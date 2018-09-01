@@ -1,0 +1,6 @@
+.dll
+.lib
+.pdb
+.modules
+*/Binaries/*
+*/Intermediate/*

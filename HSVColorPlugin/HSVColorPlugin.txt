@@ -1,0 +1,24 @@
+{
+  "FileVersion": 3,
+
+  "FriendlyName": "HSV Color Plugin",
+  "Version": 1,
+  "VersionName": "1.0",
+  "CreatedBy": "Test",
+  "CreatedByURL": "http://epicgames.com",
+  "Description": "A Color Tool",
+  "Category": "Test",
+  "EnabledByDefault": true,
+
+  "Modules": [
+    {
+      "Name": "HSVColorPluginRuntime",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    },
+    {
+      "Name": "HSVColorPluginEditor",
+      "Type": "Editor"
+    }
+  ]
+}
