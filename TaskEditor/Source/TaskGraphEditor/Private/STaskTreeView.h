@@ -71,7 +71,7 @@ public:
 };
 
 
-DECLARE_DELEGATE_RetVal(TSharedPtr<SWidget>, FOnGetFolderContextMenu);
+DECLARE_DELEGATE_RetVal(TSharedPtr<SWidget>, FOnGetTaskTreeContextMenu);
 DECLARE_DELEGATE_OneParam(FOnSingleItemSelected, UTaskObject*);
 
 class STaskTreeView : public SCompoundWidget
@@ -124,6 +124,6 @@ public:
 	TArray< UTaskModule*>               Modules;
 	FOnSingleItemSelected               OnSingleItemSelected;
 
-	FOnGetFolderContextMenu             OnMainContentMenu;
+	FOnGetTaskTreeContextMenu           OnMainContentMenu;
 	TSharedPtr<FUICommandList>          ContextMenuCommands;
 };

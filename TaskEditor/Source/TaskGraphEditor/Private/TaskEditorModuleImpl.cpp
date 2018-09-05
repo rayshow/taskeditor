@@ -1,6 +1,6 @@
 
-#include"../Public/ITaskEditorModule.h"
-#include"../Classes/TaskSystem.h"
+#include"Public/ITaskEditorModule.h"
+#include"TaskSystem.h"
 #include"TaskEditor.h"
 #include"AssetToolsModule.h"
 #include"AssetTypeActions_TaskSystem.h"

@@ -1,9 +1,12 @@
 #pragma once
 
 #include"TaskSystemGraphNode.h"
-#include"EdGraph/EdGraphPin.h"
 #include"TaskSystemGraph.h"
-#include"TaskSystemExpression.h"
+#include"TaskSystemGraphSchema.h"
+#include"Expression/TaskSystemExpression.h"
+
+#include"EdGraph/EdGraphPin.h"
+#include"SEditableTextBox.h"
 
 
 #define LOCTEXT_NAMESPACE "TaskEditor"
@@ -371,6 +374,11 @@ void UTaskSystemGraphNode::PostCopyNode() {
 }
 
 
+//TSharedRef<SWidget>	UTaskSystemGraphNode::GetDefaultValueWidget()
+//{
+//	return SNew(SEditableTextBox);
+//}
+
 void UTaskSystemGraphNode::RecreateAndLinkNode() {
 	// Throw away the original pins
 	for (int32 PinIndex = 0; PinIndex < Pins.Num(); ++PinIndex)
@@ -553,11 +561,7 @@ void UTaskSystemGraphNode::CreateInputPins()
 
 		InputName = GetShortenPinName(InputName);
 
-		/*const FName PinCategory = Expression->IsInputConnectionRequired(Index) 
-			? UMaterialGraphSchema::PC_Required : UMaterialGraphSchema::PC_Optional;
-*/
-
-		UEdGraphPin* NewPin = CreatePin(EGPD_Input, FName("PinCategroy"), InputName);
+		UEdGraphPin* NewPin = CreatePin(EGPD_Input, Input->InputEnumToName(), InputName);
 		if (NewPin->PinName.IsNone())
 		{
 			// Makes sure pin has a name for lookup purposes but user will never see it
@@ -583,7 +587,7 @@ void UTaskSystemGraphNode::CreateOutputPins()
 			OutputName = ExpressionOutput.OutputName;
 		}
 
-		UEdGraphPin* NewPin = CreatePin(EGPD_Output, FName("Output"), FName("SubCat"), OutputName);
+		UEdGraphPin* NewPin = CreatePin(EGPD_Output, UTaskSystemGraphSchema::PC_TaskThread, FName("SubCat"), OutputName);
 		if (NewPin->PinName.IsNone())
 		{
 			// Makes sure pin has a name for lookup purposes but user will never see it

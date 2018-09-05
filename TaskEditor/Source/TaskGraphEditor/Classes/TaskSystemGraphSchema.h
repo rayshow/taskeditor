@@ -7,7 +7,9 @@
 USTRUCT()
 struct FTaskSystemGraphSchemaAction_NewComment : public FEdGraphSchemaAction
 {
+public:
 	GENERATED_USTRUCT_BODY();
+
 
 	// Simple type info
 	static FName StaticGetTypeId() { static FName Type("FMaterialGraphSchemaAction_NewComment"); return Type; }
@@ -60,6 +62,10 @@ class UTaskSystemGraphSchema : public UEdGraphSchema
 {
 public:
 	GENERATED_UCLASS_BODY()
+
+	//PinType
+	static const FName PC_TaskThread; //White and Bold
+	static const FName PC_Event;      //Red and Solid
 
 	void GetPaletteActions(FGraphActionMenuBuilder& ActionMenuBuilder, const FString& CategoryName, bool bMaterialFunction) const;
 	void GetCommentAction(FGraphActionMenuBuilder& ActionMenuBuilder, const UEdGraph* CurrentGraph = nullptr) const;

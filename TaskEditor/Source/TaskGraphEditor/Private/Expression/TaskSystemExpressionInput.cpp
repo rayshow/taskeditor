@@ -1,9 +1,21 @@
-#include"TaskSystemExpressionInput.h"
-#include"TaskSystemExpression.h"
-#include"TaskSystemExpressionOutput.h"
+#include"Expression/TaskSystemExpressionInput.h"
+#include"Expression/TaskSystemExpression.h"
+#include"Expression/TaskSystemExpressionOutput.h"
+#include"TaskSystemGraphSchema.h"
 #include"CoreObjectVersion.h"
 #include"FrameworkObjectVersion.h"
 
+FName FTaskSystemExpressionInput::InputEnumToName() {
+	switch (InputType) {
+	case TIT_TaskThread:
+		return UTaskSystemGraphSchema::PC_TaskThread;
+	case TIT_EventInput :
+		return UTaskSystemGraphSchema::PC_Event;
+	default:
+		check(false);
+	}
+	return NAME_None;
+}
 
 void FTaskSystemExpressionInput::Connect(int32 InOutputIndex, UTaskSystemExpression* InExpression)
 {
@@ -13,11 +25,6 @@ void FTaskSystemExpressionInput::Connect(int32 InOutputIndex, UTaskSystemExpress
 	TArray<FTaskSystemExpressionOutput> Outputs;
 	Outputs = Expression->GetOutputs();
 	FTaskSystemExpressionOutput* Output = &Outputs[OutputIndex];
-	Mask = Output->Mask;
-	MaskR = Output->MaskR;
-	MaskG = Output->MaskG;
-	MaskB = Output->MaskB;
-	MaskA = Output->MaskA;
 }
 
 /** ICPPStructOps interface */
@@ -48,11 +55,6 @@ bool FTaskSystemExpressionInput::Serialize(FArchive& Ar)
 		Ar << InputNameStr;
 		InputName = *InputNameStr;
 	}
-	Ar << Mask;
-	Ar << MaskR;
-	Ar << MaskG;
-	Ar << MaskB;
-	Ar << MaskA;
 
 	// Some expressions may have been stripped when cooking and Expression can be null after loading
 	// so make sure we keep the information about the connected node in cooked packages

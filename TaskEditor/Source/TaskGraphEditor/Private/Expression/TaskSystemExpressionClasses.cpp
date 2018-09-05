@@ -1,8 +1,8 @@
 #pragma once
 
 #include"Expression/TaskSystemExpressionClasses.h"
-#include"TaskSystemExpressionComment.h"
-#include"TaskSystemExpression.h"
+#include"Expression/TaskSystemExpressionComment.h"
+#include"Expression/TaskSystemExpression.h"
 #include"TaskSystemGraphSchema.h"
 #include"UObject/Class.h"
 #include"ObjectMacros.h"

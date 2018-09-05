@@ -7,7 +7,5 @@
 class STaskSystemGraphEditor: public SGraphEditor
 {
 public:
-	void SetGraph(UEdGraph *Graph) {
 	
-	}
 };

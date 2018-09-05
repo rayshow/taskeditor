@@ -53,36 +53,16 @@ public:
 	virtual FString GetDocumentationLink() const override { return FString(); }
 	//~ End UEdGraphNode Interface.
 
+
+	virtual FText GetToolTipHeading() const { return FText::FromString("HelloHeading"); };
+	virtual bool ShouldDrawCompact() const { return false; }
+	virtual bool ShouldDrawAsBead() const { return false; }
+	virtual FText GetCompactNodeTitle() const { return GetNodeTitle(ENodeTitleType::FullTitle); }
+	virtual FName GetCornerIcon() const { return FName(); }
+
 protected:
 	void ModifyAndCopyPersistentPinData(UEdGraphPin& TargetPin, const UEdGraphPin& SourcePin) const;
 };
-
-
-//UCLASS(MinimalAPI)
-//class UTaskSystemGraphNode_Root : public UTaskSystemGraphNode_Base
-//{
-//	GENERATED_UCLASS_BODY()
-//
-//	/** Material whose inputs this root node represents */
-//	UPROPERTY()
-//	class UTaskSystem* Material;
-//
-//	//~ Begin UEdGraphNode Interface.
-//	virtual FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
-//	virtual FLinearColor GetNodeTitleColor() const override { return FLinearColor(1, 0, 0); }
-//	virtual FText GetTooltipText() const override { return FText::FromString("Root"); }
-//	virtual bool CanUserDeleteNode() const override { return false; }
-//	virtual bool CanDuplicateNode() const override { return false; }
-//	virtual void PostPlacedNewNode() override {}
-//	//~ End UEdGraphNode Interface.
-//
-//	//~ Begin UMaterialGraphNode_Base Interface
-//	virtual void CreateInputPins() override;
-//	virtual bool IsRootNode() const override { return true; }
-//	virtual int32 GetInputIndex(const UEdGraphPin* InputPin) const override;
-//	virtual uint32 GetInputType(const UEdGraphPin* InputPin) const override;
-//	//~ End UMaterialGraphNode_Base Interface
-//};
 
 
 UCLASS(MinimalAPI)
@@ -146,6 +126,7 @@ public:
 	virtual void GetPinHoverText(const UEdGraphPin& Pin, FString& HoverTextOut) const override;
 	virtual FString GetDocumentationExcerptName() const override;
 	virtual bool CanUserDeleteNode() const override;
+	//virtual TSharedRef<SWidget> GetDefaultValueWidget() override;
 	//~ End UEdGraphNode Interface.
 
 	//~ Begin UMaterialGraphNode_Base Interface
@@ -157,6 +138,7 @@ public:
 
 	/** Will return the shorten pin name to use based on long pin name */
 	static FName GetShortenPinName(const FName PinName) { return PinName; }
+
 
 private:
 	/** Make sure the MaterialExpression is owned by the Material */

@@ -1,4 +1,4 @@
-﻿#include"../Classes/TaskSystem.h"
+﻿#include"Classes/TaskSystem.h"
 #include"TaskSystemGraph.h"
 #include"TaskSystemGraphSchema.h"
 #include "BlueprintEditorUtils.h"

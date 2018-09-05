@@ -3,7 +3,7 @@
 #include"CoreMinimal.h"
 #include"UICommandInfo.h"
 #include"EdGraph/EdGraphSchema.h"
-#include"TaskSystemExpressionComment.h"
+#include"Expression/TaskSystemExpressionComment.h"
 #include"TaskSystemGraphSchema.h"
 
 class FTaskSystemExpressionSpawnInfo

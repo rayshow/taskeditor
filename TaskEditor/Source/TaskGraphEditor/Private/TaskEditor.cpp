@@ -10,23 +10,24 @@
 #include "GenericCommands.h"
 #include "EdGraphUtilities.h"
 #include "PlatformApplicationMisc.h"
-#include"SNodePanel.h"
+#include "SNodePanel.h"
 #include "PropertyEditorModule.h"
 #include "IDetailsView.h"
 
 #include "ITaskEditorModule.h"
-#include"TaskSystem.h"
-#include"TaskSystemExpression.h"
-#include"TaskSystemExpressionComment.h"
-#include"TaskSystemGraphNode.h"
-#include"TaskSystemGraph.h"
-#include"TaskSystemGraphSchema.h"
+#include "TaskSystem.h"
+#include "TaskSystemGraphNode.h"
+#include "TaskSystemGraph.h"
+#include "TaskSystemGraphSchema.h"
 #include "STaskSystemGraphEditor.h"
-#include"STaskSystemPalette.h"
-#include"EditorCommands.h"
-#include"STaskTreeView.h"
-#include"Expression/TaskSystemExpressionClasses.h"
-#include"Excel.h"
+#include "STaskSystemPalette.h"
+#include "EditorCommands.h"
+#include "STaskTreeView.h"
+#include "Expression/TaskSystemExpressionClasses.h"
+#include "Expression/TaskSystemExpression.h"
+#include "Expression/TaskSystemExpressionComment.h"
+#include "Excel.h"
+#include "TaskNodeFactory.h"
 
 #define LOCTEXT_NAMESPACE "TaskGraphEditor"
 const FName FTaskEditor::PreviewTabName(TEXT("TaskEditor_Preview"));
@@ -331,7 +332,7 @@ TSharedRef<STaskSystemGraphEditor> FTaskEditor::CreateTaskGraphEditor(UEdGraph* 
 		.TitleText(this, &FMaterialEditor::GetOriginalObjectName);*/
 	//.MaterialInfoList(&MaterialInfoList);
 
-	return SNew(STaskSystemGraphEditor)
+	auto Editor = SNew(STaskSystemGraphEditor)
 		.AdditionalCommands(GraphEditorCommands)
 		.IsEditable(true)
 		//.TitleBar(TitleBarWidget)
@@ -339,6 +340,8 @@ TSharedRef<STaskSystemGraphEditor> FTaskEditor::CreateTaskGraphEditor(UEdGraph* 
 		.GraphToEdit(Graph)
 		.GraphEvents(InEvents)
 		.ShowGraphStateOverlay(false);
+	Editor->SetNodeFactory(MakeShareable(new FTaskNodeGraphFactory));
+	return Editor;
 }
 
 void FTaskEditor::CreateInteralWidgets()

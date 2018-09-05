@@ -1,9 +1,9 @@
 #pragma once
 
 #include"TaskSystemGraphSchema.h"
-#include"TaskSystemExpressionComment.h"
 #include"TaskEditor.h"
 #include"TaskSystemGraphNode.h"
+#include"Expression/TaskSystemExpressionComment.h"
 #include"AssetRegistryModule.h"
 
 #define LOCTEXT_NAMESPACE "TaskGraphEditor"
@@ -16,8 +16,10 @@ FTaskSystemGraphSchemaAction_NewComment::PerformAction(class UEdGraph* ParentGra
 	return nullptr;
 }
 
-UEdGraphNode* FTaskSystemGraphSchemaAction_NewNode::PerformAction(
-	UEdGraph* ParentGraph, UEdGraphPin* FromPin, const FVector2D Location, bool bSelectNewNode)
+UEdGraphNode* 
+FTaskSystemGraphSchemaAction_NewNode::PerformAction(
+	UEdGraph* ParentGraph, UEdGraphPin* FromPin, 
+	const FVector2D Location, bool bSelectNewNode)
 {
 	check(TaskSystemExpressionClass);
 
@@ -31,12 +33,16 @@ UEdGraphNode* FTaskSystemGraphSchemaAction_NewNode::PerformAction(
 	return nullptr;
 }
 
+const FName UTaskSystemGraphSchema::PC_TaskThread(TEXT("TaskThread")); //White and Bold
+const FName UTaskSystemGraphSchema::PC_Event(TEXT("TaskEvent"));       //Red and Solid
+
 
 UTaskSystemGraphSchema::UTaskSystemGraphSchema(FObjectInitializer const& Initializer)
 	:UEdGraphSchema(Initializer) {}
 
 
-void UTaskSystemGraphSchema::GetCommentAction(FGraphActionMenuBuilder& ActionMenuBuilder,
+void 
+UTaskSystemGraphSchema::GetCommentAction(FGraphActionMenuBuilder& ActionMenuBuilder,
 	const UEdGraph* CurrentGraph) const
 {
 	if (!ActionMenuBuilder.FromPin)

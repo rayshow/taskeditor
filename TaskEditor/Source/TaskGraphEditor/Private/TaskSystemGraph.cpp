@@ -1,9 +1,9 @@
 #include"TaskSystemGraph.h"
 #include"EdGraph/EdGraphPin.h"
-#include"TaskSystemExpression.h"
-#include"TaskSystemExpressionComment.h"
+#include"Expression/TaskSystemExpression.h"
+#include"Expression/TaskSystemExpressionComment.h"
+#include"Expression/TaskSystemExpressionInput.h"
 #include"TaskSystemGraphNode.h"
-#include"TaskSystemExpressionInput.h"
 
 
 UTaskSystemGraph::UTaskSystemGraph(FObjectInitializer const& Initializer) 

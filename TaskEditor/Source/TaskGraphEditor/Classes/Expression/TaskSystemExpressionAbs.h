@@ -18,6 +18,7 @@ class UTaskSystemExpressionAbs : public UTaskSystemExpression
 #if WITH_EDITOR
 	virtual void GetCaption(TArray<FString>& OutCaptions) const override {
 		OutCaptions.Add(TEXT("任务"));
+		OutCaptions.Add(TEXT("任务2"));
 	}
 #endif
 };

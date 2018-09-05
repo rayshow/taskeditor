@@ -22,7 +22,6 @@ public:
 	// Mark Task System Dirty
 	FSetTaskSystemDirty SetTaskSystemDirty;
 
-
 	void LinkTaskSystemExpressionsFromGraph() const;
 
 	UTaskSystemGraphNode* AddExpression(UTaskSystemExpression* Expression, bool bUserInvoked);

@@ -6,6 +6,7 @@ public class TaskGraphEditor : ModuleRules
 {
     public TaskGraphEditor(ReadOnlyTargetRules Target) : base(Target)
     {
+
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicIncludePaths.AddRange(

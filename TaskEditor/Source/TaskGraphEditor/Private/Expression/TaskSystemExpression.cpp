@@ -1,5 +1,6 @@
-#include"TaskSystemExpression.h"
-#include"TaskSystemExpressionInput.h"
+#include"Expression/TaskSystemExpression.h"
+#include"Expression/TaskSystemExpressionInput.h"
+#include"TaskSystemGraphSchema.h"
 #include"UObject/UnrealType.h"
 
 #define LOCTEXT_NAMESPACE "TaskGraphEditor"
@@ -8,6 +9,8 @@ UTaskSystemExpression::UTaskSystemExpression(FObjectInitializer const& Initializ
 	:UObject(Initializer) {}
 
 const static FName TaskSystemInputName("TaskSystemExpressionInput");
+
+
 
 const TArray<FTaskSystemExpressionInput*> UTaskSystemExpression::GetInputs()
 {
@@ -256,14 +259,10 @@ void UTaskSystemExpression::ConnectExpression(FTaskSystemExpressionInput* Input,
 		FTaskSystemExpressionOutput& Output = Outputs[OutputIndex];
 		Input->Expression = this;
 		Input->OutputIndex = OutputIndex;
-		Input->Mask = Output.Mask;
-		Input->MaskR = Output.MaskR;
-		Input->MaskG = Output.MaskG;
-		Input->MaskB = Output.MaskB;
-		Input->MaskA = Output.MaskA;
 	}
-
 }
+
+
 FText UTaskSystemExpression::GetKeywords() const { return FText::GetEmpty(); }
 
 bool UTaskSystemExpression::GetAllInputExpressions(TArray<UTaskSystemExpression*>& InputExpressions)
@@ -275,14 +274,13 @@ bool UTaskSystemExpression::GetAllInputExpressions(TArray<UTaskSystemExpression*
 	return false;
 }
 
-
 bool UTaskSystemExpression::CanRenameNode() const
 {
 	return true;
 }
+
 FString UTaskSystemExpression::GetEditableName() const
 {
-	// This function is only safe to call in a class that has implemented CanRenameNode() to return true
 	check(false);
 	return TEXT("");
 }

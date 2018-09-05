@@ -48,9 +48,12 @@ class UTask : public UTaskObject
 public:
 	GENERATED_UCLASS_BODY()
 
+	
+
 	UTaskGroup* Group;
 
 	UTaskModule* Module;
+
 };
 
 UCLASS(BlueprintType, MinimalAPI)
