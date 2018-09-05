@@ -26,7 +26,7 @@
 #include "Expression/TaskSystemExpressionClasses.h"
 #include "Expression/TaskSystemExpression.h"
 #include "Expression/TaskSystemExpressionComment.h"
-#include "Excel.h"
+//#include "Excel.h"
 #include "TaskNodeFactory.h"
 
 #define LOCTEXT_NAMESPACE "TaskGraphEditor"

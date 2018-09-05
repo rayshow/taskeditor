@@ -575,7 +575,7 @@ void UTaskSystemGraphNode::CreateOutputPins()
 {
 	TArray<FTaskSystemExpressionOutput>& Outputs = Expression->GetOutputs();
 
-	for (const FTaskSystemExpressionOutput& ExpressionOutput : Outputs)
+	for ( FTaskSystemExpressionOutput& ExpressionOutput : Outputs)
 	{
 		FName PinCategory;
 		FName PinSubCategory;
@@ -587,7 +587,7 @@ void UTaskSystemGraphNode::CreateOutputPins()
 			OutputName = ExpressionOutput.OutputName;
 		}
 
-		UEdGraphPin* NewPin = CreatePin(EGPD_Output, UTaskSystemGraphSchema::PC_TaskThread, FName("SubCat"), OutputName);
+		UEdGraphPin* NewPin = CreatePin(EGPD_Output, ExpressionOutput.OutputEnumToName(), OutputName);
 		if (NewPin->PinName.IsNone())
 		{
 			// Makes sure pin has a name for lookup purposes but user will never see it

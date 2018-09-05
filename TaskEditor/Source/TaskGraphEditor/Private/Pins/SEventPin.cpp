@@ -14,14 +14,8 @@ void SEventPin::Construct(const FArguments& InArgs, UEdGraphPin* InPin)
 
 void SEventPin::CachePinIcons()
 {
-	CachedImg_ArrayPin_Connected = FEditorStyle::GetBrush(TEXT("Graph.ArrayPin.Connected"));
-	CachedImg_ArrayPin_Disconnected = FEditorStyle::GetBrush(TEXT("Graph.ArrayPin.Disconnected"));
-
-
-	/*CachedImg_Pin_ConnectedHovered = FEditorStyle::GetBrush(TEXT("Graph.ExecPin.ConnectedHovered"));
-	CachedImg_Pin_Connected = FEditorStyle::GetBrush(TEXT("Graph.ExecPin.Connected"));
-	CachedImg_Pin_DisconnectedHovered = FEditorStyle::GetBrush(TEXT("Graph.ExecPin.DisconnectedHovered"));
-	CachedImg_Pin_Disconnected = FEditorStyle::GetBrush(TEXT("Graph.ExecPin.Disconnected"));*/
+	CachedImg_Pin_Connected = FEditorStyle::GetBrush(TEXT("Graph.ArrayPin.Connected"));
+	CachedImg_Pin_Disconnected = FEditorStyle::GetBrush(TEXT("Graph.ArrayPin.Disconnected"));
 }
 
 TSharedRef<SWidget>	SEventPin::GetDefaultValueWidget()
@@ -39,7 +33,7 @@ const FSlateBrush* SEventPin::GetPinIcon() const
 	}
 	else
 	{
-		Brush = CachedImg_ArrayPin_Disconnected;
+		Brush = CachedImg_Pin_Disconnected;
 	}
 
 	return Brush;

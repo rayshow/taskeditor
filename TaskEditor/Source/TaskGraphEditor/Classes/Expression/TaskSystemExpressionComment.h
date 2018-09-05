@@ -1,11 +1,11 @@
-#pragma once
+﻿#pragma once
 
 #include"CoreMinimal.h"
 #include"ObjectMacros.h"
 #include"TaskSystemExpression.h"
 #include"TaskSystemExpressionComment.generated.h"
 
-UCLASS(MinimalAPI)
+UCLASS(MinimalAPI, DisplayName = "注释")
 class UTaskSystemExpressionComment : public UTaskSystemExpression
 {
 	GENERATED_UCLASS_BODY()

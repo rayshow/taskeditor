@@ -1,4 +1,4 @@
-// Copyright 1998-2018 Epic Games, Inc. All Rights Reserved.
+﻿// Copyright 1998-2018 Epic Games, Inc. All Rights Reserved.
 
 #pragma once
 
@@ -19,9 +19,6 @@ public:
 
 	void Construct(const FArguments& InArgs, UEdGraphNode* InNode);
 
-	virtual TSharedRef<SWidget> CreateTitleWidget(TSharedPtr<SNodeTitle> NodeTitle) override {
-		return SNew(SButton).Text(FText::FromString("Hello"));
-	}
 
 	// Override this to add widgets below the node and pins
 	virtual void CreateBelowWidgetControls(TSharedPtr<SVerticalBox> MainBox) override {
@@ -39,13 +36,12 @@ public:
 			const float NegativeHPad = 10;
 			const float ExtraPad = 0.0f;
 
-			auto Box = SNew(SHorizontalBox)
-				+ SHorizontalBox::Slot().AutoWidth().HAlign(HAlign_Center)
+			auto Box = SNew(SVerticalBox)
+				+ SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Center).Padding(FMargin(0,15,5,0))
 				[
-					SNew(SMultiLineEditableText)
+					SNew(SMultiLineEditableText).WrapTextAt(90).WrappingPolicy(ETextWrappingPolicy::AllowPerCharacterWrapping)
 					 .AllowMultiLine(true).AutoWrapText(true)
-				
-					.Text(FText::FromString("BelowPinfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"))
+					.Text(FText::FromString(TEXT("[杀怪任务]杀死20只在田里捣乱的鸡")))
 				];
 
 
