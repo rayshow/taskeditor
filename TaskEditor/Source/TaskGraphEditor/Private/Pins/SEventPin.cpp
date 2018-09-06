@@ -1,5 +1,6 @@
 ﻿// Copyright 1998-2018 Epic Games, Inc. All Rights Reserved.
 
+#include "Pins/SEventPin.h"
 #include "Pins/SSpawnMonsterPin.h"
 #include "Pins/SWeatherPin.h"
 #include "Widgets/Layout/SSpacer.h"

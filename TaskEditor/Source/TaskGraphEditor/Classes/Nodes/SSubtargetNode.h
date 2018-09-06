@@ -11,6 +11,7 @@
 #include "Widgets/Text/SMultiLineEditableText.h"
 #include "Widgets/SBoxPanel.h"
 #include "Expression/TaskSystemExpressionSubtarget.h"
+#include "TaskSystemGraphNode.h"
 
 class SSubtargetNode : public STaskNodeBase
 {
@@ -24,6 +25,11 @@ public:
 
 	void Construct(const FArguments& InArgs, UEdGraphNode* InNode)
 	{
+		auto TaskNode = Cast<UTaskSystemGraphNode>(InNode);
+		check(TaskNode);
+		SubtargetExpr = Cast<UTaskSystemExpressionSubtarget>( TaskNode->Expression);
+		check(SubtargetExpr);
+
 		this->GraphNode = InNode;
 		this->SetCursor(EMouseCursor::CardinalCross);
 		this->UpdateGraphNode();
@@ -51,11 +57,20 @@ public:
 				.AutoHeight()
 				.VAlign(VAlign_Center)
 				.HAlign(HAlign_Center)
-				.Padding(FMargin(0,15,5,0))
 				[
-					SNew(SMultiLineEditableText).WrapTextAt(90).WrappingPolicy(ETextWrappingPolicy::AllowPerCharacterWrapping)
+					SNew(SMultiLineEditableText)
+					 .WrapTextAt(110).WrappingPolicy(ETextWrappingPolicy::AllowPerCharacterWrapping)
 					 .AllowMultiLine(true).AutoWrapText(true)
-					.Text(FText::FromString(TEXT("[杀怪任务]杀死20只在田里捣乱的鸡")))
+					 .Text_Lambda([this]() {
+						const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("ESubtargetType"), true);
+						check(EnumPtr);
+						FText TypeStr = EnumPtr->GetDisplayNameTextByIndex(SubtargetExpr->TargetType);
+						return FText::Format(NSLOCTEXT("SubTargetNode", "NodeContent", "[{0}]\n{1}"),
+							TypeStr, 
+								SubtargetExpr->TaskDesc.IsEmpty()?
+								FText::FromString(TEXT("请输入任务描述。")) : SubtargetExpr->TaskDesc
+						);
+					})
 				];
 
 

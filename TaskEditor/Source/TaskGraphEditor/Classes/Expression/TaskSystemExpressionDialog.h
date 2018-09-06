@@ -9,6 +9,7 @@
 UCLASS(MinimalAPI, DisplayName = "2选1对话")
 class UTaskSystemExpression1In2Dialog : public UTaskSystemExpression
 {
+public:
 	GENERATED_UCLASS_BODY()
 
 	UPROPERTY(EditAnywhere)

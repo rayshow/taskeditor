@@ -10,15 +10,24 @@
 #include "Widgets/Text/SInlineEditableTextBlock.h"
 #include "Widgets/Text/SMultiLineEditableText.h"
 #include "Widgets/SBoxPanel.h"
+#include "Expression/TaskSystemExpressionDialog.h"
 
 class SDialogNode : public STaskNodeBase
 {
+private:
+	UTaskSystemExpression1In2Dialog * DialogExpr;
+
 public:
 	SLATE_BEGIN_ARGS(SSubtargetNode) {}
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs, UEdGraphNode* InNode)
 	{
+		auto TaskNode = Cast<UTaskSystemGraphNode>(InNode);
+		check(TaskNode);
+		DialogExpr = Cast<UTaskSystemExpression1In2Dialog>(TaskNode->Expression);
+		check(DialogExpr);
+
 		this->GraphNode = InNode;
 		this->SetCursor(EMouseCursor::CardinalCross);
 		this->UpdateGraphNode();
@@ -36,9 +45,13 @@ public:
 				+ SHorizontalBox::Slot().HAlign(HAlign_Left).VAlign(VAlign_Center)
 				.AutoWidth()
 				[
-					SNew(SMultiLineEditableText).WrappingPolicy(ETextWrappingPolicy::AllowPerCharacterWrapping)
+					SNew(SMultiLineEditableText)
+					.WrappingPolicy(ETextWrappingPolicy::AllowPerCharacterWrapping)
 					.AllowMultiLine(true).AutoWrapText(true).WrapTextAt(120)
-					.Text(FText::FromString(TEXT("这老头看上去很真诚，使不得先告辞为妙。")))
+					.Text_Lambda([this]() {
+					  return DialogExpr->DialogContent.IsEmpty() ? FText::FromString(TEXT("请输入对话内容。"))
+						: DialogExpr->DialogContent;
+					})
 				]
 			];
 	}

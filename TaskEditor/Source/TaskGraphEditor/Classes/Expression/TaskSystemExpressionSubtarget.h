@@ -9,17 +9,17 @@
 UENUM()
 enum ESubtargetType
 {
-	EST_KillingMonster = 0 UMETA(DisplayName = "杀怪"),
-	EST_Collect UMETA(DisplayName = "采集"),
-	EST_Dialog UMETA(DisplayName = "对话"),
-	EST_UseItem UMETA(DisplayName = "使用物品"),
-	EST_GetItem UMETA(DisplayName = "获得物品"),
-	EST_AINodeComplete UMETA(DisplayName = "AI节点完成"),
-	EST_ReachPosition UMETA(DisplayName = "到达位置"),
-	EST_OpenChest UMETA(DisplayName = "开宝箱"),
-	EST_HandleItem UMETA(DisplayName = "上交物品"),
-	EST_CompleteDungeon UMETA(DisplayName = "完成副本"),
-	EST_CompleteActivity UMETA(DisplayName = "完成活动"),
+	EST_KillingMonster = 0 UMETA(DisplayName = "杀怪任务"),
+	EST_Collect UMETA(DisplayName = "采集任务"),
+	EST_Dialog UMETA(DisplayName = "对话任务"),
+	EST_UseItem UMETA(DisplayName = "使用物品任务"),
+	EST_GetItem UMETA(DisplayName = "获得物品任务"),
+	EST_AINodeComplete UMETA(DisplayName = "AI节点完成任务"),
+	EST_ReachPosition UMETA(DisplayName = "到达任务"),
+	EST_OpenChest UMETA(DisplayName = "开宝箱任务"),
+	EST_HandleItem UMETA(DisplayName = "上交物品任务"),
+	EST_CompleteDungeon UMETA(DisplayName = "完成副本任务"),
+	EST_CompleteActivity UMETA(DisplayName = "完成活动任务"),
 };
 
 
@@ -27,6 +27,7 @@ enum ESubtargetType
 UCLASS(MinimalAPI, DisplayName = "子目标 - 对话任务")
 class UTaskSystemExpressionSubtarget : public UTaskSystemExpression
 {
+public:
 	GENERATED_UCLASS_BODY()
 
 	//Thread Input
@@ -113,10 +114,17 @@ class UTaskSystemExpressionSubtarget : public UTaskSystemExpression
 
 #if WITH_EDITOR
 	virtual void GetCaption(TArray<FString>& OutCaptions) const override {
-		OutCaptions.Add(TEXT("     子目标 - 对话任务               "));
 		if (!TaskName.IsEmpty()) {
-			OutCaptions.Add(TaskName);
+			OutCaptions.Add(TEXT("   ") + TaskName);
 		}
+
+		const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("ESubtargetType"), true);
+		check(EnumPtr);
+		FText TypeStr = EnumPtr->GetDisplayNameTextByIndex(TargetType);
+		FString Title = FString::Printf(TEXT("子目标 - %s                    "), *TypeStr.ToString());
+		OutCaptions.Add(Title);
+		
+		
 	}
 
 
