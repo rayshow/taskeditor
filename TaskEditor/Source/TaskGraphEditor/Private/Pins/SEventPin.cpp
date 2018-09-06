@@ -2,7 +2,10 @@
 
 
 #include "Pins/SEventPin.h"
+#include "Pins/SEventTextPin.h"
 #include "Widgets/Layout/SSpacer.h"
+#include "Widgets/SBoxPanel.h"
+
 
 void SEventPin::Construct(const FArguments& InArgs, UEdGraphPin* InPin)
 {
@@ -18,10 +21,7 @@ void SEventPin::CachePinIcons()
 	CachedImg_Pin_Disconnected = FEditorStyle::GetBrush(TEXT("Graph.ArrayPin.Disconnected"));
 }
 
-TSharedRef<SWidget>	SEventPin::GetDefaultValueWidget()
-{
-	return SNew(STextBlock); // not used for exec pin		
-}
+
 
 const FSlateBrush* SEventPin::GetPinIcon() const
 {
@@ -37,4 +37,21 @@ const FSlateBrush* SEventPin::GetPinIcon() const
 	}
 
 	return Brush;
+}
+
+
+void SEventTextPin::Construct(const FArguments& InArgs, UEdGraphPin* InPin)
+{
+	SEventPin::Construct(InArgs, InPin);
+}
+
+TSharedRef<SWidget>	SEventTextPin::GetDefaultValueWidget()
+{
+	return SNew(SHorizontalBox)
+		+ SHorizontalBox::Slot().FillWidth(40)
+		.VAlign(VAlign_Center)
+		.HAlign(HAlign_Center).Padding(FMargin(0, 15, 5, 0))
+		[
+			SNew(STextBlock).Text(FText::FromString("fdasfdsa")).ColorAndOpacity(FLinearColor(1, 0, 0, 1))
+		];
 }

@@ -68,6 +68,7 @@ protected:
 UCLASS(MinimalAPI)
 class UTaskSystemGraphNode : public UTaskSystemGraphNode_Base
 {
+public:
 	GENERATED_UCLASS_BODY()
 
 	/** Material Expression this node is representing */

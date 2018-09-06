@@ -3,48 +3,21 @@
 #include"TaskSystemGraphNode.h"
 #include"CoreMinimal.h"
 #include"Casts.h"
-#include"Pins/STaskLinePin.h"
-#include"Pins/SSelectNPCPin.h"
-#include"Pins/SEventPin.h"
-#include"nodes/STaskNode.h"
 #include"TaskSystemGraphSchema.h"
+#include"Nodes/NodeWidgetFactory.h"
+#include"Pins/PinWidgetFactory.h"
 #include"ConnectionDrawingPolicy.h"
 #include"EdGraphUtilities.h"
 #include"EdGraph/EdGraphSchema.h"
 
 TSharedPtr<SGraphNode> FTaskNodeFactory::CreateNodeWidget(UEdGraphNode* InNode)
 {
-	if (UTaskSystemGraphNode_Base* BaseNode = Cast<UTaskSystemGraphNode_Base>(InNode))
-	{
-		if (UTaskSystemGraphNode* Node = Cast<UTaskSystemGraphNode>(InNode))
-		{
-			return SNew(STaskNodeDefault, InNode);
-		}
-		check(false);
-	}
-	else {
-		TSharedPtr<SGraphNode> NodeCreatedResult = InNode->CreateVisualWidget();
-		if (NodeCreatedResult.IsValid())
-		{
-			return NodeCreatedResult;
-		}
-		check(false);
-	}
-	return nullptr;
+	return FNodeWidgetFactory::CreateNodeWidget(InNode);
 }
 
 TSharedPtr<SGraphPin> FTaskNodeFactory::CreatePinWidget(UEdGraphPin* InPin)
 {
-	if (InPin->PinType.PinCategory == UTaskSystemGraphSchema::PC_TaskThread)
-	{
-		return SNew(SSelectNPCPin, InPin);
-	}
-	else if (InPin->PinType.PinCategory == UTaskSystemGraphSchema::PC_Event)
-	{
-		return SNew(SEventPin, InPin);
-	}
-	check(false);
-	return nullptr;
+	return FPinWidgetFactory::CreatePinWidget(InPin);
 }
 
 

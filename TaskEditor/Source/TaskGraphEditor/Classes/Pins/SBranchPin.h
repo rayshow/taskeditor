@@ -7,16 +7,17 @@
 #include "Widgets/SWidget.h"
 #include "SGraphPin.h"
 
-class SEventPin : public SGraphPin
+class SBranchPin : public SGraphPin
 {
 public:
-	SLATE_BEGIN_ARGS(SEventPin) {}
+	SLATE_BEGIN_ARGS(SBranchPin) {}
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs, UEdGraphPin* InPin);
 
 protected:
 	//~ Begin SGraphPin Interface
+	virtual TSharedRef<SWidget>	GetDefaultValueWidget() override;
 	virtual const FSlateBrush* GetPinIcon() const override;
 	//~ End SGraphPin Interface
 

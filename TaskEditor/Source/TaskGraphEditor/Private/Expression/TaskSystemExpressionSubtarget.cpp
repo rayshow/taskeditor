@@ -7,11 +7,12 @@ UTaskSystemExpressionSubtarget::UTaskSystemExpressionSubtarget(FObjectInitialize
 	: Super(Initializer) {
 	FTaskSystemExpressionOutput Output;
 	Output.OutputName = FName(TEXT("交NPC"));
+	Output.OutputType = TOT_NPCExit;
 	Outputs.Add(Output);
 
 	//Input
 	Input.InputName = FName(TEXT("接NPC"));
-	Input.InputType = TIT_TaskThread;
+	Input.InputType = TIT_NPCEntry;
 
 	//Event
 	BeforeAccess.InputName = FName(TEXT("接之前"));

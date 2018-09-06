@@ -113,8 +113,7 @@ class UTaskSystemExpressionSubtarget : public UTaskSystemExpression
 
 #if WITH_EDITOR
 	virtual void GetCaption(TArray<FString>& OutCaptions) const override {
-		OutCaptions.Add(TEXT("子任务"));
-		OutCaptions.Add(TaskName);
+		OutCaptions.Add(TEXT("     子目标任务                " + TaskName));
 	}
 
 

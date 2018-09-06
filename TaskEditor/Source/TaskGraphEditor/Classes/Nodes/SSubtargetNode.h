@@ -11,13 +11,18 @@
 #include "Widgets/Text/SMultiLineEditableText.h"
 #include "Widgets/SBoxPanel.h"
 
-class STaskNodeDefault : public STaskNodeBase
+class SSubtargetNode : public STaskNodeBase
 {
 public:
-	SLATE_BEGIN_ARGS(STaskNodeDefault) {}
+	SLATE_BEGIN_ARGS(SSubtargetNode) {}
 	SLATE_END_ARGS()
 
-	void Construct(const FArguments& InArgs, UEdGraphNode* InNode);
+	void Construct(const FArguments& InArgs, UEdGraphNode* InNode)
+	{
+		this->GraphNode = InNode;
+		this->SetCursor(EMouseCursor::CardinalCross);
+		this->UpdateGraphNode();
+	}
 
 
 	// Override this to add widgets below the node and pins
@@ -37,7 +42,11 @@ public:
 			const float ExtraPad = 0.0f;
 
 			auto Box = SNew(SVerticalBox)
-				+ SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Center).Padding(FMargin(0,15,5,0))
+				+ SVerticalBox::Slot()
+				.AutoHeight()
+				.VAlign(VAlign_Center)
+				.HAlign(HAlign_Center)
+				.Padding(FMargin(0,15,5,0))
 				[
 					SNew(SMultiLineEditableText).WrapTextAt(90).WrappingPolicy(ETextWrappingPolicy::AllowPerCharacterWrapping)
 					 .AllowMultiLine(true).AutoWrapText(true)
@@ -72,10 +81,10 @@ public:
 					[
 						SNew(SHorizontalBox)
 						+ SHorizontalBox::Slot()
-					.AutoWidth()
-					[
-						Box
-					]
+						.AutoWidth()
+						[
+							Box
+						]
 					];
 			}
 		}

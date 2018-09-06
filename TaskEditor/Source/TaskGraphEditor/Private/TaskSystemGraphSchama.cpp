@@ -33,7 +33,8 @@ FTaskSystemGraphSchemaAction_NewNode::PerformAction(
 	return nullptr;
 }
 
-const FName UTaskSystemGraphSchema::PC_TaskThread(TEXT("TaskThread")); //White and Bold
+const FName UTaskSystemGraphSchema::PC_NPC(TEXT("TaskNPC")); //White and Bold
+const FName UTaskSystemGraphSchema::PC_Branch(TEXT("TaskBranch")); //White and Bold
 const FName UTaskSystemGraphSchema::PC_Event(TEXT("TaskEvent"));       //Red and Solid
 
 

@@ -64,7 +64,8 @@ public:
 	GENERATED_UCLASS_BODY()
 
 	//PinType
-	static const FName PC_TaskThread; //White and Bold
+	static const FName PC_Branch;     //White and Bold
+	static const FName PC_NPC;
 	static const FName PC_Event;      //Red and Solid
 
 	void GetPaletteActions(FGraphActionMenuBuilder& ActionMenuBuilder, const FString& CategoryName, bool bMaterialFunction) const;

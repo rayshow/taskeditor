@@ -7,10 +7,12 @@
 
 FName FTaskSystemExpressionInput::InputEnumToName() {
 	switch (InputType) {
-	case TIT_TaskThread:
-		return UTaskSystemGraphSchema::PC_TaskThread;
+	case TIT_NPCEntry:
+		return UTaskSystemGraphSchema::PC_NPC;
 	case TIT_EventInput :
 		return UTaskSystemGraphSchema::PC_Event;
+	case TIT_DialogEntry:
+		return UTaskSystemGraphSchema::PC_Branch;
 	default:
 		check(false);
 	}

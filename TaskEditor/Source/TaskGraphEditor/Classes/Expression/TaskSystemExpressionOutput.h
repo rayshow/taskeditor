@@ -6,6 +6,8 @@
 UENUM()
 enum TaskSystemExpressionOutputType {
 	TOT_EventOutput = 0,
+	TOT_NPCExit,
+	TOT_BranchExit
 };
 
 USTRUCT(noexport)
@@ -20,9 +22,13 @@ struct FTaskSystemExpressionOutput
 	FTaskSystemExpressionOutput() {}
 
 	FName  OutputEnumToName() {
-		switch (TOT_EventOutput) {
+		switch (OutputType) {
 		case TOT_EventOutput:
 			return UTaskSystemGraphSchema::PC_Event;
+		case TOT_NPCExit:
+			return UTaskSystemGraphSchema::PC_NPC;
+		case TOT_BranchExit:
+			return UTaskSystemGraphSchema::PC_Branch;
 		default:
 			check(false);
 		}

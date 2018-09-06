@@ -7,7 +7,8 @@
 
 UENUM()
 enum TaskSystemExpressionInputType{
-	TIT_TaskThread =0 ,
+	TIT_NPCEntry =0,
+	TIT_DialogEntry,
 	TIT_EventInput
 };
 

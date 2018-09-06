@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-#include"Expression/TaskSystemExpressionMonsterEvent.h"
+#include"Expression/TaskSystemExpressionSpawnMonster.h"
 #include"Expression/TaskSystemExpressionOutput.h"
 
-UTaskSystemExpressionMonsterEvent::UTaskSystemExpressionMonsterEvent(
+UTaskSystemExpressionSpawnMonster::UTaskSystemExpressionSpawnMonster(
 	FObjectInitializer const& Initializer) : Super(Initializer) {
 	FTaskSystemExpressionOutput Output;
 	Output.OutputName = FName(TEXT("招怪ID"));
