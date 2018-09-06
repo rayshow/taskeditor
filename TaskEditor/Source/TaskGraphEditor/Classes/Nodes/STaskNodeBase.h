@@ -4,8 +4,11 @@
 #include "SNodePanel.h"
 #include "SGraphNode.h"
 #include "TaskNodeFactory.h"
+#include "TaskSystemGraphNode.h"
+
 
 class SToolTip;
+class UTaskSystemExpression;
 
 class STaskNodeBase : public SGraphNode
 {
@@ -45,8 +48,12 @@ protected:
 	FText GetToolTipHeading() const;
 
 protected:
+
+	UTaskSystemExpression* Expression;
+
 	static const FLinearColor BreakpointHitColor;
 	static const FLinearColor LatentBubbleColor;
 	static const FLinearColor TimelineBubbleColor;
 	static const FLinearColor PinnedWatchColor;
+
 };

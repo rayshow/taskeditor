@@ -3,6 +3,10 @@
 #include"Expression/TaskSystemExpressionClasses.h"
 #include"Expression/TaskSystemExpressionComment.h"
 #include"Expression/TaskSystemExpression.h"
+#include"Expression/TaskSystemExpressionDialog.h"
+#include"Expression/TaskSystemExpressionSubtarget.h"
+#include"Expression/TaskSystemExpressionWeather.h"
+#include"Expression/TaskSystemExpressionSpawnMonster.h"
 #include"TaskSystemGraphSchema.h"
 #include"UObject/Class.h"
 #include"ObjectMacros.h"
@@ -48,6 +52,7 @@ void TaskSystemExpressionClasses::AddExpressions(FGraphActionMenuBuilder& Action
 		ActionMenuBuilder.AddAction(NewNodeAction);
 	}
 }
+
 
 void TaskSystemExpressionClasses::InitializeExpressionClasses()
 {

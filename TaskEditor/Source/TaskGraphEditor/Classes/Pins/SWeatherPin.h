@@ -7,13 +7,21 @@
 #include "Widgets/SWidget.h"
 #include "SEventPin.h"
 
-class SEventTextPin : public SEventPin
+class SWeatherPin : public SEventPin
 {
 public:
-	void Construct(const FArguments& InArgs, UEdGraphPin* InPin);
+	SLATE_BEGIN_ARGS(SSpawnMonsterPin) {}
+	SLATE_END_ARGS()
 
-protected:
+	void Construct(const FArguments& InArgs, UEdGraphPin* InPin);
+private:
+
 	//~ Begin SGraphPin Interface
 	virtual TSharedRef<SWidget>	GetDefaultValueWidget() override;
 	//~ End SGraphPin Interface
+
+	int During;
+
+	static TArray<TSharedPtr<FString>>* ConstructWeatherOptions();
+	static TSharedPtr<FString> GetStringByEnum(int Type);
 };

@@ -13,30 +13,29 @@ enum EMonsterEventType
 	EMT_RecycleMonster UMETA(DisplayName = "回收怪"),
 };
 
-UCLASS(MinimalAPI, DisplayName = "招怪")
+UCLASS(MinimalAPI, DisplayName = " 事件 - 招怪")
 class UTaskSystemExpressionSpawnMonster : public UTaskSystemExpression
 {
+public:
 	GENERATED_UCLASS_BODY()
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, meta=(DisplayName="事件名字"))
 	FString EventName;
 
-	UPROPERTY(EditAnywhere)
-	TEnumAsByte<enum EMonsterEventType> EventType;
-
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "怪物ID"))
 	int32 MonsterID;
 
-	UPROPERTY(EditAnywhere)
-	FString MonsterDesc;
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "描述"))
+	FText MonsterDesc;
 
 #if WITH_EDITOR
 	virtual void GetCaption(TArray<FString>& OutCaptions) const override {
 		static FString SSpawnMonster(TEXT(" 招怪 "));
 		static FString SRecycleMonster(TEXT(" 回收怪 "));
-		OutCaptions.Add(FString(TEXT(" 事件 - "))+ 
-			(EventType== EMT_SpawnMonster? SSpawnMonster:SRecycleMonster));
-		OutCaptions.Add(EventName);
+		OutCaptions.Add(FString(TEXT(" 事件 - 招怪 ")) );
+		if (!EventName.IsEmpty()) {
+			OutCaptions.Add(EventName);
+		}
 	}
 #endif
 

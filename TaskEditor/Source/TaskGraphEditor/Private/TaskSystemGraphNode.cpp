@@ -561,12 +561,15 @@ void UTaskSystemGraphNode::CreateInputPins()
 
 		InputName = GetShortenPinName(InputName);
 
-		UEdGraphPin* NewPin = CreatePin(EGPD_Input, Input->InputEnumToName(), InputName);
+		UEdGraphPin* NewPin = CreatePin(EGPD_Input, Input->InputEnumToName(), Expression, InputName);
+		NewPin->PinType.PinSubCategoryObject = Expression;
+		check(NewPin->PinType.PinSubCategoryObject.Get());
 		if (NewPin->PinName.IsNone())
 		{
 			// Makes sure pin has a name for lookup purposes but user will never see it
 			NewPin->PinName = CreateUniquePinName(TEXT("Input"));
 			NewPin->PinFriendlyName = FText::FromString(TEXT(" "));
+			
 		}
 	}
 }
@@ -586,8 +589,8 @@ void UTaskSystemGraphNode::CreateOutputPins()
 		{
 			OutputName = ExpressionOutput.OutputName;
 		}
-
-		UEdGraphPin* NewPin = CreatePin(EGPD_Output, ExpressionOutput.OutputEnumToName(), OutputName);
+		UEdGraphPin* NewPin = CreatePin(EGPD_Output, ExpressionOutput.OutputEnumToName(), Expression, OutputName);
+		check(NewPin->PinType.PinSubCategoryObject.Get());
 		if (NewPin->PinName.IsNone())
 		{
 			// Makes sure pin has a name for lookup purposes but user will never see it

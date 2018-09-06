@@ -26,7 +26,5 @@ UTaskSystemExpressionSubtarget::UTaskSystemExpressionSubtarget(FObjectInitialize
 
 	AfterPost.InputName = FName(TEXT("交之后"));
 	AfterPost.InputType = TIT_EventInput;
-
-	
 }
 

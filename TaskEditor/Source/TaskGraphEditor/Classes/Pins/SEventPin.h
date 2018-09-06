@@ -6,6 +6,7 @@
 #include "Widgets/DeclarativeSyntaxSupport.h"
 #include "Widgets/SWidget.h"
 #include "SGraphPin.h"
+#include "SButton.h"
 
 class SEventPin : public SGraphPin
 {
@@ -14,7 +15,8 @@ public:
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs, UEdGraphPin* InPin);
-
+	virtual bool AllowOutputValueWidget() const override { return true; }
+	virtual bool AllowConnectedValueWidget() const override { return true; }
 protected:
 	//~ Begin SGraphPin Interface
 	virtual const FSlateBrush* GetPinIcon() const override;

@@ -15,15 +15,15 @@ class UTaskSystemExpression1In2Dialog : public UTaskSystemExpression
 	int32 DialogID;
 
 	UPROPERTY()
-	FText DialogContent;
-
-	UPROPERTY()
 	FTaskSystemExpressionInput Input;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "对话内容"))
+	FText DialogContent;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "接受描述"))
 	FText Yes;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "拒绝描述"))
 	FText No;
 
 #if WITH_EDITOR

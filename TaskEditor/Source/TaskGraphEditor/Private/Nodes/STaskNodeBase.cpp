@@ -20,6 +20,7 @@
 #include "TaskSystemGraphNode.h"
 #include "TaskSystem.h"
 #include "Utils/TaskSystemUtils.h"
+#include "Expression/TaskSystemExpression.h"
 
 #define LOCTEXT_NAMESPACE "STaskNodeBase"
 

@@ -22,7 +22,7 @@ public:
 	static TaskSystemExpressionClasses * Get();
 
 	void AddExpressions(struct FGraphActionMenuBuilder& ActionMenuBuilder,
-		FText CategoryName, TArray<FTaskSystemExpression>* Expressions);
+		FText CategoryName, TArray<FTaskSystemExpression>* Expressions); \
 
 	void InitializeExpressionClasses();
 

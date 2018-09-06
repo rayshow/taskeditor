@@ -6,7 +6,7 @@
 UTaskSystemExpressionSpawnMonster::UTaskSystemExpressionSpawnMonster(
 	FObjectInitializer const& Initializer) : Super(Initializer) {
 	FTaskSystemExpressionOutput Output;
-	Output.OutputName = FName(TEXT("招怪ID"));
+	Output.OutputName = FName(TEXT(""));
 	Output.OutputType = TOT_EventOutput;
 	Outputs.Add(Output);
 }

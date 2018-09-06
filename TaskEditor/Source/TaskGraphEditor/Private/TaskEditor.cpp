@@ -26,6 +26,11 @@
 #include "Expression/TaskSystemExpressionClasses.h"
 #include "Expression/TaskSystemExpression.h"
 #include "Expression/TaskSystemExpressionComment.h"
+#include"Expression/TaskSystemExpressionDialog.h"
+#include"Expression/TaskSystemExpressionSubtarget.h"
+#include"Expression/TaskSystemExpressionWeather.h"
+#include"Expression/TaskSystemExpressionSpawnMonster.h"
+
 //#include "Excel.h"
 #include "TaskNodeFactory.h"
 
@@ -380,7 +385,44 @@ void FTaskEditor::CreateInteralWidgets()
 
 
 void FTaskEditor::OnSelectedNodesChanged(const FGraphPanelSelectionSet& InSet) {
+	if (InSet.Num() == 1)
+	{
+		UTaskSystemGraphNode* Node = Cast<UTaskSystemGraphNode>(InSet.Array()[0]);
+		check(Node);
 
+		auto Expr = Cast<UTaskSystemExpression>(Node->Expression);
+		check(Expr);
+		if (auto Expr2 = Cast<UTaskSystemExpression1In2Dialog>(Expr)) {
+			DetailsView->SetObject(Expr2);
+		}
+		else if (auto Expr2 = Cast<UTaskSystemExpressionSpawnMonster>(Expr)) {
+			DetailsView->SetObject(Expr2);
+		}
+		else if (auto Expr2 = Cast<UTaskSystemExpressionSubtarget>(Expr)) {
+			DetailsView->SetObject(Expr2);
+		}
+		else if (auto Expr2 = Cast<UTaskSystemExpressionWeather>(Expr)) {
+			DetailsView->SetObject(Expr2);
+		}
+		else {
+			check(false);
+		}
+	}
+	else {
+		UTaskSystem* System = Cast<UTaskSystem>(TaskObject);
+		UTaskModule* Module = Cast<UTaskModule>(TaskObject);
+		if (System) {
+			DetailsView->SetObject(System);
+		}
+		else if (Module)
+		{
+			DetailsView->SetObject(Module);
+		}
+		else {
+			check(false);
+		}
+		SelectTaskObject = TaskObject;
+	}
 }
 
 void FTaskEditor::OnNodeDoubleClicked(class UEdGraphNode* Node) {

@@ -2,8 +2,11 @@
 
 #include"SBranchPin.h"
 #include"SEventPin.h"
-#include"SEventTextPin.h"
+#include"SSpawnMonsterPin.h"
+#include"SWeatherPin.h"
 #include"SSelectNPCPin.h"
+#include"Expression/TaskSystemExpressionWeather.h"
+#include"Expression/TaskSystemExpressionSpawnMonster.h"
 #include"TaskSystemGraphSchema.h"
 
 class FPinWidgetFactory
@@ -21,8 +24,21 @@ public:
 		}
 		else if (InPin->PinType.PinCategory == UTaskSystemGraphSchema::PC_Event)
 		{
-			if(InPin->Direction == EGPD_Input) return SNew(SEventPin, InPin);
-			else return SNew(SEventTextPin, InPin);
+			if (InPin->Direction == EGPD_Input)
+			{
+				return SNew(SEventPin, InPin);
+			}
+			else {
+				check(InPin->PinType.PinSubCategoryObject.Get());
+				UClass* Clazz = InPin->PinType.PinSubCategoryObject->GetClass();
+				if (Clazz->IsChildOf<UTaskSystemExpressionSpawnMonster>())
+					return SNew(SSpawnMonsterPin, InPin);
+				else if (Clazz->IsChildOf<UTaskSystemExpressionWeather>())
+					return SNew(SWeatherPin, InPin);
+				else {
+					check(false);
+				}
+			}
 		}
 		check(false);
 		return nullptr;

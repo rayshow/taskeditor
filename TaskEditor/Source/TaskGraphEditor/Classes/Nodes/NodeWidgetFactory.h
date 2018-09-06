@@ -15,13 +15,19 @@ public:
 	{
 		if (UTaskSystemGraphNode* Node = Cast<UTaskSystemGraphNode>(InNode))
 		{
-			if (auto Expr = Cast<UTaskSystemExpressionSubtarget>(Node->Expression))
+			UClass* Clazz = Node->Expression->GetClass();
+			if (Clazz->IsChildOf<UTaskSystemExpressionSubtarget>())
 			{
 				return SNew(SSubtargetNode, InNode);
 			}
-			else if (auto Expr = Cast<UTaskSystemExpressionSpawnMonster>(Node->Expression))
+			else if ( Clazz->IsChildOf<UTaskSystemExpressionSpawnMonster>() ||
+					Clazz->IsChildOf<UTaskSystemExpressionWeather>() )
 			{
 				return SNew(SSpawnMonsterNode, InNode);
+			}
+			else if (auto Expr = Cast<UTaskSystemExpression1In2Dialog>(Node->Expression))
+			{
+				return SNew(SDialogNode, InNode);
 			}
 			else if (auto Expr = Cast<UTaskSystemExpression1In2Dialog>(Node->Expression))
 			{

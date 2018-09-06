@@ -10,12 +10,17 @@
 #include "Widgets/Text/SInlineEditableTextBlock.h"
 #include "Widgets/Text/SMultiLineEditableText.h"
 #include "Widgets/SBoxPanel.h"
+#include "Expression/TaskSystemExpressionSubtarget.h"
 
 class SSubtargetNode : public STaskNodeBase
 {
+private:
+	UTaskSystemExpressionSubtarget * SubtargetExpr;
+
 public:
 	SLATE_BEGIN_ARGS(SSubtargetNode) {}
 	SLATE_END_ARGS()
+
 
 	void Construct(const FArguments& InArgs, UEdGraphNode* InNode)
 	{
