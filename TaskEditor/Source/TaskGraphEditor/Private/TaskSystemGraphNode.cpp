@@ -4,9 +4,14 @@
 #include"TaskSystemGraph.h"
 #include"TaskSystemGraphSchema.h"
 #include"Expression/TaskSystemExpression.h"
-
+#include"Expression/TaskSystemExpressionInput.h"
+#include"Expression/TaskSystemExpressionOutput.h"
 #include"EdGraph/EdGraphPin.h"
+#include"EdGraph/EdGraphNode.h"
 #include"SEditableTextBox.h"
+#include"GenericCommands.h"
+#include"MultiBoxBuilder.h"
+#include"GraphEditorActions.h"
 
 
 #define LOCTEXT_NAMESPACE "TaskEditor"
@@ -104,6 +109,7 @@ void UTaskSystemGraphNode_Base::ReplaceNode(UTaskSystemGraphNode_Base* OldNode)
 	// Get Pins from node passed in
 	TArray<UEdGraphPin*> OldInputPins;
 	TArray<UEdGraphPin*> OldOutputPins;
+
 	OldNode->GetInputPins(OldInputPins);
 	OldNode->GetOutputPins(OldOutputPins);
 
@@ -319,43 +325,17 @@ void UTaskSystemGraphNode::GetContextMenuActions(const FGraphNodeContextMenuBuil
 	{
 		// Break all links
 		Context.MenuBuilder->AddMenuEntry(FGraphEditorCommands::Get().BreakNodeLinks);
-
-		// Separate the above frequently used options from the below less frequently used common options
-		Context.MenuBuilder->BeginSection("MaterialEditorMenu3");
+		Context.MenuBuilder->AddMenuEntry(FGraphEditorCommands::Get().HideNoConnectionPins);
+		Context.MenuBuilder->AddMenuEntry(FGraphEditorCommands::Get().ShowAllPins);
+		 
+		Context.MenuBuilder->BeginSection("TaskEditorNodeOperation");
 		{
 			Context.MenuBuilder->AddMenuEntry(FGenericCommands::Get().Delete);
 			Context.MenuBuilder->AddMenuEntry(FGenericCommands::Get().Cut);
 			Context.MenuBuilder->AddMenuEntry(FGenericCommands::Get().Copy);
 			Context.MenuBuilder->AddMenuEntry(FGenericCommands::Get().Duplicate);
-
-			// Select upstream and downstream nodes
-			/*Context.MenuBuilder->AddMenuEntry(FMaterialEditorCommands::Get().SelectDownstreamNodes);
-			Context.MenuBuilder->AddMenuEntry(FMaterialEditorCommands::Get().SelectUpstreamNodes);*/
 		}
 		Context.MenuBuilder->EndSection();
-
-		Context.MenuBuilder->BeginSection("MaterialEditorMenuDocumentation");
-		{
-			Context.MenuBuilder->AddMenuEntry(FGraphEditorCommands::Get().GoToDocumentation);
-		}
-		Context.MenuBuilder->EndSection();
-
-		// Handle the favorites options
-		/*if (Expre)
-		{
-			Context.MenuBuilder->BeginSection("MaterialEditorMenuFavorites");
-			{
-				if (FMaterialEditorUtilities::IsMaterialExpressionInFavorites(MaterialExpression))
-				{
-					Context.MenuBuilder->AddMenuEntry(FMaterialEditorCommands::Get().RemoveFromFavorites);
-				}
-				else
-				{
-					Context.MenuBuilder->AddMenuEntry(FMaterialEditorCommands::Get().AddToFavorites);
-				}
-			}
-			Context.MenuBuilder->EndSection();
-		}*/
 	}
 
 }
@@ -427,44 +407,24 @@ FText UTaskSystemGraphNode::GetNodeTitle(ENodeTitleType::Type TitleType) const
 {
 	TArray<FString> Captions;
 	Expression->GetCaption(Captions);
+ 
+	int32 CaptionIndex = Captions.Num() - 1;
 
-	if (TitleType == ENodeTitleType::EditableTitle)
-	{
-		return FText::FromString(GetParameterName());
-	}
-	else if (TitleType == ENodeTitleType::ListView || TitleType == ENodeTitleType::MenuTitle)
-	{
-		return FText::FromString(Expression->GetClass()->GetDescription());
-	}
-	else
-	{
-		// More useful to display multi line parameter captions in reverse order
-		// TODO: May have to choose order based on expression type if others need correct order
-		int32 CaptionIndex = Captions.Num() - 1;
+	FTextBuilder NodeTitle;
+	NodeTitle.AppendLine(Captions[CaptionIndex]);
 
-		FTextBuilder NodeTitle;
+	for (; CaptionIndex > 0; )
+	{
+		CaptionIndex--;
 		NodeTitle.AppendLine(Captions[CaptionIndex]);
-
-		for (; CaptionIndex > 0; )
-		{
-			CaptionIndex--;
-			NodeTitle.AppendLine(Captions[CaptionIndex]);
-		}
-
-
-		if (bIsPreviewExpression)
-		{
-			NodeTitle.AppendLine();
-			NodeTitle.AppendLine(LOCTEXT("PreviewExpression", "Previewing"));
-		}
-
-		return NodeTitle.ToText();
 	}
+	return NodeTitle.ToText();
+	 
 }
 
 FLinearColor UTaskSystemGraphNode::GetNodeTitleColor() const
 {
-	return FLinearColor(1, 0, 0);
+	return FLinearColor(0.69,0.227,0.596);
 }
 
 FText UTaskSystemGraphNode::GetTooltipText() const
@@ -481,28 +441,8 @@ void UTaskSystemGraphNode::PrepareForCopying()
 	}
 }
 
-//void UTaskSystemGraphNode::GetContextMenuActions(const FGraphNodeContextMenuBuilder& Context) const
-//{
-//	UTaskSystemGraph* MaterialGraph = CastChecked<UTaskSystemGraph>(GetGraph());
-//
-//	if (Context.Node)
-//	{
-//		if (Expression)
-//		{
-//		}
-//	}
-//}
-
 void UTaskSystemGraphNode::PostPlacedNewNode()
 {
-	if (Expression)
-	{
-		/*NodeComment = Expression->Desc;
-		bCommentBubbleVisible = Expression->bCommentBubbleVisible;
-		NodePosX = Expression->MaterialExpressionEditorX;
-		NodePosY = Expression->MaterialExpressionEditorY;
-		bCanRenameNode = Expression->CanRenameNode();*/
-	}
 }
 
 void UTaskSystemGraphNode::NodeConnectionListChanged()
@@ -518,10 +458,8 @@ void UTaskSystemGraphNode::NodeConnectionListChanged()
 
 void UTaskSystemGraphNode::OnRenameNode(const FString& NewName)
 {
-	Expression->Modify();
-	SetParameterName(NewName);
+	Expression->Modify(); 
 	Expression->MarkPackageDirty();
-	//MaterialDirtyDelegate.ExecuteIfBound();
 }
 
 void UTaskSystemGraphNode::OnUpdateCommentText(const FString& NewComment)
@@ -561,7 +499,10 @@ void UTaskSystemGraphNode::CreateInputPins()
 
 		InputName = GetShortenPinName(InputName);
 
-		UEdGraphPin* NewPin = CreatePin(EGPD_Input, Input->InputEnumToName(), Expression, InputName);
+		UEdGraphPin* NewPin = CreatePin(EGPD_Input,
+			Input->InputEnumToName(),
+			Input->InputSubEnumToName(),
+			Expression, InputName);
 		NewPin->PinType.PinSubCategoryObject = Expression;
 		check(NewPin->PinType.PinSubCategoryObject.Get());
 		if (NewPin->PinName.IsNone())
@@ -589,7 +530,10 @@ void UTaskSystemGraphNode::CreateOutputPins()
 		{
 			OutputName = ExpressionOutput.OutputName;
 		}
-		UEdGraphPin* NewPin = CreatePin(EGPD_Output, ExpressionOutput.OutputEnumToName(), Expression, OutputName);
+		UEdGraphPin* NewPin = CreatePin(EGPD_Output, 
+			ExpressionOutput.OutputEnumToName(), 
+			ExpressionOutput.OutputSubEnumToName(),
+			Expression, OutputName);
 		check(NewPin->PinType.PinSubCategoryObject.Get());
 		if (NewPin->PinName.IsNone())
 		{

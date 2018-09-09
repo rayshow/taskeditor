@@ -30,14 +30,14 @@ class UTaskSystemExpressionComment : public UTaskSystemExpression
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 	virtual void GetCaption(TArray<FString>& OutCaptions) const override{ OutCaptions.Add(TEXT("Comment")); }
-	virtual bool MatchesSearchQuery(const TCHAR* SearchQuery) override {
+	virtual bool MatchesSearchQuery(const TCHAR* SearchQuery) override 
+	{
 		if (Text.Contains(SearchQuery)) {
 			return true;
 		}
 		return false;
 	}
 #endif // WITH_EDITOR
-
 };
 
 

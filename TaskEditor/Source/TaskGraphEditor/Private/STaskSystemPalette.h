@@ -18,14 +18,18 @@ public:
 	virtual FText GetItemTooltip() const override { return ActionPtr.Pin()->GetTooltipDescription(); }
 };
 
+DECLARE_DELEGATE_RetVal(UObject*, FOnTaskObjectChanged);
+
 class STaskSystemPalette : public SGraphPalette{
 public:
 	SLATE_BEGIN_ARGS(STaskSystemPalette) {};
+		SLATE_EVENT(FOnTaskObjectChanged, OnTaskObjectChanged)
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs, TWeakPtr<FTaskEditor> InEditorWRef);
 
 	FString GetFilterCategoryName() const { return FString("All"); }
+	void NotifyTaskObjectChanged();
 protected:
 
 	virtual TSharedRef<SWidget> OnCreateWidgetForAction(FCreateWidgetForActionData* const InCreateData) override;
@@ -43,8 +47,7 @@ protected:
 
 	/** Pointer back to the material editor that owns us */
 	TWeakPtr<FTaskEditor> TaskSystemEditorPtr;
-
 	TArray< TSharedPtr<FString> > CategoryNames;
-
 	TSharedPtr<STextComboBox> CategoryComboBox;
+	FOnTaskObjectChanged OnTaskObjectChanged;
 };

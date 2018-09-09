@@ -159,13 +159,13 @@ void STaskTreeView::Construct(const FArguments& InArgs)
 		.OnGenerateRow(this, &STaskTreeView::GenerateTreeRow)
 		.OnItemScrolledIntoView(this, &STaskTreeView::TreeItemScrolledIntoView)
 		.ItemHeight(18)
-		.SelectionMode(InArgs._SelectionMode)
+		//.SelectionMode(InArgs._SelectionMode)
 		.OnSelectionChanged(this, &STaskTreeView::TreeSelectionChanged)
 		.OnExpansionChanged(this, &STaskTreeView::TreeExpansionChanged)
 		.OnGetChildren(this, &STaskTreeView::GetChildrenForTree)
 		.OnSetExpansionRecursive(this, &STaskTreeView::SetTreeItemExpansionRecursive)
 		.OnContextMenuOpening(this, &STaskTreeView::MakeViewContextMenu)
-		.ClearSelectionOnClick(true);
+		.ClearSelectionOnClick(false).SelectionMode(ESelectionMode::Multi);
 
 	BindCommand();
 

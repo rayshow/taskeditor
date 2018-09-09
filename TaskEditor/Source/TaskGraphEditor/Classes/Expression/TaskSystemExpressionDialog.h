@@ -27,10 +27,19 @@ public:
 	UPROPERTY(EditAnywhere, meta = (DisplayName = "拒绝描述"))
 	FText No;
 
-#if WITH_EDITOR
 	virtual void GetCaption(TArray<FString>& OutCaptions) const override {
 		OutCaptions.Add(FString(TEXT("    2选1对话   ")));
 	}
-#endif
+
+	virtual TArray<FName> GetCategroy()
+	{
+		static TArray<FName> Categories;
+		if (Categories.Num() == 0)
+		{
+			Categories.Add(UTaskSystemGraphSchema::PC_All);
+			Categories.Add(UTaskSystemGraphSchema::PC_Flow);
+		}
+		return Categories;
+	}
 
 };

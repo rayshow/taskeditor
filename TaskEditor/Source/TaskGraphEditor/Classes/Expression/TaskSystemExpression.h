@@ -5,6 +5,7 @@
 #include "UObject/Object.h"
 #include "Misc/Guid.h"
 #include "TaskSystemExpressionOutput.h"
+#include "TaskSystemGraphSchema.h"
 #include "TaskSystemExpression.generated.h"
 
 class UEdGraphNode;
@@ -57,8 +58,7 @@ public:
 	void ConnectExpression(FTaskSystemExpressionInput* Input, int32 OutputIndex);
 
 	/** Returns the keywords that should be used when searching for this expression */
-	virtual FText GetKeywords() const;
-	bool GetAllInputExpressions(TArray<UTaskSystemExpression*>& InputExpressions);
+	virtual FText GetKeywords() const { return FText(); };
 	virtual bool CanRenameNode() const;
 	virtual FString GetEditableName() const;
 	virtual void SetEditableName(const FString& NewName);
@@ -66,4 +66,14 @@ public:
 	virtual void SetParameterName(const FName& Name) {}
 #endif //WITH_EDITOR
 	bool ContainsInputLoop(const bool bStopOnFunctionCall = true);
+	
+	virtual TArray<FName> GetCategroy()
+	{
+		static TArray<FName> Categories;
+		if(Categories.Num()==0)
+		{
+			Categories.Add(UTaskSystemGraphSchema::PC_All);
+		}
+		return Categories;
+	}
 };

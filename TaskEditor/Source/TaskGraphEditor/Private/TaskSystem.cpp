@@ -27,6 +27,7 @@ void UTaskObject::PrivateInitialize()
 	if (!Graph) {
 		Graph = CastChecked<UTaskSystemGraph>(FBlueprintEditorUtils::CreateNewGraph(
 			this, NAME_None, UTaskSystemGraph::StaticClass(), UTaskSystemGraphSchema::StaticClass()));
+		Graph->TaskObject = this;
 	}
 	check(Graph);
 }

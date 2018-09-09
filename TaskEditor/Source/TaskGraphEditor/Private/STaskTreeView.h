@@ -103,7 +103,7 @@ public:
 	bool CanDeleteItems();
 
 	// add Module to 
-	void AddTaskModule(UTaskModule* Module);
+	void AddTaskModule(class UTaskModule* Module);
 
 	virtual TSharedRef<ITableRow> GenerateTreeRow(
 		TSharedPtr<FTaskTreeItem> TreeItem, const TSharedRef<STableViewBase>& OwnerTable);
@@ -121,7 +121,7 @@ public:
 
 	TSharedPtr< STreeView< TSharedPtr<FTaskTreeItem>> > TreeViewPtr;
 	TArray< TSharedPtr<FTaskTreeItem> > TreeRootItems;
-	TArray< UTaskModule*>               Modules;
+	TArray <class UTaskModule* > Modules;
 	FOnSingleItemSelected               OnSingleItemSelected;
 
 	FOnGetTaskTreeContextMenu           OnMainContentMenu;

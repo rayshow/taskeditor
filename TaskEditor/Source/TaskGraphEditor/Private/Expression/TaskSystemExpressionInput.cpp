@@ -8,16 +8,28 @@
 FName FTaskSystemExpressionInput::InputEnumToName() {
 	switch (InputType) {
 	case TIT_NPCEntry:
-		return UTaskSystemGraphSchema::PC_NPC;
+	case TIT_NPCEntry_Test:
+		return UTaskSystemGraphSchema::PC_TaskSubtarget;
 	case TIT_EventInput :
 		return UTaskSystemGraphSchema::PC_Event;
 	case TIT_DialogEntry:
-		return UTaskSystemGraphSchema::PC_Branch;
+		return UTaskSystemGraphSchema::PC_Flow;
 	default:
 		check(false);
 	}
 	return NAME_None;
 }
+
+FName FTaskSystemExpressionInput::InputSubEnumToName()
+{
+	switch (InputType) {
+	case TIT_NPCEntry_Test:
+		return UTaskSystemGraphSchema::PSC_Test;
+	default:
+		return NAME_None;
+	}
+}
+
 
 void FTaskSystemExpressionInput::Connect(int32 InOutputIndex, UTaskSystemExpression* InExpression)
 {

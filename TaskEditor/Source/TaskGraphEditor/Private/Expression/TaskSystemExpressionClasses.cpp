@@ -15,7 +15,7 @@
 #include"UObjectIterator.h"
 #include"UnrealType.h"
 
-#define LOCTEXT_NAMESPACE "TaskGraphEditor"
+#define LOCTEXT_NAMESPACE "TaskEditor"
 
 TaskSystemExpressionClasses* TaskSystemExpressionClasses::Get()
 {
@@ -44,10 +44,10 @@ void TaskSystemExpressionClasses::AddExpressions(FGraphActionMenuBuilder& Action
 			CreationName = Expression.CreationName;
 		}
 
-		TSharedPtr<FTaskSystemGraphSchemaAction_NewNode> NewNodeAction(new FTaskSystemGraphSchemaAction_NewNode(
-			CategoryName,
-			CreationName,
-			ToolTip, 0, CastChecked<UTaskSystemExpression>(Expression.Class->GetDefaultObject())->GetKeywords()));
+		TSharedPtr<FTaskSystemGraphSchemaAction_NewNode> NewNodeAction(
+			new FTaskSystemGraphSchemaAction_NewNode( CategoryName, CreationName, ToolTip, 0,
+				CastChecked<UTaskSystemExpression>(Expression.Class->GetDefaultObject())->GetKeywords()));
+
 		NewNodeAction->TaskSystemExpressionClass = Expression.Class;
 		ActionMenuBuilder.AddAction(NewNodeAction);
 	}
@@ -64,6 +64,9 @@ void TaskSystemExpressionClasses::InitializeExpressionClasses()
 	TArray<UStructProperty*>	ExpressionInputs;
 
 	AllExpressionClasses.Empty();
+	EventExpressionClasses.Empty();
+	SubtargetExpressionClasses.Empty();
+	FlowExpressionClasses.Empty();
 	if (BaseType)
 	{
 		for (TObjectIterator<UClass> It; It; ++It)
@@ -100,6 +103,21 @@ void TaskSystemExpressionClasses::InitializeExpressionClasses()
 					}
 
 					AllExpressionClasses.Add(Expression);
+
+					TArray<FName> Categories = TempObject->GetCategroy();
+					if (Categories.Contains(UTaskSystemGraphSchema::PC_Event))
+					{
+						EventExpressionClasses.Add(Expression);
+					}
+					else if (Categories.Contains(UTaskSystemGraphSchema::PC_Flow))
+					{
+						FlowExpressionClasses.Add(Expression);
+					}
+					else if (Categories.Contains(UTaskSystemGraphSchema::PC_TaskSubtarget))
+					{
+						SubtargetExpressionClasses.Add(Expression);
+					}
+
 
 					// Initialize the expression class input map.							
 					for (TFieldIterator<UStructProperty> InputIt(Class); InputIt; ++InputIt)

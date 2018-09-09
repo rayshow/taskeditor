@@ -26,10 +26,10 @@
 #include "Expression/TaskSystemExpressionClasses.h"
 #include "Expression/TaskSystemExpression.h"
 #include "Expression/TaskSystemExpressionComment.h"
-#include"Expression/TaskSystemExpressionDialog.h"
-#include"Expression/TaskSystemExpressionSubtarget.h"
-#include"Expression/TaskSystemExpressionWeather.h"
-#include"Expression/TaskSystemExpressionSpawnMonster.h"
+#include "Expression/TaskSystemExpressionDialog.h"
+#include "Expression/TaskSystemExpressionSubtarget.h"
+#include "Expression/TaskSystemExpressionWeather.h"
+#include "Expression/TaskSystemExpressionSpawnMonster.h"
 
 //#include "Excel.h"
 #include "TaskNodeFactory.h"
@@ -357,8 +357,10 @@ void FTaskEditor::CreateInteralWidgets()
 
 
 	//Create Palette
-	Palette = SNew(STaskSystemPalette, SharedThis(this));
-
+	Palette = SNew(STaskSystemPalette, SharedThis(this))
+		.OnTaskObjectChanged_Lambda([this]() {
+		return SelectTaskObject;
+	});
 
 	//Task Tree
 	TaskTree = SNew(STaskTreeView)
@@ -408,21 +410,6 @@ void FTaskEditor::OnSelectedNodesChanged(const FGraphPanelSelectionSet& InSet) {
 			check(false);
 		}
 	}
-	else {
-		UTaskSystem* System = Cast<UTaskSystem>(TaskObject);
-		UTaskModule* Module = Cast<UTaskModule>(TaskObject);
-		if (System) {
-			DetailsView->SetObject(System);
-		}
-		else if (Module)
-		{
-			DetailsView->SetObject(Module);
-		}
-		else {
-			check(false);
-		}
-		SelectTaskObject = TaskObject;
-	}
 }
 
 void FTaskEditor::OnNodeDoubleClicked(class UEdGraphNode* Node) {
@@ -450,28 +437,64 @@ void FTaskEditor::OnTaskTreeItemChanged(UTaskObject* InObject)
 		GraphCanvesTab->SetContent(GraphEditor.ToSharedRef());
 
 		SelectTaskObject = InObject;
+		Palette->NotifyTaskObjectChanged();
 	}
-	else {
-		UTaskSystem* System = Cast<UTaskSystem>(TaskObject);
-		UTaskModule* Module = Cast<UTaskModule>(TaskObject);
-		if (System) {
-			DetailsView->SetObject(System);
-		}
-		else if(Module)
-		{
-			DetailsView->SetObject(Module);
-		}
-		else {
-			check(false);
-		}
-		SelectTaskObject = TaskObject;
+	//else {
+	//	UTaskSystem* System = Cast<UTaskSystem>(TaskObject);
+	//	UTaskModule* Module = Cast<UTaskModule>(TaskObject);
+	//	if (System) {
+	//		DetailsView->SetObject(System);
+	//	}
+	//	else if(Module)
+	//	{
+	//		DetailsView->SetObject(Module);
+	//	}
+	//	else {
+	//		check(false);
+	//	}
+	//	SelectTaskObject = TaskObject;
+	//}
+}
+
+void FTaskEditor::GetTaskSystemExpressionActions(
+	FGraphActionMenuBuilder& ActionMenuBuilder, UObject* Object, FName Category)
+{
+	if (Object && Object->GetClass()->IsChildOf<UTask>())
+	{
+		TaskSystemExpressionClasses* Classes = TaskSystemExpressionClasses::Get();
+		Classes->AddExpressions(ActionMenuBuilder, FText::FromString(Category.ToString()), &Classes->AllExpressionClasses);
 	}
 }
 
-void FTaskEditor::GetTaskSystemExpressionActions(FGraphActionMenuBuilder& ActionMenuBuilder, bool bMaterialFunction)
+void FTaskEditor::GetTaskSystemContextActions(
+	FGraphActionMenuBuilder& ActionMenuBuilder, UObject* Object, TArray<FName> Categories)
 {
-	TaskSystemExpressionClasses* Classes = TaskSystemExpressionClasses::Get();
-	Classes->AddExpressions(ActionMenuBuilder, FText::FromString(""), &Classes->AllExpressionClasses);
+	if (Object && Object->GetClass()->IsChildOf<UTask>())
+	{
+		TaskSystemExpressionClasses* Classes = TaskSystemExpressionClasses::Get();
+		if (Categories.Contains(UTaskSystemGraphSchema::PC_All))
+		{
+			Classes->AddExpressions(ActionMenuBuilder,
+				FText::FromString(UTaskSystemGraphSchema::PC_All.ToString()), &Classes->AllExpressionClasses);
+		}
+		else {
+			if (Categories.Contains(UTaskSystemGraphSchema::PC_Event))
+			{
+				Classes->AddExpressions(ActionMenuBuilder,
+					FText::FromString(UTaskSystemGraphSchema::PC_Event.ToString()), &Classes->EventExpressionClasses);
+			}
+			if (Categories.Contains(UTaskSystemGraphSchema::PC_Flow))
+			{
+				Classes->AddExpressions(ActionMenuBuilder,
+					FText::FromString(UTaskSystemGraphSchema::PC_Flow.ToString()), &Classes->FlowExpressionClasses);
+			}
+			if (Categories.Contains(UTaskSystemGraphSchema::PC_TaskSubtarget))
+			{
+				Classes->AddExpressions(ActionMenuBuilder,
+					FText::FromString(UTaskSystemGraphSchema::PC_TaskSubtarget.ToString()), &Classes->SubtargetExpressionClasses);
+			}
+		}
+	}
 }
 
 
@@ -497,6 +520,9 @@ UTaskSystemExpression* FTaskEditor::CreateNewTaskSystemExpression(
 		{
 			TaskEditor = StaticCastSharedPtr<FTaskEditor>(FoundAssetEditor);
 		}
+		else {
+			check(false);
+		}
 	}
 	else if((TaskModule = Cast<UTaskModule>(Outer) ) != nullptr) {
 		TSharedPtr< IToolkit > FoundAssetEditor = FToolkitManager::Get().FindEditorForAsset(TaskModule);
@@ -504,6 +530,7 @@ UTaskSystemExpression* FTaskEditor::CreateNewTaskSystemExpression(
 		{
 			TaskEditor = StaticCastSharedPtr<FTaskEditor>(FoundAssetEditor);
 		}
+		else{ check(false); }
 	}
 	else {
 		check(false);

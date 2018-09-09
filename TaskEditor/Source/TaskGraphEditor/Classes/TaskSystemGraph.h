@@ -2,6 +2,7 @@
 
 #include"CoreMinimal.h"
 #include"ObjectMacros.h"
+#include"EdGraph/EdGraph.h"
 #include"TaskSystemGraph.generated.h"
 
 
@@ -17,6 +18,7 @@ public:
 	GENERATED_UCLASS_BODY()
 
 	//Main Resource Object
+	UPROPERTY()
 	class UTaskObject* TaskObject;
 
 	// Mark Task System Dirty

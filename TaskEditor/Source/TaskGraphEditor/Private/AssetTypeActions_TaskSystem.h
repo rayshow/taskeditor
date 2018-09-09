@@ -1,4 +1,4 @@
-// Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
+﻿// Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
 
 #pragma once
 
@@ -14,8 +14,8 @@ class FAssetTypeActions_TaskSystem : public FAssetTypeActions_Base
 {
 public:
 	// IAssetTypeActions Implementation
-	virtual FText GetName() const override { return NSLOCTEXT("AssetTypeActions", "AssetTypeActions_TaskSystem", "Task System"); }
-	virtual FColor GetTypeColor() const override { return FColor(255, 0, 0); }
+	virtual FText GetName() const override { return NSLOCTEXT("AssetTypeActions", "AssetTypeActions_TaskSystem", "任务主表"); }
+	virtual FColor GetTypeColor() const override { return FColor(176, 58, 152, 255); }
 	virtual UClass* GetSupportedClass() const override { return UTaskSystem::StaticClass(); }
 	virtual bool HasActions(const TArray<UObject*>& InObjects) const override { return false; }
 	virtual void GetActions(const TArray<UObject*>& InObjects, FMenuBuilder& MenuBuilder) override {};
@@ -42,8 +42,8 @@ class FAssetTypeActions_TaskModule : public FAssetTypeActions_Base
 {
 public:
 	// IAssetTypeActions Implementation
-	virtual FText GetName() const override { return NSLOCTEXT("AssetTypeActions", "AssetTypeActions_TaskModule", "Task Module"); }
-	virtual FColor GetTypeColor() const override { return FColor(255, 0, 0); }
+	virtual FText GetName() const override { return NSLOCTEXT("AssetTypeActions", "AssetTypeActions_TaskModule", "任务分表"); }
+	virtual FColor GetTypeColor() const override { return FColor(176, 58, 152,255); }
 	virtual UClass* GetSupportedClass() const override { return UTaskModule::StaticClass(); }
 	virtual bool HasActions(const TArray<UObject*>& InObjects) const override { return false; }
 	virtual void GetActions(const TArray<UObject*>& InObjects, FMenuBuilder& MenuBuilder) override {};

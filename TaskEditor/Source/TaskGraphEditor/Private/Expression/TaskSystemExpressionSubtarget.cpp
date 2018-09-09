@@ -28,3 +28,19 @@ UTaskSystemExpressionSubtarget::UTaskSystemExpressionSubtarget(FObjectInitialize
 	AfterPost.InputType = TIT_EventInput;
 }
 
+UTaskSystemExpressionSubtargetTest::UTaskSystemExpressionSubtargetTest(
+	FObjectInitializer const& Initializer)
+	: Super(Initializer)
+{
+	Outputs[0].OutputType = TOT_NPCExit_Test;
+	Input.InputType = TIT_NPCEntry_Test;
+}
+
+
+
+
+UTaskSystemExpressionDialogSubtarget::UTaskSystemExpressionDialogSubtarget(FObjectInitializer const& Initializer)
+	: Super(Initializer)
+{
+	TargetType = EST_Dialog;
+}

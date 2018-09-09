@@ -24,7 +24,7 @@ enum ESubtargetType
 
 
 
-UCLASS(MinimalAPI, DisplayName = "子目标 - 对话任务")
+UCLASS(MinimalAPI, DisplayName = "子目标(选择资源) - 可定制任务")
 class UTaskSystemExpressionSubtarget : public UTaskSystemExpression
 {
 public:
@@ -112,7 +112,6 @@ public:
 	UPROPERTY(EditAnywhere, meta = (DisplayName = "最大等级"))
 	int32 LvLimitEnd;
 
-#if WITH_EDITOR
 	virtual void GetCaption(TArray<FString>& OutCaptions) const override {
 		if (!TaskName.IsEmpty()) {
 			OutCaptions.Add(TEXT("   ") + TaskName);
@@ -123,12 +122,32 @@ public:
 		FText TypeStr = EnumPtr->GetDisplayNameTextByIndex(TargetType);
 		FString Title = FString::Printf(TEXT("子目标 - %s                    "), *TypeStr.ToString());
 		OutCaptions.Add(Title);
-		
-		
 	}
 
 
+	virtual TArray<FName> GetCategroy()
+	{
+		static TArray<FName> Categories;
+		if (Categories.Num() == 0)
+		{
+			Categories.Add(UTaskSystemGraphSchema::PC_All);
+			Categories.Add(UTaskSystemGraphSchema::PC_TaskSubtarget);
+		}
+		return Categories;
+	}
 
-#endif
+};
 
+UCLASS(MinimalAPI, DisplayName = "子目标(输入ID) - 可定制任务")
+class UTaskSystemExpressionSubtargetTest : public UTaskSystemExpressionSubtarget
+{
+public:
+	GENERATED_UCLASS_BODY()
+};
+
+UCLASS(MinimalAPI, DisplayName = "子目标(输入ID) - 对话任务")
+class UTaskSystemExpressionDialogSubtarget : public UTaskSystemExpressionSubtargetTest
+{
+public:
+	GENERATED_UCLASS_BODY()
 };

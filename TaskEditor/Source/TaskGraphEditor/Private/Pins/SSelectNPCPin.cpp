@@ -104,42 +104,6 @@ TSharedRef<SWidget>	SSelectNPCPin::GetDefaultValueWidget()
 				]
 				.OnGetMenuContent(this, &SSelectNPCPin::GenerateAssetPicker)
 			];
-		//// Use button
-		//+ SHorizontalBox::Slot()
-		//	.AutoWidth()
-		//	.Padding(1, 0)
-		//	.VAlign(VAlign_Center)
-		//	[
-		//		SAssignNew(UseButton, SButton)
-		//		.ButtonStyle(FEditorStyle::Get(), "NoBorder")
-		//		.ButtonColorAndOpacity(this, &SSelectNPCPin::OnGetWidgetBackground)
-		//		.OnClicked(GetOnUseButtonDelegate())
-		//		.ContentPadding(1.f)
-		//		.ToolTipText(NSLOCTEXT("GraphEditor", "ObjectGraphPin_Use_Tooltip", "Use asset browser selection"))
-		//		[
-		//			SNew(SImage)
-		//			.ColorAndOpacity(this, &SSelectNPCPin::OnGetWidgetForeground)
-		//			.Image(FEditorStyle::GetBrush(TEXT("PropertyWindow.Button_Use")))
-		//		]
-		//	]
-		//// Browse button
-		//+ SHorizontalBox::Slot()
-		//	.AutoWidth()
-		//	.Padding(1, 0)
-		//	.VAlign(VAlign_Center)
-		//	[
-		//		SAssignNew(BrowseButton, SButton)
-		//		.ButtonStyle(FEditorStyle::Get(), "NoBorder")
-		//		.ButtonColorAndOpacity(this, &SSelectNPCPin::OnGetWidgetBackground)
-		//		.OnClicked(GetOnBrowseButtonDelegate())
-		//		.ContentPadding(0)
-		//		.ToolTipText(NSLOCTEXT("GraphEditor", "ObjectGraphPin_Browse_Tooltip", "Browse"))
-		//		[
-		//			SNew(SImage)
-		//			.ColorAndOpacity(this, &SSelectNPCPin::OnGetWidgetForeground)
-		//			.Image(FEditorStyle::GetBrush(TEXT("PropertyWindow.Button_Browse")))
-		//		]
-		//	];
 	}
 
 	return SNullWidget::NullWidget;

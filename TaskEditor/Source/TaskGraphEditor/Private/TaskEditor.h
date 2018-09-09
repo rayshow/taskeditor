@@ -9,6 +9,7 @@ class UTaskSystem;
 class UTaskModule;
 class STaskSystemGraphEditor;
 class UEdGraph;
+struct FGraphActionMenuBuilder;
 
 class FTaskEditor : 
 	public ITaskEditor
@@ -53,7 +54,12 @@ public:
 
 public:
 	//Util Function
-	static void GetTaskSystemExpressionActions(FGraphActionMenuBuilder& ActionMenuBuilder, bool bMaterialFunction);
+	static void GetTaskSystemExpressionActions(FGraphActionMenuBuilder& ActionMenuBuilder, 
+		UObject* Object, FName Category);
+
+	static void GetTaskSystemContextActions( FGraphActionMenuBuilder& ActionMenuBuilder,
+		UObject* Object, TArray<FName> Categories);
+
 	static int32 GetNumberOfSelectedNodes(const class UEdGraph* Graph) { return 0; }
 	static UTaskSystemExpression* CreateNewTaskSystemExpression(UObject* ToFocus, UClass* NewExpressionClass,
 		const FVector2D& NodePos, bool bAutoSelect, bool bAutoAssignResource);
@@ -84,7 +90,6 @@ private:
 
 	//Tab
 	TSharedPtr<SDockTab> GraphCanvesTab;
-
 
 	// for Undo/Redo
 	FScopedTransaction* ScopedTransaction;

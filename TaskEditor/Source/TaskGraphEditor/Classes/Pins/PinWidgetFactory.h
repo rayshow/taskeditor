@@ -5,6 +5,7 @@
 #include"SSpawnMonsterPin.h"
 #include"SWeatherPin.h"
 #include"SSelectNPCPin.h"
+#include"SInputNPCIdPin.h"
 #include"Expression/TaskSystemExpressionWeather.h"
 #include"Expression/TaskSystemExpressionSpawnMonster.h"
 #include"TaskSystemGraphSchema.h"
@@ -14,11 +15,17 @@ class FPinWidgetFactory
 public:
 	static TSharedPtr<SGraphPin> CreatePinWidget(UEdGraphPin* InPin)
 	{
-		if (InPin->PinType.PinCategory == UTaskSystemGraphSchema::PC_NPC)
+		if (InPin->PinType.PinCategory == UTaskSystemGraphSchema::PC_TaskSubtarget)
 		{
-			return SNew(SSelectNPCPin, InPin);
+			if (InPin->PinType.PinSubCategory == UTaskSystemGraphSchema::PSC_Test)
+			{
+				return SNew(SInputNpcIdPin, InPin);
+			}
+			else {
+				return SNew(SSelectNPCPin, InPin);
+			}
 		}
-		else if (InPin->PinType.PinCategory == UTaskSystemGraphSchema::PC_Branch)
+		else if (InPin->PinType.PinCategory == UTaskSystemGraphSchema::PC_Flow)
 		{
 			return SNew(SBranchPin, InPin);
 		}

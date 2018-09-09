@@ -111,7 +111,7 @@ TArray<TSharedPtr<FString>>* SWeatherPin::ConstructWeatherOptions()
 		for (int i = 0; i < TWT_MAX; ++i)
 		{
 			auto index = EnumPtr->GetIndexByValue(i);
-			Options.Add( MakeShareable( new FString(EnumPtr->GetEnumText(index).ToString())));
+			Options.Add( MakeShareable( new FString(EnumPtr->GetDisplayNameTextByIndex(index).ToString())));
 		}
 		Initialize = true;
 	}

@@ -7,7 +7,8 @@
 
 UENUM()
 enum TaskSystemExpressionInputType{
-	TIT_NPCEntry =0,
+	TIT_NPCEntry = 0,
+	TIT_NPCEntry_Test,
 	TIT_DialogEntry,
 	TIT_EventInput
 };
@@ -60,6 +61,8 @@ struct FTaskSystemExpressionInput
 	FTaskSystemExpressionInput GetTracedInput() const;
 
 	FName InputEnumToName();
+
+	FName InputSubEnumToName();
 
 };
 

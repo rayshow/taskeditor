@@ -32,11 +32,20 @@ public:
 
 	static const FName SubCatgory;
 
-#if WITH_EDITOR
 	virtual void GetCaption(TArray<FString>& OutCaptions) const override {
 		OutCaptions.Add(FString(TEXT(" 事件 - 天气")));
 		OutCaptions.Add(EventName);
 	}
-#endif
+
+	virtual TArray<FName> GetCategroy()
+	{
+		static TArray<FName> Categories;
+		if (Categories.Num() == 0)
+		{
+			Categories.Add(UTaskSystemGraphSchema::PC_All);
+			Categories.Add(UTaskSystemGraphSchema::PC_Event);
+		}
+		return Categories;
+	}
 
 };

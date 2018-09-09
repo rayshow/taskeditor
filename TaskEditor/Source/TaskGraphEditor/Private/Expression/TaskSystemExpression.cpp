@@ -4,11 +4,11 @@
 #include"UObject/UnrealType.h"
 
 #define LOCTEXT_NAMESPACE "TaskGraphEditor"
+const static FName TaskSystemInputName("TaskSystemExpressionInput");
+
 
 UTaskSystemExpression::UTaskSystemExpression(FObjectInitializer const& Initializer)
 	:UObject(Initializer) {}
-
-const static FName TaskSystemInputName("TaskSystemExpressionInput");
 
 
 
@@ -135,121 +135,6 @@ bool UTaskSystemExpression::MatchesSearchQuery(const TCHAR* SearchQuery)
 {
 	return true;
 }
-//
-//static void CopyMaterialExpressions(
-//	const TArray<class UMaterialExpression*>& SrcExpressions,
-//	const TArray<class UMaterialExpressionComment*>& SrcExpressionComments,
-//	class UMaterial* Material, class UMaterialFunction* Function,
-//	TArray<class UMaterialExpression*>& OutNewExpressions,
-//	TArray<class UMaterialExpression*>& OutNewComments)
-//{
-//	OutNewExpressions.Empty();
-//	OutNewComments.Empty();
-//
-//	UObject* ExpressionOuter = Material;
-//	if (EditFunction)
-//	{
-//		ExpressionOuter = EditFunction;
-//	}
-//
-//	TMap<UMaterialExpression*, UMaterialExpression*> SrcToDestMap;
-//
-//	// Duplicate source expressions into the editor's material copy buffer.
-//	for (int32 SrcExpressionIndex = 0; SrcExpressionIndex < SrcExpressions.Num(); ++SrcExpressionIndex)
-//	{
-//		UMaterialExpression*	SrcExpression = SrcExpressions[SrcExpressionIndex];
-//		UMaterialExpressionMaterialFunctionCall* FunctionExpression = Cast<UMaterialExpressionMaterialFunctionCall>(SrcExpression);
-//		bool bIsValidFunctionExpression = true;
-//
-//		if (EditFunction
-//			&& FunctionExpression
-//			&& FunctionExpression->MaterialFunction
-//			&& FunctionExpression->MaterialFunction->IsDependent(EditFunction))
-//		{
-//			bIsValidFunctionExpression = false;
-//		}
-//
-//		if (bIsValidFunctionExpression && IsAllowedExpressionType(SrcExpression->GetClass(), EditFunction != NULL))
-//		{
-//			UMaterialExpression* NewExpression = Cast<UMaterialExpression>(StaticDuplicateObject(SrcExpression, ExpressionOuter, NAME_None, RF_Transactional));
-//			NewExpression->Material = Material;
-//			// Make sure we remove any references to functions the nodes came from
-//			NewExpression->Function = NULL;
-//
-//			SrcToDestMap.Add(SrcExpression, NewExpression);
-//
-//			// Add to list of material expressions associated with the copy buffer.
-//			Material->Expressions.Add(NewExpression);
-//
-//			// There can be only one default mesh paint texture.
-//			UMaterialExpressionTextureBase* TextureSample = Cast<UMaterialExpressionTextureBase>(NewExpression);
-//			if (TextureSample)
-//			{
-//				TextureSample->IsDefaultMeshpaintTexture = false;
-//			}
-//
-//			NewExpression->UpdateParameterGuid(true, true);
-//			NewExpression->UpdateMaterialExpressionGuid(true, true);
-//
-//			UMaterialExpressionFunctionInput* FunctionInput = Cast<UMaterialExpressionFunctionInput>(NewExpression);
-//			if (FunctionInput)
-//			{
-//				FunctionInput->ConditionallyGenerateId(true);
-//				FunctionInput->ValidateName();
-//			}
-//
-//			UMaterialExpressionFunctionOutput* FunctionOutput = Cast<UMaterialExpressionFunctionOutput>(NewExpression);
-//			if (FunctionOutput)
-//			{
-//				FunctionOutput->ConditionallyGenerateId(true);
-//				FunctionOutput->ValidateName();
-//			}
-//
-//			// Record in output list.
-//			OutNewExpressions.Add(NewExpression);
-//		}
-//	}
-//
-//	// Fix up internal references.  Iterate over the inputs of the new expressions, and for each input that refers
-//	// to an expression that was duplicated, point the reference to that new expression.  Otherwise, clear the input.
-//	for (int32 NewExpressionIndex = 0; NewExpressionIndex < OutNewExpressions.Num(); ++NewExpressionIndex)
-//	{
-//		UMaterialExpression* NewExpression = OutNewExpressions[NewExpressionIndex];
-//		const TArray<FExpressionInput*>& ExpressionInputs = NewExpression->GetInputs();
-//		for (int32 ExpressionInputIndex = 0; ExpressionInputIndex < ExpressionInputs.Num(); ++ExpressionInputIndex)
-//		{
-//			FExpressionInput* Input = ExpressionInputs[ExpressionInputIndex];
-//			UMaterialExpression* InputExpression = Input->Expression;
-//			if (InputExpression)
-//			{
-//				UMaterialExpression** NewInputExpression = SrcToDestMap.Find(InputExpression);
-//				if (NewInputExpression)
-//				{
-//					check(*NewInputExpression);
-//					Input->Expression = *NewInputExpression;
-//				}
-//				else
-//				{
-//					Input->Expression = NULL;
-//				}
-//			}
-//		}
-//	}
-//
-//	// Copy Selected Comments
-//	for (int32 CommentIndex = 0; CommentIndex<SrcExpressionComments.Num(); CommentIndex++)
-//	{
-//		UMaterialExpressionComment* ExpressionComment = SrcExpressionComments[CommentIndex];
-//		UMaterialExpressionComment* NewComment = Cast<UMaterialExpressionComment>(StaticDuplicateObject(ExpressionComment, ExpressionOuter));
-//		NewComment->Material = Material;
-//
-//		// Add reference to the material
-//		Material->EditorComments.Add(NewComment);
-//
-//		// Add to the output array.
-//		OutNewComments.Add(NewComment);
-//	}
-//}
 
 void UTaskSystemExpression::ConnectExpression(FTaskSystemExpressionInput* Input, int32 OutputIndex)
 {
@@ -260,18 +145,6 @@ void UTaskSystemExpression::ConnectExpression(FTaskSystemExpressionInput* Input,
 		Input->Expression = this;
 		Input->OutputIndex = OutputIndex;
 	}
-}
-
-
-FText UTaskSystemExpression::GetKeywords() const { return FText::GetEmpty(); }
-
-bool UTaskSystemExpression::GetAllInputExpressions(TArray<UTaskSystemExpression*>& InputExpressions)
-{
-	if (!InputExpressions.Contains(this))
-	{
-		InputExpressions.Add(this);
-	}
-	return false;
 }
 
 bool UTaskSystemExpression::CanRenameNode() const
@@ -292,6 +165,10 @@ void UTaskSystemExpression::SetEditableName(const FString& NewName)
 FName UTaskSystemExpression::GetParameterName() const { return NAME_None; }
 
 
-bool UTaskSystemExpression::ContainsInputLoop(const bool bStopOnFunctionCall) { return false; }
+bool UTaskSystemExpression::ContainsInputLoop(const bool bStopOnFunctionCall) 
+{
+	return false; 
+}
+
 
 #undef LOCTEXT_NAMESPACE

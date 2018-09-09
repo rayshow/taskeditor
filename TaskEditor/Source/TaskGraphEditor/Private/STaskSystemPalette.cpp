@@ -1,4 +1,4 @@
-#include"STaskSystemPalette.h"
+﻿#include"STaskSystemPalette.h"
 #include"Styling/CoreStyle.h"
 #include"GraphEditorActions.h"
 #include"SpawnNodeCommands.h"
@@ -88,9 +88,11 @@ void STaskSystemPaletteItem::Construct(const FArguments& InArgs,
 }
 
 
+
 void STaskSystemPalette::Construct(const FArguments& InArgs, TWeakPtr<FTaskEditor> InTaskEditorPtr)
 {
 	TaskSystemEditorPtr = InTaskEditorPtr;
+	OnTaskObjectChanged = InArgs._OnTaskObjectChanged;
 
 	// Create the asset discovery indicator
 	ITaskEditorModule& EditorWidgetsModule = FModuleManager::LoadModuleChecked<ITaskEditorModule>("EditorWidgets");
@@ -98,8 +100,6 @@ void STaskSystemPalette::Construct(const FArguments& InArgs, TWeakPtr<FTaskEdito
 		EditorWidgetsModule.CreateAssetDiscoveryIndicator(EAssetDiscoveryIndicatorScaleMode::Scale_Vertical);*/
 
 	CategoryNames.Add(MakeShareable(new FString(TEXT("All"))));
-	CategoryNames.Add(MakeShareable(new FString(TEXT("Expressions"))));
-	CategoryNames.Add(MakeShareable(new FString(TEXT("Functions"))));
 
 	this->ChildSlot
 	[
@@ -117,7 +117,7 @@ void STaskSystemPalette::Construct(const FArguments& InArgs, TWeakPtr<FTaskEdito
 				.AutoWidth()
 				[
 					SNew(STextBlock)
-					.Text(LOCTEXT("Category", "Category: "))
+					.Text(LOCTEXT("Category", "类别: "))
 				]
 				+ SHorizontalBox::Slot()
 				.VAlign(VAlign_Center)
@@ -143,6 +143,7 @@ void STaskSystemPalette::Construct(const FArguments& InArgs, TWeakPtr<FTaskEdito
 					.OnCreateWidgetForAction(this, &STaskSystemPalette::OnCreateWidgetForAction)
 					.OnCollectAllActions(this, &STaskSystemPalette::CollectAllActions)
 					.AutoExpandActionMenu(true)
+					
 				]
 
 				//+ SOverlay::Slot()
@@ -173,10 +174,12 @@ TSharedRef<SWidget> STaskSystemPalette::OnCreateWidgetForAction(FCreateWidgetFor
 
 void STaskSystemPalette::CollectAllActions(FGraphActionListBuilderBase& OutAllActions)
 {
+	UObject *Obj = nullptr;
+	if(OnTaskObjectChanged.IsBound()) Obj = OnTaskObjectChanged.Execute();
 	OutAllActions.Empty();
 	const UTaskSystemGraphSchema* Schema = GetDefault<UTaskSystemGraphSchema>();
 	FGraphActionMenuBuilder ActionMenuBuilder;
-	Schema->GetPaletteActions(ActionMenuBuilder, GetFilterCategoryName(), false);
+	Schema->GetPaletteActions(ActionMenuBuilder, Obj, GetFilterCategoryName());
 	OutAllActions.Append(ActionMenuBuilder);
 }
 
@@ -211,6 +214,11 @@ void STaskSystemPalette::RefreshAssetInRegistry(const FAssetData& InAddedAssetDa
 	}
 }
 
+
+void STaskSystemPalette::NotifyTaskObjectChanged()
+{
+	RefreshActionsList(true);
+}
 
 
 #undef LOCTEXT_NAMESPACE

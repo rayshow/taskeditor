@@ -2,15 +2,16 @@
 
 #include"ObjectMacros.h"
 #include"CoreMinimal.h"
-#include"Object.h"
 #include"Factories/Factory.h"
-#include"EdGraph/EdGraphNode.h"
-#include"SharedPointer.h"
 #include"TaskSystem.generated.h"
-
 
 class UTaskGroup;
 class UTaskModule;
+
+const FString TEXT_TaskSystem{ TEXT("TaskSystem") };
+const FString TEXT_TaskModule{ TEXT("TaskModule") };
+const FString TEXT_TaskGroup{ TEXT("TaskGroup") };
+const FString TEXT_TaskSelf{ TEXT("TaskSelf") };
 
 UCLASS(BlueprintType, MinimalAPI)
 class UTaskObject : public UObject
@@ -39,7 +40,7 @@ public:
 
 	virtual void AddChild(UTaskObject* Child) {}
 
-
+	virtual const FString* GetFilterCategory() { return nullptr; };
 };
 
 UCLASS(BlueprintType, MinimalAPI)
@@ -51,6 +52,11 @@ public:
 	UTaskGroup* Group;
 
 	UTaskModule* Module;
+
+	virtual const FString* GetFilterCategory() override
+	{
+		return &TEXT_TaskSelf;
+	}
 };
 
 UCLASS(BlueprintType, MinimalAPI)
@@ -62,13 +68,20 @@ public:
 	UPROPERTY()
 	TArray<UTaskObject*> Children;
 	
-	virtual void AddChild(UTaskObject* Child) override{
-		if (Child->GetClass()->IsChildOf<UTaskGroup>()
-			|| Child->GetClass()->IsChildOf<UTask>())
+	virtual void AddChild(UTaskObject* Child) override
+	{
+		if (Child->GetClass()->IsChildOf<UTaskGroup>() ||
+			Child->GetClass()->IsChildOf<UTask>())
 		{
 			Children.Add(Child);
 		}
 	}
+
+	virtual const FString* GetFilterCategory() override
+	{
+		return &TEXT_TaskGroup;
+	}
+
 };
 
 // As Top Group, no Father Group
@@ -88,6 +101,11 @@ public:
 			Children.Add(ChildGroup);
 		}
 	}
+
+	virtual const FString* GetFilterCategory() override
+	{
+		return &TEXT_TaskModule;
+	}
 };
 
 UCLASS(BlueprintType, MinimalAPI)
@@ -98,6 +116,11 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TArray<UTaskModule*> Modules;
+
+	virtual const FString* GetFilterCategory() override
+	{
+		return &TEXT_TaskSystem;
+	}
 };
 
 UCLASS()
@@ -105,7 +128,6 @@ class UTaskSystemFactory : public UFactory
 {
 	GENERATED_UCLASS_BODY()
 
-	// UFactory interface
 	virtual UObject* FactoryCreateNew(UClass* Class, UObject* InParent,
 		FName Name, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn) override;
 };
@@ -116,7 +138,6 @@ class UTaskModuleFactory : public UFactory
 {
 	GENERATED_UCLASS_BODY()
 
-	// UFactory interface
 	virtual UObject* FactoryCreateNew(UClass* Class, UObject* InParent,
 		FName Name, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn) override;
 };
