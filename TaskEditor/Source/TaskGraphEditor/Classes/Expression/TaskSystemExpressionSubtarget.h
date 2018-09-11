@@ -46,75 +46,80 @@ public:
 	UPROPERTY()
 	FTaskSystemExpressionInput AfterPost;
 
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "任务ID"))
-	int32 TaskID;
 
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "任务名字"))
-	FString TaskName;
+	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "能否自动接受"))
+		uint32 bCanAutoAccept : 1;
+
+	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "能否重复接受"))
+		uint32 bCanReAccept : 1;
+
+	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "失败自动删除"))
+		uint32 bRemoveIfFailed : 1;
+
+	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "显示在任务栏中"))
+		uint32 bDisplayInTaskColumn : 1;
+
+	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "是否自动寻路"))
+		uint32 bAutoFindWay : 1;
+
+	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "是否限时任务"))
+		uint32 bLimitTime : 1;
+
+	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "是否限区域任务"))
+		uint32 bLimitArea : 1;
+
+	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "是否限职业"))
+		uint32 bLimitOccupation : 1;
+
+	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "是否限性别"))
+		uint32 bLimitSex : 1;
+
+	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "是否限等级"))
+		uint32 bLimitLv : 1;
+
+	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "最小等级"))
+		int32 LvLimitStart;
+
+	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "最大等级"))
+		int32 LvLimitEnd;
+
+	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "任务ID"))
+		int32 TaskID;
+
+	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "任务标题"))
+		FString TaskTitle;
+
+	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "任务描述"))
+		FText TaskDesc;
+
+	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "任务接受描述"))
+		FText TaskAcceptDesc;
+
+	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "任务进行描述"))
+		FText TaskDoingDesc;
+
+	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "任务完成描述"))
+		FText TaskFinishDesc;
+
+	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "开始NPC ID"))
+		int32 StartNpcID;
+
+	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "接受对话ID"))
+		int32 AcceptDialogID;
+
+	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "完成NPC ID"))
+		int32 FinishNpcID;
+
+	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "完成对话ID"))
+		int32 FinishDialogID;
+
 
 	UPROPERTY(EditAnywhere, meta = (DisplayName = "任务类型"))
-	TEnumAsByte<enum ESubtargetType> TargetType;
-
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "任务描述"))
-	FText TaskDesc;
-
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "任务接受描述"))
-	FText TaskAcceptDesc;
-
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "任务进行中描述"))
-	FText TaskDoingDesc;
-
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "任务完成描述"))
-	FText TaskFinishDesc;
-
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "开始NPC ID"))
-	int32 StartNpcID;
-
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "接受对话ID"))
-	int32 AcceptDialogID;
-
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "完成NPC ID"))
-	int32 FinishNpcID;
-
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "完成对话ID"))
-	int32 FinishDialogID;
-
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "能否自动接受"))
-	uint32 bCanAutoAccept : 1;
-
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "能否重复接受"))
-	uint32 bCanReAccept : 1;
-
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "失败自动删除"))
-	uint32 bRemoveIfFailed : 1;
-
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "显示在任务栏中"))
-	uint32 bDisplayInTaskColumn : 1;
-
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "自动寻路"))
-	uint32 bAutoFindWay : 1;
-
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "限时任务"))
-	uint32 bLimitTime : 1;
-
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "限区域任务"))
-	uint32 bLimitArea : 1;
-
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "限职业"))
-	uint32 bOccupationLimit : 1;
-
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "限性别"))
-	uint32 bSexLimit : 1;
-
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "最小等级"))
-	int32 LvLimitStart;
-
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "最大等级"))
-	int32 LvLimitEnd;
+		TEnumAsByte<enum ESubtargetType> TargetType;
 
 	virtual void GetCaption(TArray<FString>& OutCaptions) const override {
-		if (!TaskName.IsEmpty()) {
-			OutCaptions.Add(TEXT("   ") + TaskName);
+		if (!TaskTitle.IsEmpty()) {
+			OutCaptions.Add(TEXT("   ") + TaskTitle);
 		}
 
 		const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("ESubtargetType"), true);
