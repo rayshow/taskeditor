@@ -23,6 +23,18 @@ enum ESubtargetType
 };
 
 
+USTRUCT()
+struct FSubtargetDialog
+{
+public:
+	GENERATED_BODY()
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "NPC ID"))
+	int NpcID;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "对话 ID"))
+	int DialogID;
+};
+
 
 UCLASS(MinimalAPI, DisplayName = "子目标(选择资源) - 可定制任务")
 class UTaskSystemExpressionSubtarget : public UTaskSystemExpression
@@ -48,7 +60,7 @@ public:
 
 
 	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "能否自动接受"))
-		uint32 bCanAutoAccept : 1;
+	uint32 bCanAutoAccept : 1;
 
 	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "能否重复接受"))
 		uint32 bCanReAccept : 1;
@@ -74,58 +86,51 @@ public:
 	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "是否限性别"))
 		uint32 bLimitSex : 1;
 
-	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "是否限等级"))
+	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "是否限等级", InlineEditConditionToggle))
 		uint32 bLimitLv : 1;
 
-	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "最小等级"))
-		int32 LvLimitStart;
-
-	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "最大等级"))
-		int32 LvLimitEnd;
+	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "等级范围", editcondition = "bLimitLv"))
+		FIntPoint LvLimitStart;
 
 	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "任务ID"))
 		int32 TaskID;
 
-	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "任务标题"))
+	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "任务标题",MultiLine))
 		FString TaskTitle;
 
-	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "任务描述"))
+	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "任务描述", MultiLine))
 		FText TaskDesc;
 
-	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "任务接受描述"))
+	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "任务接受描述", MultiLine))
 		FText TaskAcceptDesc;
 
-	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "任务进行描述"))
+	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "任务进行描述", MultiLine))
 		FText TaskDoingDesc;
 
-	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "任务完成描述"))
+	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "任务完成描述", MultiLine))
 		FText TaskFinishDesc;
 
-	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "开始NPC ID"))
+	UPROPERTY()
 		int32 StartNpcID;
 
 	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "接受对话ID"))
 		int32 AcceptDialogID;
 
-	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "完成NPC ID"))
+	UPROPERTY()
 		int32 FinishNpcID;
 
 	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "完成对话ID"))
 		int32 FinishDialogID;
 
+	UPROPERTY(EditAnywhere, Category = "子目标", meta = (DisplayName = "对话子目标"))
+		TArray<FSubtargetDialog> Dialogs;
 
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "任务类型"))
-		TEnumAsByte<enum ESubtargetType> TargetType;
 
 	virtual void GetCaption(TArray<FString>& OutCaptions) const override {
 		if (!TaskTitle.IsEmpty()) {
 			OutCaptions.Add(TEXT("   ") + TaskTitle);
 		}
-
-		const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("ESubtargetType"), true);
-		check(EnumPtr);
-		FText TypeStr = EnumPtr->GetDisplayNameTextByIndex(TargetType);
-		FString Title = FString::Printf(TEXT("子目标 - %s                    "), *TypeStr.ToString());
+		FString Title = TEXT("子任务                        ");
 		OutCaptions.Add(Title);
 	}
 
@@ -141,18 +146,4 @@ public:
 		return Categories;
 	}
 
-};
-
-UCLASS(MinimalAPI, DisplayName = "子目标(输入ID) - 可定制任务")
-class UTaskSystemExpressionSubtargetTest : public UTaskSystemExpressionSubtarget
-{
-public:
-	GENERATED_UCLASS_BODY()
-};
-
-UCLASS(MinimalAPI, DisplayName = "子目标(输入ID) - 对话任务")
-class UTaskSystemExpressionDialogSubtarget : public UTaskSystemExpressionSubtargetTest
-{
-public:
-	GENERATED_UCLASS_BODY()
 };

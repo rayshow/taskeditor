@@ -62,11 +62,8 @@ public:
 					 .WrapTextAt(110).WrappingPolicy(ETextWrappingPolicy::AllowPerCharacterWrapping)
 					 .AllowMultiLine(true).AutoWrapText(true)
 					 .Text_Lambda([this]() {
-						const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("ESubtargetType"), true);
-						check(EnumPtr);
-						FText TypeStr = EnumPtr->GetDisplayNameTextByIndex(SubtargetExpr->TargetType);
-						return FText::Format(NSLOCTEXT("SubTargetNode", "NodeContent", "[{0}]\n{1}"),
-							TypeStr, 
+						
+						return FText::Format(NSLOCTEXT("SubTargetNode", "NodeContent", " n{1}"),
 								SubtargetExpr->TaskDesc.IsEmpty()?
 								FText::FromString(TEXT("请输入任务描述。")) : SubtargetExpr->TaskDesc
 						);
