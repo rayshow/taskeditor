@@ -22,17 +22,205 @@ enum ESubtargetType
 	EST_CompleteActivity UMETA(DisplayName = "完成活动任务"),
 };
 
-
+// 对话子目标
 USTRUCT()
 struct FSubtargetDialog
 {
 public:
 	GENERATED_BODY()
 	UPROPERTY(EditAnywhere, meta = (DisplayName = "NPC ID"))
-	int NpcID;
+		uint32 NpcID;
 
 	UPROPERTY(EditAnywhere, meta = (DisplayName = "对话 ID"))
-	int DialogID;
+		uint32 DialogID;
+};
+
+// 杀怪子目标
+USTRUCT()
+struct FSubtargetKillMonster
+{
+public:
+	GENERATED_BODY()
+		UPROPERTY(EditAnywhere, meta = (DisplayName = "怪物 ID"))
+		uint32 MonsterID;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "怪物数量"))
+		uint32 MonsterNum;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "怪物血量"))
+		uint32 MonsterHealth;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "怪物掉落物品ID"))
+		uint32 DropItemID;
+};
+
+// 到达子目标
+USTRUCT()
+struct FSubtargetReachPlace
+{
+public:
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "坐标表ID"))
+	uint32 PositionID;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "跟随友方怪ID"))
+	uint32 FollowMonsterID;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "跟随冒泡"))
+	uint32 FollowBubble;
+};
+
+USTRUCT()
+struct FSubtargetRecycleItems
+{
+public:
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "回收道具编号"))
+	uint32 RecycleItemID;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "回收道具数量"))
+	uint32 RecycleItemNum;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "来源类型"))
+	uint32 SourceType;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "道具来源参数"))
+	uint32 SourceParam;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "掉落ID"))
+	uint32 DropItemID;
+};
+
+USTRUCT()
+struct FSubtargetHandUpItems
+{
+public:
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "上交道具编号"))
+	uint32 UpItemID;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "上交道具数量"))
+	uint32 UpItemNum;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "来源类型"))
+	uint32 SourceType;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "道具来源参数"))
+	uint32 SourceParam;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "掉落ID"))
+	uint32 DropItemID;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "上交对象类型"))
+	uint32 HandUpTargetType;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "上交对象ID"))
+	uint32 HandUpTargetID;
+};
+
+USTRUCT()
+struct FSubtargetGetItems
+{
+public:
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "回收道具编号"))
+	uint32 GetItemID;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "回收道具数量"))
+	uint32 GetItemNum;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "道具来源类型"))
+	uint32 SourceType;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "道具来源参数"))
+	uint32 SourceParam;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "掉落ID"))
+	uint32 DropItemID;
+};
+
+
+USTRUCT()
+struct FSubtargetUseItems
+{
+public:
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "回收道具编号"))
+	uint32 UseItemID;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "回收道具数量"))
+	uint32 UseItemNum;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "使用物品对象类型"))
+	uint32 UseItemTargetType;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "使用物品对象ID"))
+	uint32 UseItemTargetID;
+};
+
+USTRUCT()
+struct FSubtargetDungeon
+{
+public:
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "副本ID"))
+	uint32 DungeonID;
+};
+
+USTRUCT()
+struct FSubtargetReachLevel
+{
+public:
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "到达等级"))
+	uint32 ReachLevel;
+};
+
+USTRUCT()
+struct FSubtargetCompleteActivity
+{
+public:
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "活动ID"))
+	uint32 CompleteActivityID;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "活动次数"))
+	uint32 CompleteActivityNum;
+};
+
+USTRUCT()
+struct FSubtargetAddFriendliness
+{
+public:
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "类型"))
+	uint32 AddType;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "增加点数"))
+	uint32 AddNum;
+};
+
+
+USTRUCT()
+struct FSubtargetOpenTreasureBox
+{
+public:
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "宝箱ID"))
+	uint32 TreasureBoxID;
+
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "宝箱次数"))
+	uint32 TreasureBoxNum;
 };
 
 
@@ -125,6 +313,38 @@ public:
 	UPROPERTY(EditAnywhere, Category = "子目标", meta = (DisplayName = "对话子目标"))
 		TArray<FSubtargetDialog> Dialogs;
 
+	UPROPERTY(EditAnywhere, Category = "子目标", meta = (DisplayName = "杀怪子目标"))
+		TArray<FSubtargetKillMonster> KillMonsters;
+
+	UPROPERTY(EditAnywhere, Category = "子目标", meta = (DisplayName = "到达位置子目标"))
+		TArray<FSubtargetReachPlace> ReachPlace;
+
+	UPROPERTY(EditAnywhere, Category = "子目标", meta = (DisplayName = "回收物品子目标"))
+		TArray<FSubtargetRecycleItems> RecycleItems;
+
+	UPROPERTY(EditAnywhere, Category = "子目标", meta = (DisplayName = "上交物品子目标"))
+		TArray<FSubtargetHandUpItems> HandUpItems;
+
+	UPROPERTY(EditAnywhere, Category = "子目标", meta = (DisplayName = "获得物品子目标"))
+		TArray<FSubtargetGetItems> GetItems;
+
+	UPROPERTY(EditAnywhere, Category = "子目标", meta = (DisplayName = "使用物品子目标"))
+		TArray<FSubtargetUseItems> UseItems;
+
+	UPROPERTY(EditAnywhere, Category = "子目标", meta = (DisplayName = "刷副本子目标"))
+		TArray<FSubtargetDungeon> Dungeons;
+
+	UPROPERTY(EditAnywhere, Category = "子目标", meta = (DisplayName = "到达等级子目标"))
+		TArray<FSubtargetReachLevel> ReachLevel;
+
+	UPROPERTY(EditAnywhere, Category = "子目标", meta = (DisplayName = "完成活动子目标"))
+		FSubtargetCompleteActivity CompleteActivities[3];
+
+	UPROPERTY(EditAnywhere, Category = "子目标", meta = (DisplayName = "增加友好度子目标"))
+		FSubtargetAddFriendliness AddFriendlinesses[1];
+
+	UPROPERTY(EditAnywhere, Category = "子目标", meta = (DisplayName = "开宝箱子目标"))
+		TArray<FSubtargetOpenTreasureBox> OpenTreasureBoxes;
 
 	virtual void GetCaption(TArray<FString>& OutCaptions) const override {
 		if (!TaskTitle.IsEmpty()) {
