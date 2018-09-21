@@ -4,9 +4,7 @@
 #include"SSpawnMonsterNode.h"
 #include"TaskSystemGraphNode.h"
 #include"SDialogNode.h"
-#include"Expression/TaskSystemExpressionSubtarget.h"
-#include"Expression/TaskSystemExpressionSpawnMonster.h"
-#include"Expression/TaskSystemExpressionDialog.h"
+#include"Expression/ExpressionIncludes.h"
 
 class FNodeWidgetFactory
 {
@@ -16,7 +14,7 @@ public:
 		if (UTaskSystemGraphNode* Node = Cast<UTaskSystemGraphNode>(InNode))
 		{
 			UClass* Clazz = Node->Expression->GetClass();
-			if (Clazz->IsChildOf<UTaskSystemExpressionSubtarget>())
+			if (Clazz->IsChildOf<UTaskSystemExpressionSubtask>())
 			{
 				return SNew(SSubtargetNode, InNode);
 			}

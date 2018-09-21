@@ -33,6 +33,6 @@ private:
 	const FSlateBrush* CachedImg_Pin_ConnectedHovered;
 	const FSlateBrush* CachedImg_Pin_DisconnectedHovered;
 
-	UTaskSystemExpressionSubtarget* Expr;
+	UTaskSystemExpressionSubtask* Expr;
 
 };

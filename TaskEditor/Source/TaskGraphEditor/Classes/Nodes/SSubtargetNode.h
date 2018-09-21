@@ -10,13 +10,13 @@
 #include "Widgets/Text/SInlineEditableTextBlock.h"
 #include "Widgets/Text/SMultiLineEditableText.h"
 #include "Widgets/SBoxPanel.h"
-#include "Expression/TaskSystemExpressionSubtarget.h"
+#include "Expression/TaskSystemExpressionSubtask.h"
 #include "TaskSystemGraphNode.h"
 
 class SSubtargetNode : public STaskNodeBase
 {
 private:
-	UTaskSystemExpressionSubtarget * SubtargetExpr;
+	UTaskSystemExpressionSubtask * Expr;
 
 public:
 	SLATE_BEGIN_ARGS(SSubtargetNode) {}
@@ -27,8 +27,8 @@ public:
 	{
 		auto TaskNode = Cast<UTaskSystemGraphNode>(InNode);
 		check(TaskNode);
-		SubtargetExpr = Cast<UTaskSystemExpressionSubtarget>( TaskNode->Expression);
-		check(SubtargetExpr);
+		Expr = Cast<UTaskSystemExpressionSubtask>( TaskNode->Expression);
+		check(Expr);
 
 		this->GraphNode = InNode;
 		this->SetCursor(EMouseCursor::CardinalCross);
@@ -64,8 +64,8 @@ public:
 					 .Text_Lambda([this]() {
 						
 						return FText::Format(NSLOCTEXT("SubTargetNode", "NodeContent", " n{1}"),
-								SubtargetExpr->TaskDesc.IsEmpty()?
-								FText::FromString(TEXT("请输入任务描述。")) : SubtargetExpr->TaskDesc
+								Expr->TaskDesc.IsEmpty()?
+								FText::FromString(TEXT("请输入任务描述。")) : Expr->TaskDesc
 						);
 					})
 				];

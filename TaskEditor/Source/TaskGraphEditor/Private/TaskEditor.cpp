@@ -23,13 +23,7 @@
 #include "STaskSystemPalette.h"
 #include "EditorCommands.h"
 #include "STaskTreeView.h"
-#include "Expression/TaskSystemExpressionClasses.h"
-#include "Expression/TaskSystemExpression.h"
-#include "Expression/TaskSystemExpressionComment.h"
-#include "Expression/TaskSystemExpressionDialog.h"
-#include "Expression/TaskSystemExpressionSubtarget.h"
-#include "Expression/TaskSystemExpressionWeather.h"
-#include "Expression/TaskSystemExpressionSpawnMonster.h"
+#include "Expression/ExpressionIncludes.h"
 
 //#include "Excel.h"
 #include "TaskNodeFactory.h"
@@ -400,7 +394,7 @@ void FTaskEditor::OnSelectedNodesChanged(const FGraphPanelSelectionSet& InSet) {
 		else if (auto Expr2 = Cast<UTaskSystemExpressionSpawnMonster>(Expr)) {
 			DetailsView->SetObject(Expr2);
 		}
-		else if (auto Expr2 = Cast<UTaskSystemExpressionSubtarget>(Expr)) {
+		else if (auto Expr2 = Cast<UTaskSystemExpressionSubtask>(Expr)) {
 			DetailsView->SetObject(Expr2);
 		}
 		else if (auto Expr2 = Cast<UTaskSystemExpressionWeather>(Expr)) {

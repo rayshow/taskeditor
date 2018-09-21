@@ -1,12 +1,6 @@
 #pragma once
-
 #include"Expression/TaskSystemExpressionClasses.h"
-#include"Expression/TaskSystemExpressionComment.h"
-#include"Expression/TaskSystemExpression.h"
-#include"Expression/TaskSystemExpressionDialog.h"
-#include"Expression/TaskSystemExpressionSubtarget.h"
-#include"Expression/TaskSystemExpressionWeather.h"
-#include"Expression/TaskSystemExpressionSpawnMonster.h"
+//#include"Expression/ExpressionIncludes.h"
 #include"TaskSystemGraphSchema.h"
 #include"UObject/Class.h"
 #include"ObjectMacros.h"
@@ -77,7 +71,7 @@ void TaskSystemExpressionClasses::InitializeExpressionClasses()
 			{
 				ExpressionInputs.Empty();
 
-				if (Class != UTaskSystemExpressionComment::StaticClass())
+				//if (Class != UTaskSystemExpressionComment::StaticClass())
 				{
 					FTaskSystemExpression Expression;
 					

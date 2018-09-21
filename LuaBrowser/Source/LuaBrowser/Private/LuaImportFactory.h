@@ -34,9 +34,9 @@ public:
 
 	virtual UObject* ImportObject(UClass* InClass, UObject* InOuter, FName InName, EObjectFlags Flags, const FString& Filename, const TCHAR* Parms, bool& OutCanceled)
 	{
-		ULuaFileRefObject* NewLuaRef = NewObject<ULuaFileRefObject>(InClass, ULuaFileRefObject::StaticClass(), InName, Flags);
+		ULuaFileRefObject* NewLuaRef = NewObject<ULuaFileRefObject>(InOuter, ULuaFileRefObject::StaticClass(), InName, Flags);
 		NewLuaRef->RefPath = Filename;
-		return InClass;
+		return InOuter;
 	}
 
 

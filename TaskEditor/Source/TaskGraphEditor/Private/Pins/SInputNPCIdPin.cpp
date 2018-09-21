@@ -7,7 +7,7 @@
 #include "Widgets/Input/SNumericEntryBox.h"
 #include "Widgets/Input/STextComboBox.h"
 #include "TaskSystemGraphNode.h"
-#include "Expression/TaskSystemExpressionSubtarget.h"
+#include "Expression/TaskSystemExpressionSubtask.h"
 
 
 
@@ -15,7 +15,7 @@ void SInputNpcIdPin::Construct(const FArguments& InArgs, UEdGraphPin* InPin)
 {
 	auto TaskNode = Cast<UTaskSystemGraphNode>(InPin->GetOwningNode());
 	check(TaskNode);
-	Expr = Cast<UTaskSystemExpressionSubtarget>(TaskNode->Expression);
+	Expr = Cast<UTaskSystemExpressionSubtask>(TaskNode->Expression);
 	check(Expr);
 
 	SGraphPin::Construct(SGraphPin::FArguments(), InPin);

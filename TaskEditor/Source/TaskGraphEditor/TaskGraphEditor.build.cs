@@ -48,13 +48,13 @@ public class TaskGraphEditor : ModuleRules
                 "GraphEditor",
                 "ApplicationCore",
                 "PropertyEditor",
-                
+                "ExcelOps",
             }
        );
-        //"ExcelOps",
-        //AddEngineThirdPartyPrivateStaticDependencies(Target,
-        //    "ExcelOpsLibrary"
-        //);
+
+        AddEngineThirdPartyPrivateStaticDependencies(Target,
+            "ExcelOpsLibrary"
+        );
 
         DynamicallyLoadedModuleNames.AddRange(
             new string[]
