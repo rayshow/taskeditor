@@ -1,4 +1,4 @@
-ï»¿// Copyright 1998-2018 Epic Games, Inc. All Rights Reserved.
+// Copyright 1998-2018 Epic Games, Inc. All Rights Reserved.
 
 #pragma once
 
@@ -13,13 +13,13 @@
 #include "Expression/TaskSystemExpressionSubtask.h"
 #include "TaskSystemGraphNode.h"
 
-class SSubtargetNode : public STaskNodeBase
+class SSelectSubtaskNode : public STaskNodeBase
 {
 private:
-	UTaskSystemExpressionSubtask * Expr;
+	UTaskSystemExpressionSelectSubtask * Expr;
 
 public:
-	SLATE_BEGIN_ARGS(SSubtargetNode) {}
+	SLATE_BEGIN_ARGS(SSubtaskNode) {}
 	SLATE_END_ARGS()
 
 
@@ -27,14 +27,23 @@ public:
 	{
 		auto TaskNode = Cast<UTaskSystemGraphNode>(InNode);
 		check(TaskNode);
-		Expr = Cast<UTaskSystemExpressionSubtask>( TaskNode->Expression);
+		Expr = Cast<UTaskSystemExpressionSelectSubtask>(TaskNode->Expression);
 		check(Expr);
+
+		Expr->OnExpressionChanged.AddRaw(this, &SSelectSubtaskNode::OnExpressionChanged);
 
 		this->GraphNode = InNode;
 		this->SetCursor(EMouseCursor::CardinalCross);
 		this->UpdateGraphNode();
 	}
 
+
+	void OnExpressionChanged(FString PropertyName)
+	{
+		GraphNode->Pins.Empty();
+		GraphNode->AllocateDefaultPins();
+		this->UpdateGraphNode();
+	}
 
 	// Override this to add widgets below the node and pins
 	virtual void CreateBelowWidgetControls(TSharedPtr<SVerticalBox> MainBox) override {
@@ -59,15 +68,15 @@ public:
 				.HAlign(HAlign_Center)
 				[
 					SNew(SMultiLineEditableText)
-					 .WrapTextAt(110).WrappingPolicy(ETextWrappingPolicy::AllowPerCharacterWrapping)
-					 .AllowMultiLine(true).AutoWrapText(true)
-					 .Text_Lambda([this]() {
-						
-						return FText::Format(NSLOCTEXT("SubTargetNode", "NodeContent", " n{1}"),
-								Expr->TaskDesc.IsEmpty()?
-								FText::FromString(TEXT("è¯·è¾“å…¥ä»»åŠ¡æè¿°ã€‚")) : Expr->TaskDesc
-						);
-					})
+					.WrapTextAt(110).WrappingPolicy(ETextWrappingPolicy::AllowPerCharacterWrapping)
+				.AllowMultiLine(true).AutoWrapText(true)
+				.Text_Lambda([this]() {
+
+				return FText::Format(NSLOCTEXT("SubTargetNode", "NodeContent", " n{1}"),
+					Expr->TaskDesc.IsEmpty() ?
+					FText::FromString(TEXT("ÇëÊäÈëÈÎÎñÃèÊö¡£")) : Expr->TaskDesc
+				);
+			})
 				];
 
 
@@ -98,10 +107,10 @@ public:
 					[
 						SNew(SHorizontalBox)
 						+ SHorizontalBox::Slot()
-						.AutoWidth()
-						[
-							Box
-						]
+					.AutoWidth()
+					[
+						Box
+					]
 					];
 			}
 		}
@@ -120,17 +129,17 @@ public:
 				+ SHorizontalBox::Slot()
 				.HAlign(HAlign_Left)
 				.FillWidth(1.0f)
-				[
-					// LEFT
-					SAssignNew(LeftNodeBox, SVerticalBox)
-				]
+			[
+				// LEFT
+				SAssignNew(LeftNodeBox, SVerticalBox)
+			]
 			+ SHorizontalBox::Slot()
 				.AutoWidth()
 				.HAlign(HAlign_Right)
-				[
-					// RIGHT
-					SAssignNew(RightNodeBox, SVerticalBox)
-				]
+			[
+				// RIGHT
+				SAssignNew(RightNodeBox, SVerticalBox)
+			]
 			];
 	}
 

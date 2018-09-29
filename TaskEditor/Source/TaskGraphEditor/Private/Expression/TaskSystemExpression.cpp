@@ -14,18 +14,46 @@ UTaskSystemExpression::UTaskSystemExpression(FObjectInitializer const& Initializ
 
 const TArray<FTaskSystemExpressionInput*> UTaskSystemExpression::GetInputs()
 {
+	static const FName NAME_InputName("InputName");
+	TMap<FString, bool> Enables;
+	for (TFieldIterator<UBoolProperty> InputIt(GetClass(), EFieldIteratorFlags::IncludeSuper, EFieldIteratorFlags::ExcludeDeprecated); InputIt; ++InputIt)
+	{
+		UBoolProperty*  boolProp = *InputIt;
+		if ( !boolProp->GetMetaData(NAME_InputName).IsEmpty())
+		{
+			for (int32 ArrayIndex = 0; ArrayIndex < boolProp->ArrayDim; ArrayIndex++)
+			{
+				Enables.Add(boolProp->GetMetaData(NAME_InputName),
+					*boolProp->ContainerPtrToValuePtr<bool>(this, ArrayIndex));
+			}
+		}
+	}
+
 	TArray<FTaskSystemExpressionInput*> Result;
+	TArray<FTaskSystemExpressionInput*> Events;
 	for (TFieldIterator<UStructProperty> InputIt(GetClass(), EFieldIteratorFlags::IncludeSuper, EFieldIteratorFlags::ExcludeDeprecated); InputIt; ++InputIt)
 	{
 		UStructProperty* StructProp = *InputIt;
 		if (StructProp->Struct->GetFName() == TaskSystemInputName)
 		{
+			FString Name = StructProp->GetName();
+		
 			for (int32 ArrayIndex = 0; ArrayIndex < StructProp->ArrayDim; ArrayIndex++)
 			{
-				Result.Add(StructProp->ContainerPtrToValuePtr<FTaskSystemExpressionInput>(this, ArrayIndex));
+				auto Input = StructProp->ContainerPtrToValuePtr<FTaskSystemExpressionInput>(this, ArrayIndex);
+
+				if (!Input->IsEvent) 
+				{
+					Result.Add(Input);
+				}
+				else if (Enables[StructProp->GetName()])
+				{
+					Events.Add(Input);
+				}
 			}
 		}
 	}
+	Result.Append(Events);
 	return Result;
 }
 

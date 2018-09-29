@@ -13,6 +13,7 @@ class UTaskObject;
 struct FTaskSystemExpressionOutput;
 struct FTaskSystemExpressionInput;
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnExpressionChanged, FString);
 
 UCLASS(abstract, BlueprintType, hidecategories = Object)
 class UTaskSystemExpression: public UObject
@@ -28,8 +29,8 @@ public:
 #endif 
 
 	UTaskObject* TaskObject;
-
 	TArray<FTaskSystemExpressionOutput> Outputs;
+	FOnExpressionChanged OnExpressionChanged;
 
 #if WITH_EDITOR
 	virtual TArray<FTaskSystemExpressionOutput>& GetOutputs() { return Outputs; }

@@ -245,8 +245,9 @@ public:
 	uint32 DialogID;
 
 	UPROPERTY(EditAnywhere, meta = (DisplayName = "选项名称"))
-	uint32 ItemDesc;
+	FString ItemDesc;
 };
+
 
 UCLASS(MinimalAPI)
 class UTaskSystemExpressionSubtask_Common : public UTaskSystemExpression
@@ -259,16 +260,10 @@ public:
 	FTaskSystemExpressionInput Input;
 
 	UPROPERTY()
-	FTaskSystemExpressionInput BeforeAccess;
+	FTaskSystemExpressionInput PreAccept;
 
 	UPROPERTY()
-	FTaskSystemExpressionInput AfterAccess;
-
-	UPROPERTY()
-	FTaskSystemExpressionInput BeforePost;
-
-	UPROPERTY()
-	FTaskSystemExpressionInput AfterPost;
+	FTaskSystemExpressionInput PostAccept;
 
 
 	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "能否自动接受"))
@@ -334,7 +329,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = "任务描述", meta = (DisplayName = "完成对话ID"))
 	int32 FinishDialogID;
 
-	
+	UPROPERTY(EditAnywhere, Category = "事件", meta = (DisplayName = "接之前", InputName = "PreAccept"))
+	uint32 bAllowPreAccept : 1;
+
+	UPROPERTY(EditAnywhere, Category = "事件", meta = (DisplayName = "接之后", InputName = "PostAccept"))
+	uint32 bAllowPostAccept : 1;
+
 	virtual void GetCaption(TArray<FString>& OutCaptions) const override {
 		if (!TaskTitle.IsEmpty()) {
 			OutCaptions.Add(TEXT("   ") + TaskTitle);
@@ -356,11 +356,20 @@ public:
 	}
 };
 
+
+
 UCLASS(MinimalAPI, DisplayName = "子任务")
 class UTaskSystemExpressionSubtask : public UTaskSystemExpressionSubtask_Common
 {
 public:
 	GENERATED_UCLASS_BODY()
+
+	UPROPERTY()
+	FTaskSystemExpressionInput PreHandup;
+
+	UPROPERTY()
+	FTaskSystemExpressionInput PostHandup;
+
 
 	UPROPERTY(EditAnywhere, Category = "子目标", meta = (DisplayName = "对话"))
 	TArray<FSubtargetDialog> Dialogs;
@@ -398,6 +407,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = "子目标", meta = (DisplayName = "开宝箱"))
 	TArray<FSubtargetOpenTreasureBox> OpenTreasureBoxes;
 
+	UPROPERTY(EditAnywhere, Category = "事件", meta = (DisplayName = "交之前", InputName = "PreHandup"))
+	uint32 bAllowPreHandUp : 1;
+
+	UPROPERTY(EditAnywhere, Category = "事件", meta = (DisplayName = "交之后", InputName = "PostHandup"))
+	uint32 bAllowPostHandUp : 1;
+
 };
 
 
@@ -407,6 +422,34 @@ class UTaskSystemExpressionSelectSubtask : public UTaskSystemExpressionSubtask_C
 public:
 	GENERATED_UCLASS_BODY()
 
-	UPROPERTY(EditAnywhere, Category = "子目标", meta = (DisplayName = "选择"))
-	TArray<FSubtargetSelectItem> OpenTreasureBoxes;
+	UPROPERTY()
+	FTaskSystemExpressionInput PreSelect;
+
+	UPROPERTY()
+	FTaskSystemExpressionInput PostSelect;
+
+
+	UPROPERTY(EditAnywhere, Category = "子目标", meta = (DisplayName = "子选择"))
+	TArray<FSubtargetSelectItem> Selects; 
+
+	UPROPERTY(EditAnywhere, Category = "事件", meta = (DisplayName = "选之前", InputName = "PreSelect"))
+		uint32 bAllowPreSelect : 1;
+
+	UPROPERTY(EditAnywhere, Category = "事件", meta = (DisplayName = "选之后", InputName = "PostSelect"))
+		uint32 bAllowPostSelect : 1;
+
+#if WITH_EDITOR
+	virtual TArray<FTaskSystemExpressionOutput>& GetOutputs() { 
+		Outputs.Empty();
+		for (int i = 0; i < Selects.Num(); ++i) {
+			FTaskSystemExpressionOutput output;
+			output.OutputType = TOT_BranchExit;
+			output.OutputName = FName(*Selects[i].ItemDesc);
+			Outputs.Add(output);
+		}
+		return Outputs;
+	}
+#endif
 };
+
+#undef INPUTEVENT_NAME

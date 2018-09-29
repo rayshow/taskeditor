@@ -3,6 +3,7 @@
 #include"ITaskEditor.h"
 #include"ScopedTransaction.h"
 #include"GraphEditor.h"
+#include"NotifyHook.h"
 
 class UTaskObject;
 class UTaskSystem;
@@ -12,7 +13,8 @@ class UEdGraph;
 struct FGraphActionMenuBuilder;
 
 class FTaskEditor : 
-	public ITaskEditor
+	public ITaskEditor,
+	public FNotifyHook
 {
 public:
 	FTaskEditor();
@@ -51,6 +53,10 @@ public:
 
 	//Callback
 	void OnTaskTreeItemChanged(UTaskObject* InObject);
+
+	//Call back to expression'lister when expression's member is changed by detail panel
+	virtual void NotifyPostChange(const FPropertyChangedEvent& PropertyChangedEvent,
+		UProperty* PropertyThatChanged) override;
 
 public:
 	//Util Function

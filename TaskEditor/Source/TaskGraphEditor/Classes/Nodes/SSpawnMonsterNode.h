@@ -14,7 +14,7 @@
 class SSpawnMonsterNode : public STaskNodeBase
 {
 public:
-	SLATE_BEGIN_ARGS(SSubtargetNode) {}
+	SLATE_BEGIN_ARGS(SSpawnMonsterNode) {}
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs, UEdGraphNode* InNode)

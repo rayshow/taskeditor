@@ -15,7 +15,7 @@ void SInputNpcIdPin::Construct(const FArguments& InArgs, UEdGraphPin* InPin)
 {
 	auto TaskNode = Cast<UTaskSystemGraphNode>(InPin->GetOwningNode());
 	check(TaskNode);
-	Expr = Cast<UTaskSystemExpressionSubtask>(TaskNode->Expression);
+	Expr = Cast<UTaskSystemExpressionSubtask_Common>(TaskNode->Expression);
 	check(Expr);
 
 	SGraphPin::Construct(SGraphPin::FArguments(), InPin);

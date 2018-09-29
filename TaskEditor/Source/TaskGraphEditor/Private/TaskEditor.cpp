@@ -374,11 +374,26 @@ void FTaskEditor::CreateInteralWidgets()
 
 	//Detail Panel
 	FPropertyEditorModule& PropertyEditorModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
-	FDetailsViewArgs DetailsViewArgs(false, false, false, FDetailsViewArgs::HideNameArea);
+	FDetailsViewArgs DetailsViewArgs(false, false, false, FDetailsViewArgs::HideNameArea,false, this);
 	DetailsView = PropertyEditorModule.CreateDetailView(DetailsViewArgs);
 	DetailsView->SetIsPropertyVisibleDelegate(FIsPropertyVisible::CreateLambda([](const FPropertyAndParent&) {return true; }));
 }
 
+
+void FTaskEditor::NotifyPostChange(
+	const FPropertyChangedEvent& PropertyChangedEvent,
+	UProperty* PropertyThatChanged) {
+	int Num = PropertyChangedEvent.GetNumObjectsBeingEdited();
+	for (int i = 0; i < Num; ++i) {
+		auto ObjectBeingEdit = PropertyChangedEvent.GetObjectBeingEdited(i);
+		auto Expr = Cast<UTaskSystemExpression>(ObjectBeingEdit);
+		if (Expr) {
+			FString ChangePropertyName = PropertyChangedEvent.MemberProperty->GetName();
+			if (Expr->OnExpressionChanged.IsBound())
+				Expr->OnExpressionChanged.Broadcast(ChangePropertyName);
+		}
+	}
+}
 
 void FTaskEditor::OnSelectedNodesChanged(const FGraphPanelSelectionSet& InSet) {
 	if (InSet.Num() == 1)
@@ -400,9 +415,13 @@ void FTaskEditor::OnSelectedNodesChanged(const FGraphPanelSelectionSet& InSet) {
 		else if (auto Expr2 = Cast<UTaskSystemExpressionWeather>(Expr)) {
 			DetailsView->SetObject(Expr2);
 		}
+		else if (auto Expr2 = Cast<UTaskSystemExpressionSelectSubtask>(Expr)) {
+			DetailsView->SetObject(Expr2);
+		}
 		else {
 			check(false);
 		}
+		
 	}
 }
 

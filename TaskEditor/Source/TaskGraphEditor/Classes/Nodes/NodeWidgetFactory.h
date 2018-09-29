@@ -1,9 +1,10 @@
 #pragma once
 
-#include"SSubtargetNode.h"
+#include"SSubtaskNode.h"
 #include"SSpawnMonsterNode.h"
 #include"TaskSystemGraphNode.h"
 #include"SDialogNode.h"
+#include"SSelectSubtaskNode.h"
 #include"Expression/ExpressionIncludes.h"
 
 class FNodeWidgetFactory
@@ -16,9 +17,10 @@ public:
 			UClass* Clazz = Node->Expression->GetClass();
 			if (Clazz->IsChildOf<UTaskSystemExpressionSubtask>())
 			{
-				return SNew(SSubtargetNode, InNode);
+				return SNew(SSubtaskNode, InNode);
 			}
-			else if ( Clazz->IsChildOf<UTaskSystemExpressionSpawnMonster>() ||
+			else if ( 
+					Clazz->IsChildOf<UTaskSystemExpressionSpawnMonster>() ||
 					Clazz->IsChildOf<UTaskSystemExpressionWeather>() )
 			{
 				return SNew(SSpawnMonsterNode, InNode);
@@ -30,6 +32,9 @@ public:
 			else if (auto Expr = Cast<UTaskSystemExpression1In2Dialog>(Node->Expression))
 			{
 				return SNew(SDialogNode, InNode);
+			}
+			else if (auto Expr = Cast<UTaskSystemExpressionSelectSubtask>(Node->Expression)) {
+				return SNew(SSelectSubtaskNode,InNode);
 			}
 			check(false);
 		}

@@ -14,7 +14,6 @@ public:
 		const UEdGraphSchema* Schema, int32 InBackLayerID, int32 InFrontLayerID,
 		float ZoomFactor, const FSlateRect& InClippingRect, FSlateWindowElementList& InDrawElements,
 		UEdGraph* InGraphObj);
-
 };
 
 

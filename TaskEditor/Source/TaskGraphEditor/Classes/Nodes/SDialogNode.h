@@ -18,7 +18,7 @@ private:
 	UTaskSystemExpression1In2Dialog * DialogExpr;
 
 public:
-	SLATE_BEGIN_ARGS(SSubtargetNode) {}
+	SLATE_BEGIN_ARGS(SDialogNode) {}
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs, UEdGraphNode* InNode)

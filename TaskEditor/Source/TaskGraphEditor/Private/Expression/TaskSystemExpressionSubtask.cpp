@@ -10,13 +10,16 @@ UTaskSystemExpressionSubtask_Common::UTaskSystemExpressionSubtask_Common(
 	//Input
 	Input.InputName = FName(TEXT("接NPC"));
 	Input.InputType = TIT_NPCEntry_Test;
+	Input.IsEvent = false;
 
 	//Event
-	BeforeAccess.InputName = FName(TEXT("接之前"));
-	BeforeAccess.InputType = TIT_EventInput;
+	PreAccept.InputName = FName(TEXT("接之前"));
+	PreAccept.InputType = TIT_EventInput;
+	PreAccept.IsEvent = true;
 
-	AfterAccess.InputName = FName(TEXT("接之前"));
-	AfterAccess.InputType = TIT_EventInput;
+	PostAccept.InputName = FName(TEXT("接之后"));
+	PostAccept.InputType = TIT_EventInput;
+	PostAccept.IsEvent = true;
 }
 
 
@@ -29,11 +32,13 @@ UTaskSystemExpressionSubtask::UTaskSystemExpressionSubtask(
 	Output.OutputType = TOT_NPCExit_Test;
 	Outputs.Add(Output);
 
-	BeforePost.InputName = FName(TEXT("交之前"));
-	BeforePost.InputType = TIT_EventInput;
+	PreHandup.InputName = FName(TEXT("交之前"));
+	PreHandup.InputType = TIT_EventInput;
+	PreHandup.IsEvent = true;
 
-	AfterPost.InputName = FName(TEXT("交之后"));
-	AfterPost.InputType = TIT_EventInput;
+	PostHandup.InputName = FName(TEXT("交之后"));
+	PostHandup.InputType = TIT_EventInput;
+	PostHandup.IsEvent = true;
 }
 
 
@@ -43,9 +48,25 @@ UTaskSystemExpressionSelectSubtask::UTaskSystemExpressionSelectSubtask(
 	: Super(Initializer)
 {
 	
-	BeforePost.InputName = FName(TEXT("选之前"));
-	BeforePost.InputType = TIT_EventInput;
+	PreSelect.InputName = FName(TEXT("选之前"));
+	PreSelect.InputType = TIT_EventInput;
+	PreSelect.IsEvent = true;
 
-	AfterPost.InputName = FName(TEXT("选之后"));
-	AfterPost.InputType = TIT_EventInput;
+	PostSelect.InputName = FName(TEXT("选之后"));
+	PostSelect.InputType = TIT_EventInput;
+	PostSelect.IsEvent = true;
+
+	FSubtargetSelectItem FirstSelect;
+	FirstSelect.NextTaskID = 0;
+	FirstSelect.DialogID = 0;
+	FirstSelect.ItemDesc = FString(TEXT("是"));
+	
+	FSubtargetSelectItem SecondSelect;
+	SecondSelect.NextTaskID = 0;
+	SecondSelect.DialogID = 0;
+	SecondSelect.ItemDesc = FString(TEXT("否"));
+
+	Selects.Add(FirstSelect);
+	Selects.Add(SecondSelect);
+
 }

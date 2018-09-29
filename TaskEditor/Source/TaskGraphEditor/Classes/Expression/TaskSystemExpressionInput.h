@@ -35,6 +35,9 @@ struct FTaskSystemExpressionInput
 	UPROPERTY()
 	TEnumAsByte<TaskSystemExpressionInputType> InputType;
 
+	UPROPERTY()
+		bool IsEvent;
+
 	FTaskSystemExpressionInput()
 		: OutputIndex(0)
 	{
@@ -65,6 +68,7 @@ struct FTaskSystemExpressionInput
 	FName InputSubEnumToName();
 
 };
+
 
 template<>
 struct TStructOpsTypeTraits<FTaskSystemExpressionInput>

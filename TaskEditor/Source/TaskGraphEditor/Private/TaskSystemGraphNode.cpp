@@ -510,7 +510,6 @@ void UTaskSystemGraphNode::CreateInputPins()
 			// Makes sure pin has a name for lookup purposes but user will never see it
 			NewPin->PinName = CreateUniquePinName(TEXT("Input"));
 			NewPin->PinFriendlyName = FText::FromString(TEXT(" "));
-			
 		}
 	}
 }
@@ -518,7 +517,6 @@ void UTaskSystemGraphNode::CreateInputPins()
 void UTaskSystemGraphNode::CreateOutputPins()
 {
 	TArray<FTaskSystemExpressionOutput>& Outputs = Expression->GetOutputs();
-
 	for ( FTaskSystemExpressionOutput& ExpressionOutput : Outputs)
 	{
 		FName PinCategory;
