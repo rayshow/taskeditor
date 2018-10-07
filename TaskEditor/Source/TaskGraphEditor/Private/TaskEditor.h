@@ -125,6 +125,8 @@ private:
 	void PasteNodes();
 	void CutSelectedNodes();
 	void DuplicateNodes();
+	void ExportTasks();
+
 	//Generic Commands prediction
 	bool CanSelectAllNodes() const;
 	bool CanDeleteNodes() const;

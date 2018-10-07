@@ -495,7 +495,7 @@ void UTaskSystemGraphNode::CreateInputPins()
 	for (int32 Index = 0; Index < ExpressionInputs.Num(); ++Index)
 	{
 		FTaskSystemExpressionInput* Input = ExpressionInputs[Index];
-		FName InputName = Expression->GetInputName(Index);
+		FName InputName = Input->InputName;
 
 		InputName = GetShortenPinName(InputName);
 

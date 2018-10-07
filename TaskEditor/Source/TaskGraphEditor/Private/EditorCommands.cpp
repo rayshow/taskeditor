@@ -7,7 +7,9 @@
 
 void FEditorCommands::RegisterCommands()
 {
-
+	UI_COMMAND(Export, "EditorToolBar", 
+		"Execute EditorToolBar action",
+		EUserInterfaceActionType::Button, FInputGesture());
 }
 
 #undef LOCTEXT_NAMESPACE

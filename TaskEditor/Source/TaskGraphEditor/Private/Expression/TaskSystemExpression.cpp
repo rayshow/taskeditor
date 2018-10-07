@@ -23,8 +23,8 @@ const TArray<FTaskSystemExpressionInput*> UTaskSystemExpression::GetInputs()
 		{
 			for (int32 ArrayIndex = 0; ArrayIndex < boolProp->ArrayDim; ArrayIndex++)
 			{
-				Enables.Add(boolProp->GetMetaData(NAME_InputName),
-					*boolProp->ContainerPtrToValuePtr<bool>(this, ArrayIndex));
+				bool value = boolProp->GetPropertyValue_InContainer(this);
+				Enables.Add(boolProp->GetMetaData(NAME_InputName), value);
 			}
 		}
 	}

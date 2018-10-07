@@ -30,8 +30,6 @@ public:
 		Expr = Cast<UTaskSystemExpressionSubtask>( TaskNode->Expression);
 		check(Expr);
 
-
-
 		this->GraphNode = InNode;
 		this->SetCursor(EMouseCursor::CardinalCross);
 		this->UpdateGraphNode();
@@ -61,51 +59,28 @@ public:
 				.HAlign(HAlign_Center)
 				[
 					SNew(SMultiLineEditableText)
-					 .WrapTextAt(110).WrappingPolicy(ETextWrappingPolicy::AllowPerCharacterWrapping)
-					 .AllowMultiLine(true).AutoWrapText(true)
-					 .Text_Lambda([this]() {
-						
-						return FText::Format(NSLOCTEXT("SubTargetNode", "NodeContent", " n{1}"),
-								Expr->TaskDesc.IsEmpty()?
-								FText::FromString(TEXT("请输入任务描述。")) : Expr->TaskDesc
-						);
-					})
+					.WrapTextAt(110).WrappingPolicy(ETextWrappingPolicy::AllowPerCharacterWrapping)
+				.AllowMultiLine(true).AutoWrapText(true)
+				.Text_Lambda([this]() {
+
+				return FText::Format(NSLOCTEXT("SubTargetNode", "NodeContent", " n{1}fffffffffffffffff"),
+					Expr->TaskDesc.IsEmpty() ?
+					FText::FromString(TEXT("请输入任务描述。")) : Expr->TaskDesc
+				);
+			})
 				];
 
-
-			// Place preview widget based on where the least pins are
-			if ((LeftPinCount < RightPinCount) || (RightPinCount == 0))
-			{
-				LeftNodeBox->AddSlot()
-					.Padding(FMargin(NegativeHPad + ExtraPad, 0.0f, 0.0f, 0.0f))
-					.AutoHeight()
-					[
-						Box
-					];
-			}
-			else if (LeftPinCount > RightPinCount)
-			{
-				RightNodeBox->AddSlot()
-					.Padding(FMargin(NegativeHPad + ExtraPad, 0.0f, 0.0f, 0.0f))
-					.AutoHeight()
-					[
-						Box
-					];
-			}
-			else
-			{
-				MainBox->AddSlot()
-					.Padding(10)
-					.AutoHeight()
-					[
-						SNew(SHorizontalBox)
-						+ SHorizontalBox::Slot()
-						.AutoWidth()
-						[
-							Box
-						]
-					];
-			}
+			MainBox->AddSlot()
+				.Padding(10)
+				.AutoHeight()
+				[
+					SNew(SHorizontalBox)
+					+ SHorizontalBox::Slot()
+				.AutoWidth()
+				[
+					Box
+				]
+				];
 		}
 	}
 
@@ -130,7 +105,6 @@ public:
 				.AutoWidth()
 				.HAlign(HAlign_Right)
 				[
-					// RIGHT
 					SAssignNew(RightNodeBox, SVerticalBox)
 				]
 			];

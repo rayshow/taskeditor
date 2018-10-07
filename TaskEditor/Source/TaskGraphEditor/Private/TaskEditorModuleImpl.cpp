@@ -3,6 +3,7 @@
 #include"TaskSystem.h"
 #include"TaskEditor.h"
 #include"AssetToolsModule.h"
+#include"EditorCommands.h"
 #include"AssetTypeActions_TaskSystem.h"
 
 
@@ -14,6 +15,7 @@ public:
 	{
 		MenuExtensibilityManager = MakeShareable(new FExtensibilityManager);
 		ToolBarExtensibilityManager = MakeShareable(new FExtensibilityManager);
+		FEditorCommands::Register();
 
 		auto& AssetTool = FAssetToolsModule::GetModule().Get();
 		AssetTool.RegisterAssetTypeActions(MakeShareable(new FAssetTypeActions_TaskSystem));
@@ -23,6 +25,7 @@ public:
 	
 	virtual void ShutdownModule() override
 	{
+		FEditorCommands::Unregister();
 		MenuExtensibilityManager.Reset();
 		ToolBarExtensibilityManager.Reset();
 	}

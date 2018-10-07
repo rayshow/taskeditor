@@ -13,6 +13,7 @@
 #include "SNodePanel.h"
 #include "PropertyEditorModule.h"
 #include "IDetailsView.h"
+#include "EditorCommands.h"
 
 #include "ITaskEditorModule.h"
 #include "TaskSystem.h"
@@ -24,8 +25,8 @@
 #include "EditorCommands.h"
 #include "STaskTreeView.h"
 #include "Expression/ExpressionIncludes.h"
+#include "Exports/XlsxExporter.h"
 
-//#include "Excel.h"
 #include "TaskNodeFactory.h"
 
 #define LOCTEXT_NAMESPACE "TaskGraphEditor"
@@ -262,6 +263,40 @@ void FTaskEditor::InitTaskEditor(const EToolkitMode::Type Mode,
 
 	FAssetEditorToolkit::InitAssetEditor(Mode, InitToolkitHost, TaskEditorAppIdentifier,
 		StandaloneDefaultLayout, bCreateDefaultStandaloneMenu, bCreateDefaultToolbar, ObjectsToEdit, false);
+
+	//
+	ToolkitCommands->MapAction(
+		FEditorCommands::Get().Export,
+		FExecuteAction::CreateSP(this, &FTaskEditor::ExportTasks),
+		FCanExecuteAction());
+
+	struct Local
+	{
+		static void FillToolbar(FToolBarBuilder& ToolbarBuilder)
+		{
+			ToolbarBuilder.BeginSection("Export");
+			{
+				ToolbarBuilder.AddToolBarButton(FEditorCommands::Get().Export,
+					NAME_None);
+			}
+			ToolbarBuilder.EndSection();
+
+		}
+	};
+
+	TSharedPtr<FExtender> ToolbarExtender = MakeShareable(new FExtender);
+
+	ToolbarExtender->AddToolBarExtension(
+		"Asset",
+		EExtensionHook::After,
+		GetToolkitCommands(),
+		FToolBarExtensionDelegate::CreateStatic(&Local::FillToolbar)
+	);
+
+	AddToolbarExtender(ToolbarExtender);
+
+
+
 
 	// add menu 
 	AddMenuExtender(GetMenuExtensibilityManager()->GetAllExtenders(GetToolkitCommands(), GetEditingObjects()));
@@ -581,6 +616,7 @@ UTaskSystemExpression* FTaskEditor::InternalCreateNewMaterialExpression(UClass* 
 		if (NewExpression)
 		{
 			//TaskSystem->Expressions.Add(NewExpression);
+			SelectTaskObject->Expressions.Add(NewExpression);
 			NewExpression->TaskObject = SelectTaskObject;
 		}
 		NewExpression->MarkPackageDirty();
@@ -670,6 +706,56 @@ void FTaskEditor::DuplicateNodes() {
 }
 
 
+
+static void CollectExpressions(
+	const FString& ModuleName,
+	UTaskGroup* Module, ExportItem& Pair)
+{
+	for (auto Child : Module->Children) {
+		if (auto Group = Cast<UTaskGroup>(Child))
+		{
+			CollectExpressions(ModuleName, Group, Pair);
+		}
+		else if (auto Task = Cast<UTask>(Child))
+		{
+			for(auto Expr : Task->Expressions)
+				Pair.Exprs.Add(Expr);
+		}
+		else {
+			check(false);
+		}
+	}
+}
+
+void FTaskEditor::ExportTasks() {
+	TArray<ExportItem> AllPair;
+
+	if (auto Task = Cast<UTaskSystem>(TaskObject)) {
+		for (auto Child : Task->Modules)
+		{
+			ExportItem ModulePair;
+			ModulePair.ModuleName = Child->GetPathName();
+			CollectExpressions(Child->GetPathName(), Child, ModulePair);
+			AllPair.Add(ModulePair);
+		}
+	}
+	else if (auto Module = Cast<UTaskModule>(TaskObject)) {
+		ExportItem ModulePair;
+		ModulePair.ModuleName = Module->GetPathName();
+		CollectExpressions(Module->GetPathName(), Module, ModulePair);
+		AllPair.Add(ModulePair);
+	}
+	else {
+		check(false);
+	}
+	
+	for (auto& Item : AllPair)
+	{
+		XlsxExporter::ExportModule(Item);
+	}
+}
+
+
 bool FTaskEditor::CanSelectAllNodes() const {
 	return GraphEditor.IsValid();
 }
@@ -756,6 +842,12 @@ void FTaskEditor::DeleteNodes(const TArray<UEdGraphNode*>& NodesToDelete)
 
 						bHaveExpressionsToDelete = true;
 						Expression->Modify();
+						if (Expression->TaskObject && Expression->TaskObject->Expressions.Find(Expression) != INDEX_NONE) {
+							Expression->TaskObject->Expressions.Remove(Expression);
+							Expression->TaskObject->Modify();
+							Expression->TaskObject->MarkPackageDirty();
+						}
+							
 						//TaskSystem->Expressions.Remove(Expression);
 						//TaskSystem->RemoveExpressionParameter(Expression);
 						Expression->MarkPendingKill();

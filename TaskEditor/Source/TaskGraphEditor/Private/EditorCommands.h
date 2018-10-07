@@ -10,7 +10,7 @@ class FEditorCommands
 {
 public:
 	FEditorCommands()
-		:TCommands<FEditorCommands>(TEXT("GenericCommands"),
+		:TCommands<FEditorCommands>(TEXT("TaskGraphEditor"),
 			NSLOCTEXT("TaskGraphEditor", "TaskSystem Editor", "Common Commands"),
 			NAME_None, FCoreStyle::Get().GetStyleSetName())
 	{}
@@ -19,7 +19,6 @@ public:
 
 	virtual void RegisterCommands() override;
 
-	TSharedPtr< FUICommandInfo > BreakPinLinks;
-	TSharedPtr< FUICommandInfo > PromoteToVariable;
+	TSharedPtr< FUICommandInfo > Export;
 
 };
