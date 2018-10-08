@@ -15,9 +15,14 @@
 	"Installed": false,
 	"Modules": [
     {
-      "Name": "HeightFogVolumePlugin",
-      "Type": "Editor",
-      "LoadingPhase": "PostEngineInit"
-    }
+      "Name": "HeightFogVolumeRuntime",
+      "Type": "Runtime",
+      "LoadingPhase": "PreDefault"
+    },
+		{
+		  "Name": "HeightFogVolumeEditor",
+		  "Type": "Editor",
+		  "LoadingPhase": "PostEngineInit"
+		}
 	]
 }

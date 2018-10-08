@@ -22,22 +22,12 @@ AHeightFogVolume::AHeightFogVolume(const FObjectInitializer& ObjectInitializer)
 	BlendWeight = 1.0f;
 }
 
-
-#if WITH_EDITOR
 void AHeightFogVolume::Serialize(FArchive& Ar)
 {
 	Super::Serialize(Ar);
 }
 
-void AHeightFogVolume::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
-{
-	Super::PostEditChangeProperty(PropertyChangedEvent);
-}
 
-bool AHeightFogVolume::CanEditChange(const UProperty* InProperty) const
-{
-	return Super::CanEditChange(InProperty);
-}
 
 void AHeightFogVolume::PostUnregisterAllComponents()
 {
@@ -78,7 +68,16 @@ void AHeightFogVolume::PostRegisterAllComponents()
 	}
 }
 
+#if WITH_EDITOR
 
+void AHeightFogVolume::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+{
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+}
 
+bool AHeightFogVolume::CanEditChange(const UProperty* InProperty) const
+{
+	return Super::CanEditChange(InProperty);
+}
 
 #endif // WITH_EDITOR

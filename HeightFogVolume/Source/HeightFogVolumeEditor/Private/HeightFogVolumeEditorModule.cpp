@@ -21,7 +21,7 @@ void CreateFactoryForHeightVolume() {
 		}
 }
 
-void FHeightFogVolumePluginModule::StartupModule()
+void FHeightFogVolumeEditorModule::StartupModule()
 {
 	auto& PlacementModule = IPlacementModeModule::Get();
 	auto Info = PlacementModule.GetRegisteredPlacementCategory(FBuiltInPlacementCategories::Volumes());
@@ -32,12 +32,12 @@ void FHeightFogVolumePluginModule::StartupModule()
 		MakeShareable(new FPlaceableItem(Factory, FAssetData(AHeightFogVolume::StaticClass()))));
 }
 
-void FHeightFogVolumePluginModule::ShutdownModule()
+void FHeightFogVolumeEditorModule::ShutdownModule()
 {
 	
 }
 
-IMPLEMENT_MODULE(FHeightFogVolumePluginModule, HeightFogVolumePlugin)
+IMPLEMENT_MODULE(FHeightFogVolumeEditorModule, HeightFogVolumeEditor)
 
 #undef LOCTEXT_NAMESPACE
 	

@@ -8,7 +8,7 @@
 
 
 
-class FHeightFogVolumePluginModule : public IModuleInterface
+class FHeightFogVolumeRuntimeModule : public IModuleInterface
 {
 public:
 

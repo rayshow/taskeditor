@@ -718,8 +718,14 @@ static void CollectExpressions(
 		}
 		else if (auto Task = Cast<UTask>(Child))
 		{
-			for(auto Expr : Task->Expressions)
-				Pair.Exprs.Add(Expr);
+			for (auto Expr : Task->Expressions)
+			{
+				if (auto SubTask = Cast<UTaskSystemExpressionSubtask_Common>(Expr))
+				{
+					Pair.Exprs.Add(SubTask);
+				}
+			}
+				
 		}
 		else {
 			check(false);

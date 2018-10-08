@@ -67,15 +67,15 @@ protected:
 	virtual void PostRegisterAllComponents() override;
 public:
 	//~ End AActor Interface
-#if WITH_EDITORONLY_DATA
+#if WITH_EDITOR
 	//~ Begin UObject Interface
 	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;
 	virtual bool CanEditChange(const UProperty* InProperty) const override;
-	virtual void Serialize(FArchive& Ar);
+
 #endif // WITH_EDITOR
 	//~ End UObject Interface
 
-
+	virtual void Serialize(FArchive& Ar);
 	/** replicated copy of ExponentialHeightFogComponent's bEnabled property */
 	UPROPERTY(replicatedUsing = OnRep_bEnabled)
 	uint32 bEffectEnabled : 1;
