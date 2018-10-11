@@ -5,14 +5,17 @@
 #include "CoreMinimal.h"
 #include "ModuleManager.h"
 #include "LogMacros.h"
+#include "EffectBlendInterface.h"
 
 
-
-class FHeightFogVolumeRuntimeModule : public IModuleInterface
+class FHeightFogVolumeRuntimeModule 
+	: public IModuleInterface
 {
 public:
 
 	/** IModuleInterface implementation */
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
+
+	virtual void DoBlend(int) override {};
 };

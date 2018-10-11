@@ -14,6 +14,7 @@ public class HeightFogVolumeRuntime : ModuleRules
 			{
 				"Core",
                 "Engine",
+                "Renderer",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -24,7 +25,7 @@ public class HeightFogVolumeRuntime : ModuleRules
 			{
 				"CoreUObject",
 				"Engine",
-
+                "Renderer",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

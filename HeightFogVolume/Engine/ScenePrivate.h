@@ -2165,6 +2165,7 @@ public:
 
 	/** The exponential fog components in the scene. */
 	TArray<FExponentialHeightFogSceneInfo> ExponentialFogs;
+	TArray<FExponentialHeightFogSceneInfo> OriginalExponentialFogs;
 
 	/** The atmospheric fog components in the scene. */
 	FAtmosphericFogSceneInfo* AtmosphericFog;
@@ -2273,6 +2274,7 @@ public:
 	virtual void UpdateLightColorAndBrightness(ULightComponent* Light) override;
 	virtual void AddExponentialHeightFog(UExponentialHeightFogComponent* FogComponent) override;
 	virtual void RemoveExponentialHeightFog(UExponentialHeightFogComponent* FogComponent) override;
+	void BlendLightOverride(FVector InViewLocation);
 	virtual void BlendExponentialHeightFog(FVector InViewLocation) override;
 	virtual void AddAtmosphericFog(UAtmosphericFogComponent* FogComponent) override;
 	virtual void RemoveAtmosphericFog(UAtmosphericFogComponent* FogComponent) override;

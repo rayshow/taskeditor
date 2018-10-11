@@ -54,6 +54,7 @@ Scene.cpp: Scene manager implementation.
 #include "GPUSkinCache.h"
 #include "Components/ExponentialHeightFogComponent.h"
 #include "Components/HeightFogVolumeInfo.h"
+#include "Components/SkyLightComponent.h"
 #include "Interfaces/Interface_ExpHeightFogVolume.h"
 
 // Enable this define to do slow checks for components being added to the wrong
@@ -2203,9 +2204,9 @@ void FScene::RemoveExponentialHeightFog(UExponentialHeightFogComponent* FogCompo
 				}
 			}
 
-			if (Scene->ExponentialFogs.Num() > 0 && Scene->ExponentialFogs[0].Component == FogComponent) {
-				Scene->ExponentialFogs.Empty();
-			}
+	if (Scene->ExponentialFogs.Num() > 0 && Scene->ExponentialFogs[0].Component == FogComponent) {
+		Scene->ExponentialFogs.Empty();
+	}
 		});
 }
 
@@ -2215,6 +2216,8 @@ struct MainDirectionLightOverride
 	float LightIntensity;
 	FQuat Rotate;
 	float Temperature;
+	FLinearColor SkyLightColor;
+	float SkyLightIntensity;
 };
 
 
@@ -2227,7 +2230,8 @@ void FScene::BlendLightOverride(FVector InViewLocation)
 	const static FString MainLight("MainLight");
 	ULightComponent *MainDirLight = nullptr;
 	FLightSceneProxy *LightProxy = nullptr;
-
+	USkyLightComponent* SkyLightComp = nullptr;
+	if (SkyLight) SkyLightComp = const_cast<USkyLightComponent*>(SkyLight->LightComponent);
 
 	// find MainLight 
 	for (auto Light : Lights)
@@ -2243,21 +2247,31 @@ void FScene::BlendLightOverride(FVector InViewLocation)
 		}
 	}
 
-	if (!MainDirLight) return;
+	// neither MainLight and Sky Light Is Exists
+	if (!MainDirLight && !SkyLightComp) return;
 
+	//
 	MainDirectionLightOverride LightOverride;
 	if (!IsOverrided)
 	{
-		LightOverride.LightColor = FLinearColor(MainDirLight->LightColor);
-		LightOverride.LightIntensity = MainDirLight->Intensity;
-		LightOverride.Rotate = MainDirLight->GetComponentQuat();
-		LightOverride.Temperature = MainDirLight->Temperature;
+		if (MainDirLight)
+		{
+			LightOverride.LightColor = FLinearColor(MainDirLight->LightColor);
+			LightOverride.LightIntensity = MainDirLight->Intensity;
+			LightOverride.Rotate = MainDirLight->GetComponentQuat();
+			LightOverride.Temperature = MainDirLight->Temperature;
+		}
+		if (SkyLightComp)
+		{
+			LightOverride.SkyLightColor = FLinearColor(SkyLightComp->LightColor);
+			LightOverride.SkyLightIntensity = SkyLightComp->Intensity;
+		}
 	}
 	else {
 		LightOverride = RecoverValues;
 	}
-	
-	
+
+
 	bool HasEffect = false;
 
 	for (auto VolumeIt = World->ExpHeightFogVolumes.CreateIterator(); VolumeIt; ++VolumeIt)
@@ -2267,7 +2281,6 @@ void FScene::BlendLightOverride(FVector InViewLocation)
 		auto Comp = VolumeProperties.Settings;
 		float DistanceToPoint = 100000000;
 		float LocalWeight = FMath::Clamp(VolumeProperties.BlendWeight, 0.0f, 1.0f);
-		
 
 		auto VolumeInfo = Cast<UHeightFogVolumeInfo>(Comp);
 		if (VolumeInfo)
@@ -2290,7 +2303,6 @@ void FScene::BlendLightOverride(FVector InViewLocation)
 						if (VolumeProperties.BlendRadius >= 1.0f)
 						{
 							LocalWeight *= 1.0f - DistanceToPoint / VolumeProperties.BlendRadius;
-
 							check(LocalWeight >= 0 && LocalWeight <= 1.0f);
 						}
 					}
@@ -2306,41 +2318,64 @@ void FScene::BlendLightOverride(FVector InViewLocation)
 
 			if (LocalWeight > 0)
 			{
-				
-				LightOverride.LightColor = FMath::Lerp(LightOverride.LightColor, VolumeInfo->LightColor, LocalWeight);
-				LightOverride.LightIntensity = FMath::Lerp(LightOverride.LightIntensity, VolumeInfo->LightIntensity, LocalWeight);
-				LightOverride.Rotate = FQuat::Slerp(LightOverride.Rotate, VolumeInfo->LightRotate, LocalWeight);
+				if (MainDirLight)
+				{
+					LightOverride.LightColor = FMath::Lerp(LightOverride.LightColor, VolumeInfo->LightColor, LocalWeight);
+					LightOverride.LightIntensity = FMath::Lerp(LightOverride.LightIntensity, VolumeInfo->LightIntensity, LocalWeight);
+					LightOverride.Rotate = FQuat::Slerp(LightOverride.Rotate, VolumeInfo->Rotate, LocalWeight);
+				}
+				if (SkyLightComp)
+				{
+					LightOverride.SkyLightColor = FMath::Lerp(LightOverride.SkyLightColor, VolumeInfo->SkyLightColor, LocalWeight);
+					LightOverride.SkyLightIntensity = FMath::Lerp(LightOverride.SkyLightIntensity, VolumeInfo->SkyLightIntensity, LocalWeight);
+				}
 				HasEffect = true;
 			}
 		}
 	}
 
+	const MainDirectionLightOverride* SetFrom = nullptr;
 	if (HasEffect)
 	{
 		if (!IsOverrided)
 		{
-			RecoverValues.LightColor = FLinearColor(MainDirLight->LightColor.ReinterpretAsLinear());
-			RecoverValues.LightIntensity = MainDirLight->Intensity;
-			RecoverValues.Rotate = MainDirLight->GetComponentQuat();
+			if (MainDirLight)
+			{
+				RecoverValues.LightColor = FLinearColor(MainDirLight->LightColor.ReinterpretAsLinear());
+				RecoverValues.LightIntensity = MainDirLight->Intensity;
+				RecoverValues.Rotate = MainDirLight->GetComponentQuat();
+			}
+			if (SkyLightComp)
+			{
+				RecoverValues.SkyLightColor = FLinearColor(SkyLightComp->LightColor);
+				RecoverValues.SkyLightIntensity = SkyLightComp->Intensity;
+			}
 			IsOverrided = true;
 		}
-		MainDirLight->LightColor = LightOverride.LightColor.ToFColor(false);
-		MainDirLight->Intensity = LightOverride.LightIntensity;
-		FTransform& Transform = const_cast<FTransform&>(MainDirLight->GetComponentTransform());
-		Transform.SetRotation(LightOverride.Rotate);
-		UpdateLightColorAndBrightness(MainDirLight);
-		UpdateLightTransform(MainDirLight);
-		
+		SetFrom = &LightOverride;
 	}
-	else if(IsOverrided){
-		MainDirLight->LightColor = RecoverValues.LightColor.ToFColor(false);
-		MainDirLight->Intensity = RecoverValues.LightIntensity;
-		FTransform& Transform =const_cast<FTransform&>( MainDirLight->GetComponentTransform() );
-		Transform.SetRotation(RecoverValues.Rotate);
-		
-		UpdateLightColorAndBrightness(MainDirLight);
-		UpdateLightTransform(MainDirLight);
+	else if (IsOverrided) {
+		SetFrom = &RecoverValues;
 		IsOverrided = false;
+	}
+
+	//Update Value
+	if (SetFrom)
+	{
+		if (MainDirLight)
+		{
+			MainDirLight->LightColor = SetFrom->LightColor.ToFColor(false);
+			MainDirLight->Intensity = SetFrom->LightIntensity;
+			FTransform& Transform = const_cast<FTransform&>(MainDirLight->GetComponentTransform());
+			Transform.SetRotation(SetFrom->Rotate);
+			UpdateLightColorAndBrightness(MainDirLight);
+			UpdateLightTransform(MainDirLight);
+		}
+		if (SkyLightComp)
+		{
+			SkyLightComp->SetLightColor(SetFrom->SkyLightColor.ToFColor(false));
+			SkyLightComp->SetIntensity(SetFrom->SkyLightIntensity);
+		}
 	}
 }
 
@@ -2397,7 +2432,7 @@ void FScene::BlendExponentialHeightFog(FVector InViewLocation)
 		else {
 			BlendDest = OriginalExponentialFogs[0];
 		}
-		
+
 
 		for (auto VolumeIt = World->ExpHeightFogVolumes.CreateIterator(); VolumeIt; ++VolumeIt)
 		{
@@ -2407,8 +2442,8 @@ void FScene::BlendExponentialHeightFog(FVector InViewLocation)
 			// This Volume will be ignored if 
 			// 1. Volume is disabled 
 			// 2. This is An Unbound Fog Volume and Has System Exp Fog
-			if ( !VolumeProperties.bIsEnabled ||
-				(HasSystemExpFog && VolumeProperties.bIsUnbound) )
+			if (!VolumeProperties.bIsEnabled ||
+				(HasSystemExpFog && VolumeProperties.bIsUnbound))
 			{
 				continue;
 			}
@@ -2489,17 +2524,17 @@ void FScene::BlendExponentialHeightFog(FVector InViewLocation)
 
 		// exists fog volume but none is affect the final fog , set fog 
 		/*if (!IsFogVolumeEffect
-			&& !HasUnbound
-			&& !HasSystemExpFog
-			&& ExponentialFogs.Num()>0
-			) {
+		&& !HasUnbound
+		&& !HasSystemExpFog
+		&& ExponentialFogs.Num()>0
+		) {
 
 		ENQUEUE_UNIQUE_RENDER_COMMAND_ONEPARAMETER(
-			FEmptyFogCommand,
-			FScene*, Scene, this,
-			{
-				Scene->ExponentialFogs.Empty();
-			});
+		FEmptyFogCommand,
+		FScene*, Scene, this,
+		{
+		Scene->ExponentialFogs.Empty();
+		});
 		}*/
 	}
 }
