@@ -19,16 +19,24 @@ class ENGINE_API UHeightFogVolumeInfo
 	uint32 bOverride_LightIntensity : 1;
 
 	/** Override Direction-Light Color. */
-	UPROPERTY(interp, BlueprintReadWrite, Category = "Directional Light Override", meta = (editcondition = "bOverride_SunColor", DisplayName = "Sun Color", LegacyTonemapper))
+	UPROPERTY(interp, BlueprintReadWrite, Category = "Directional Light Override")
 	FLinearColor LightColor;
 
 	/** Override Direction-Light Intensity. */
-	UPROPERTY(interp, BlueprintReadWrite, Category = "Directional Light Override", meta = (editcondition = "bOverride_SunIntensity", DisplayName = "Sun Intensity"))
+	UPROPERTY(interp, BlueprintReadWrite, Category = "Directional Light Override")
 	float LightIntensity;
 
-	UPROPERTY(interp, BlueprintReadWrite, Category = "Directional Light Override", meta = (editcondition = "bOverride_SunIntensity", DisplayName = "Sun Intensity"))
-	FQuat LightRotate;
+	UPROPERTY(interp, BlueprintReadWrite, Category = "Directional Light Override")
+	FQuat Rotate;
 
+
+	/** Override Direction-Light Color. */
+	UPROPERTY(interp, BlueprintReadWrite, Category = "Sky Light Override")
+		FLinearColor SkyLightColor;
+
+	/** Override Direction-Light Intensity. */
+	UPROPERTY(interp, BlueprintReadWrite, Category = "Sky Light Override")
+		float SkyLightIntensity;
 
 
 	//do nothing, avoid Add Fog to scene
