@@ -30,11 +30,11 @@ void FHeightFogVolumeEditorModule::StartupModule()
 		AHeightFogVolume::StaticClass());
 	PlacementModule.RegisterPlaceableItem(Info->UniqueHandle,
 		MakeShareable(new FPlaceableItem(Factory, FAssetData(AHeightFogVolume::StaticClass()))));
+
 }
 
 void FHeightFogVolumeEditorModule::ShutdownModule()
 {
-	
 }
 
 IMPLEMENT_MODULE(FHeightFogVolumeEditorModule, HeightFogVolumeEditor)

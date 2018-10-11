@@ -3,7 +3,7 @@
 #include "Engine/CollisionProfile.h"
 #include "Components/BrushComponent.h"
 #include "Components/ExponentialHeightFogComponent.h"
-
+#include "Components/HeightFogVolumeInfo.h"
 
 AHeightFogVolume::AHeightFogVolume(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)

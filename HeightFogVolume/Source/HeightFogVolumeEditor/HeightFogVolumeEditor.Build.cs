@@ -7,14 +7,26 @@ public class HeightFogVolumeEditor : ModuleRules
 	public HeightFogVolumeEditor(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
-		 
-		
-		PublicDependencyModuleNames.AddRange(
+
+        PrivateIncludePathModuleNames.AddRange(
+            new string[] {
+                "ContentBrowser",
+            }
+        );
+
+        DynamicallyLoadedModuleNames.AddRange(
+            new string[] {
+               "ContentBrowser",
+            }
+        );
+
+        PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
 				"Core",
                 "Engine",
                 "HeightFogVolumeRuntime",
+                //"ContentBrowser",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -30,6 +42,7 @@ public class HeightFogVolumeEditor : ModuleRules
                 "PlacementMode",
                 "UnrealEd",
 				"HeightFogVolumeRuntime",
+                //"ContentBrowser",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

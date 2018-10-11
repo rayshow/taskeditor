@@ -1,5 +1,5 @@
 
-#include "HeightFogVolumeInfo.h"
+#include "Components/HeightFogVolumeInfo.h"
 
 
 UHeightFogVolumeInfo::UHeightFogVolumeInfo(const FObjectInitializer& ObjectInitializer)

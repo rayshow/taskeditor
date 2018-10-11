@@ -9,10 +9,9 @@
 #include "Engine/Scene.h"
 #include "Engine/World.h"
 #include "Interfaces/Interface_ExpHeightFogVolume.h"
-#include "HeightFogVolumeInfo.h"
+#include "Components/HeightFogVolumeInfo.h"
 #include "Net/UnrealNetwork.h"
 #include "HeightFogVolume.generated.h"
-
 
 UCLASS(autoexpandcategories = HeightFogVolume, hidecategories = (Advanced, Collision, Volume, Brush, Attachment), MinimalAPI)
 class AHeightFogVolume:
