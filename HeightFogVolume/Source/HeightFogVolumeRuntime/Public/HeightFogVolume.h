@@ -50,11 +50,11 @@ public:
 
 	virtual FExponentialHeightFogProperties GetProperties() const {
 		FExponentialHeightFogProperties Properties;
-		Properties.Priority = Priority;
+		Properties.bIsEnabled = bEnabled != 0;
+		Properties.bIsUnbound = bUnbound != 0;
 		Properties.BlendRadius = BlendRadius;
 		Properties.BlendWeight = BlendWeight;
-		Properties.bIsEnabled = bEnabled;
-		Properties.bIsUnbound = bUnbound;
+		Properties.Priority = Priority;
 		Properties.Settings = Settings;
 		return Properties;
 	};
