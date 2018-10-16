@@ -425,7 +425,7 @@ void FTaskEditor::NotifyPostChange(
 		if (Expr) {
 			FString ChangePropertyName = PropertyChangedEvent.MemberProperty->GetName();
 			if (Expr->OnExpressionChanged.IsBound())
-				Expr->OnExpressionChanged.Broadcast(ChangePropertyName);
+				Expr->OnExpressionChanged.Execute(ChangePropertyName);
 		}
 	}
 }

@@ -13,7 +13,7 @@ class UTaskObject;
 struct FTaskSystemExpressionOutput;
 struct FTaskSystemExpressionInput;
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnExpressionChanged, FString);
+DECLARE_DELEGATE_OneParam(FOnExpressionChanged, FString);
 
 UCLASS(abstract, BlueprintType, hidecategories = Object)
 class UTaskSystemExpression: public UObject

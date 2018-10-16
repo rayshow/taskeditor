@@ -1,4 +1,4 @@
-// Copyright 1998-2018 Epic Games, Inc. All Rights Reserved.
+ï»¿// Copyright 1998-2018 Epic Games, Inc. All Rights Reserved.
 
 #pragma once
 
@@ -30,7 +30,9 @@ public:
 		Expr = Cast<UTaskSystemExpressionSelectSubtask>(TaskNode->Expression);
 		check(Expr);
 
-		Expr->OnExpressionChanged.AddRaw(this, &SSelectSubtaskNode::OnExpressionChanged);
+		if (Expr->OnExpressionChanged.IsBound())
+			Expr->OnExpressionChanged.Unbind();
+		Expr->OnExpressionChanged.BindRaw(this, &SSelectSubtaskNode::OnExpressionChanged);
 
 		this->GraphNode = InNode;
 		this->SetCursor(EMouseCursor::CardinalCross);
@@ -40,8 +42,10 @@ public:
 
 	void OnExpressionChanged(FString PropertyName)
 	{
-		GraphNode->Pins.Empty();
-		GraphNode->AllocateDefaultPins();
+		if (auto TaskNode = Cast<UTaskSystemGraphNode>(GraphNode)) {
+			TaskNode->RecreateAndLinkNode();
+		}
+		
 		this->UpdateGraphNode();
 	}
 
@@ -72,47 +76,26 @@ public:
 				.AllowMultiLine(true).AutoWrapText(true)
 				.Text_Lambda([this]() {
 
-				return FText::Format(NSLOCTEXT("SubTargetNode", "NodeContent", " n{1}"),
+				return FText::Format(NSLOCTEXT("SubTargetNode", "NodeContent", "å¾…æ·»åŠ æ˜¾ç¤ºæ–‡æœ¬"),
 					Expr->TaskDesc.IsEmpty() ?
-					FText::FromString(TEXT("ÇëÊäÈëÈÎÎñÃèÊö¡£")) : Expr->TaskDesc
+					FText::FromString(TEXT("è¯·è¾“å…¥ä»»åŠ¡æè¿°ã€‚")) : Expr->TaskDesc
 				);
 			})
 				];
 
 
-			// Place preview widget based on where the least pins are
-			if ((LeftPinCount < RightPinCount) || (RightPinCount == 0))
-			{
-				LeftNodeBox->AddSlot()
-					.Padding(FMargin(NegativeHPad + ExtraPad, 0.0f, 0.0f, 0.0f))
-					.AutoHeight()
-					[
-						Box
-					];
-			}
-			else if (LeftPinCount > RightPinCount)
-			{
-				RightNodeBox->AddSlot()
-					.Padding(FMargin(NegativeHPad + ExtraPad, 0.0f, 0.0f, 0.0f))
-					.AutoHeight()
-					[
-						Box
-					];
-			}
-			else
-			{
-				MainBox->AddSlot()
-					.Padding(10)
-					.AutoHeight()
-					[
-						SNew(SHorizontalBox)
-						+ SHorizontalBox::Slot()
-					.AutoWidth()
-					[
-						Box
-					]
-					];
-			}
+			MainBox->AddSlot()
+				.Padding(10)
+				.AutoHeight()
+				[
+					SNew(SHorizontalBox)
+					+ SHorizontalBox::Slot()
+				.AutoWidth()
+				[
+					Box
+				]
+				];
+
 		}
 	}
 

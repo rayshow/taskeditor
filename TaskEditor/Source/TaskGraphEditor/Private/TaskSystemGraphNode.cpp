@@ -361,18 +361,38 @@ void UTaskSystemGraphNode::PostCopyNode() {
 
 void UTaskSystemGraphNode::RecreateAndLinkNode() {
 	// Throw away the original pins
+	TMap<FName, TArray<UEdGraphPin*>> RecordLinks;
 	for (int32 PinIndex = 0; PinIndex < Pins.Num(); ++PinIndex)
 	{
 		UEdGraphPin* Pin = Pins[PinIndex];
 		Pin->Modify();
-		Pin->BreakAllPinLinks();
+		//Pin->BreakAllPinLinks();
+		for (auto ToPin : Pin->LinkedTo) {
+			check(ToPin->LinkedTo.Find(Pin) != INDEX_NONE);
+			ToPin->LinkedTo.Remove(Pin);
+		}
+		RecordLinks.Add(Pin->PinName, MoveTemp(Pin->LinkedTo));
 		UEdGraphNode::DestroyPin(Pin);
 	}
 	Pins.Empty();
 
 	AllocateDefaultPins();
 
-	CastChecked<UTaskSystemGraph>(GetGraph())->LinkTaskSystemExpressionsFromGraph();
+	for (int32 PinIndex = 0; PinIndex < Pins.Num(); ++PinIndex)
+	{
+		UEdGraphPin* Pin = Pins[PinIndex];
+		auto LinkTo = RecordLinks.Find(Pin->PinName);
+		if (LinkTo) {
+			for (auto ToPin : *LinkTo) {
+				check(ToPin->LinkedTo.Find(Pin)==INDEX_NONE);
+				ToPin->LinkedTo.Add(Pin);
+			}
+			Pin->LinkedTo = MoveTemp(*LinkTo);
+		}
+		
+	}
+
+	//CastChecked<UTaskSystemGraph>(GetGraph())->LinkTaskSystemExpressionsFromGraph();
 }
 
 

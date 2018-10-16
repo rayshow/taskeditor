@@ -30,8 +30,21 @@ public:
 		Expr = Cast<UTaskSystemExpressionSubtask>( TaskNode->Expression);
 		check(Expr);
 
+		if (Expr->OnExpressionChanged.IsBound())
+			Expr->OnExpressionChanged.Unbind();
+		Expr->OnExpressionChanged.BindRaw(this, &SSubtaskNode::OnExpressionChanged);
+
 		this->GraphNode = InNode;
 		this->SetCursor(EMouseCursor::CardinalCross);
+		this->UpdateGraphNode();
+	}
+
+	void OnExpressionChanged(FString PropertyName)
+	{
+		if (auto TaskNode = Cast<UTaskSystemGraphNode>(GraphNode)) {
+			TaskNode->RecreateAndLinkNode();
+		}
+
 		this->UpdateGraphNode();
 	}
 
@@ -63,7 +76,7 @@ public:
 				.AllowMultiLine(true).AutoWrapText(true)
 				.Text_Lambda([this]() {
 
-				return FText::Format(NSLOCTEXT("SubTargetNode", "NodeContent", " n{1}fffffffffffffffff"),
+				return FText::Format(NSLOCTEXT("SubTargetNode", "NodeContent", "待添加显示文本"),
 					Expr->TaskDesc.IsEmpty() ?
 					FText::FromString(TEXT("请输入任务描述。")) : Expr->TaskDesc
 				);
@@ -76,11 +89,11 @@ public:
 				[
 					SNew(SHorizontalBox)
 					+ SHorizontalBox::Slot()
-				.AutoWidth()
-				[
-					Box
-				]
-				];
+						.AutoWidth()
+						[
+							Box
+						]
+					];
 		}
 	}
 
