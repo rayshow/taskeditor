@@ -18,10 +18,14 @@ enum TaskSystemExpressionInputType{
 USTRUCT(noexport)
 struct FTaskSystemExpressionInput
 {
-#if WITH_EDITORONLY_DATA
 	UPROPERTY()
 	class UTaskSystemExpression* Expression;
-#endif
+
+	UPROPERTY()
+	TArray<uint32> PreTaskObjectIDs;
+
+	UPROPERTY()
+	TArray<class UTaskSystemExpression*> LinkedExpression;
 
 	UPROPERTY()
 	int32 OutputIndex;

@@ -18,6 +18,9 @@ struct FTaskSystemExpressionOutput
 	FName	OutputName;
 
 	UPROPERTY()
+	uint32 NextTaskObjectID;
+
+	UPROPERTY()
 	TEnumAsByte<TaskSystemExpressionOutputType> OutputType;
 
 	FTaskSystemExpressionOutput() {}

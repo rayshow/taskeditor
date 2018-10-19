@@ -169,7 +169,23 @@ static bool CanConnect(UEdGraphPin* From, UEdGraphPin* To)
 bool UTaskSystemGraphSchema::TryCreateConnection(UEdGraphPin* A, UEdGraphPin* B) const{
 	if (CanConnect(A, B))
 	{
-		return UEdGraphSchema::TryCreateConnection(A, B);
+		if (UEdGraphSchema::TryCreateConnection(A, B))
+		{
+			auto TaskNodeA = CastChecked<UTaskSystemGraphNode>(A->GetOwningNode());
+			auto TaskNodeB = CastChecked<UTaskSystemGraphNode>(B->GetOwningNode());
+
+			if (A->Direction == EGPD_Input && B->Direction == EGPD_Output) {
+				TaskNodeA->NotifyLinkFrom(A, TaskNodeB, B);
+				TaskNodeB->NotifyLinkTo(B, TaskNodeA, A);
+			}
+			else if(A->Direction == EGPD_Output && B->Direction == EGPD_Input){
+				TaskNodeA->NotifyLinkTo(A, TaskNodeB, B);
+				TaskNodeB->NotifyLinkFrom(B, TaskNodeA, A);
+			}
+			else {
+				check(false);
+			}
+		}
 	}
 		
 	return false;

@@ -49,6 +49,7 @@ protected:
 	void ModifyAndCopyPersistentPinData(UEdGraphPin& TargetPin, const UEdGraphPin& SourcePin) const;
 };
 
+class UTaskSystemExpression;
 
 UCLASS(MinimalAPI)
 class UTaskSystemGraphNode : public UTaskSystemGraphNode_Base
@@ -57,9 +58,28 @@ public:
 	GENERATED_UCLASS_BODY()
 		 
 	UPROPERTY()
-	class UTaskSystemExpression* Expression;
+	UTaskSystemExpression* Expression;
+
+	static constexpr int MaxPinNumber = 30;
+
+private:
+	//mapping from input pin to input
+	TMap<UEdGraphPin*, FTaskSystemExpressionInput*> InPinMap;
+
+	//mapping from output pin to output
+	TMap<UEdGraphPin*, FTaskSystemExpressionOutput*> OutPinMap;
   
 public:
+
+	// ThisPin ---> ToNode.LinkTo
+	void NotifyLinkTo(UEdGraphPin* ThisPin,
+		UTaskSystemGraphNode* ToNode, UEdGraphPin* LinkTo);
+
+	// ThisPin <-- FromNode.LinkFrom
+	void NotifyLinkFrom(UEdGraphPin* ThisPin,
+		UTaskSystemGraphNode* FromNode, UEdGraphPin* LinkFrom);
+
+
 	/** Fix up the node's owner after being copied */
 	void PostCopyNode();
 

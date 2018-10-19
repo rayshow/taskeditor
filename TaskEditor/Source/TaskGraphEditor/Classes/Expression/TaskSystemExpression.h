@@ -29,7 +29,10 @@ public:
 #endif 
 
 	UTaskObject* TaskObject;
+
+	//outputs
 	TArray<FTaskSystemExpressionOutput> Outputs;
+
 	FOnExpressionChanged OnExpressionChanged;
 
 #if WITH_EDITOR
@@ -77,4 +80,16 @@ public:
 		}
 		return Categories;
 	}
+
+	virtual void NotifyLinkTo(FTaskSystemExpressionOutput* ThisOutput,
+		UTaskSystemExpression* ToExpr, FTaskSystemExpressionInput* ToInput) {
+		int a = 0;
+	}
+
+	virtual void NotifyLinkFrom(FTaskSystemExpressionInput* ThisInput,
+		UTaskSystemExpression* FromExpr, FTaskSystemExpressionOutput* ToOutput) {
+		int a = 0;
+	}
+
+
 };

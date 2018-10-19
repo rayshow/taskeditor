@@ -353,11 +353,33 @@ void UTaskSystemGraphNode::PostCopyNode() {
 
 }
 
+// ThisPin ---> ToExpr.LinkTo
+void UTaskSystemGraphNode::NotifyLinkTo(UEdGraphPin* ThisPin,
+	UTaskSystemGraphNode* ToNode, UEdGraphPin* LinkTo)
+{
+	auto ToExpr = ToNode->Expression;
+	check(ToNode && ToExpr);
+	if (OutPinMap.Find(ThisPin) && ToNode->InPinMap.Find(LinkTo)) {
+		ToExpr->NotifyLinkTo(OutPinMap[ThisPin], ToExpr, ToNode->InPinMap[LinkTo] );
+	}
+	else {
+		check(false);
+	}
+}
 
-//TSharedRef<SWidget>	UTaskSystemGraphNode::GetDefaultValueWidget()
-//{
-//	return SNew(SEditableTextBox);
-//}
+// ThisPin <-- T.LinkFrom
+void UTaskSystemGraphNode::NotifyLinkFrom(UEdGraphPin* ThisPin,
+	UTaskSystemGraphNode* FromNode, UEdGraphPin* LinkFrom)
+{
+	auto FromExpr = FromNode->Expression;
+	check(FromNode && FromExpr);
+	if (InPinMap.Find(ThisPin) && FromNode->OutPinMap.Find(LinkFrom)) {
+		FromExpr->NotifyLinkFrom(InPinMap[ThisPin], FromExpr, FromNode->OutPinMap[LinkFrom]);
+	}
+	else {
+		check(false);
+	}
+}
 
 void UTaskSystemGraphNode::RecreateAndLinkNode() {
 	// Throw away the original pins
@@ -510,7 +532,10 @@ bool UTaskSystemGraphNode::CanUserDeleteNode() const
 
 void UTaskSystemGraphNode::CreateInputPins()
 {
-	const TArray<FTaskSystemExpressionInput*> ExpressionInputs = Expression->GetInputs();
+	const TArray<FTaskSystemExpressionInput*> ExpressionInputs
+		= Expression->GetInputs(); 
+
+	InPinMap.Empty(MaxPinNumber);
 
 	for (int32 Index = 0; Index < ExpressionInputs.Num(); ++Index)
 	{
@@ -531,12 +556,16 @@ void UTaskSystemGraphNode::CreateInputPins()
 			NewPin->PinName = CreateUniquePinName(TEXT("Input"));
 			NewPin->PinFriendlyName = FText::FromString(TEXT(" "));
 		}
+		InPinMap.Add(NewPin, Input);
 	}
 }
 
 void UTaskSystemGraphNode::CreateOutputPins()
 {
 	TArray<FTaskSystemExpressionOutput>& Outputs = Expression->GetOutputs();
+
+	OutPinMap.Empty(MaxPinNumber);
+
 	for ( FTaskSystemExpressionOutput& ExpressionOutput : Outputs)
 	{
 		FName PinCategory;
@@ -559,6 +588,7 @@ void UTaskSystemGraphNode::CreateOutputPins()
 			NewPin->PinName = CreateUniquePinName(TEXT("Output"));
 			NewPin->PinFriendlyName = FText::FromString(TEXT(" "));
 		}
+		OutPinMap.Add(NewPin, &ExpressionOutput);
 	}
 }
 

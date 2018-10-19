@@ -22,7 +22,6 @@ public:
 	SLATE_BEGIN_ARGS(SSubtaskNode) {}
 	SLATE_END_ARGS()
 
-
 	void Construct(const FArguments& InArgs, UEdGraphNode* InNode)
 	{
 		auto TaskNode = Cast<UTaskSystemGraphNode>(InNode);

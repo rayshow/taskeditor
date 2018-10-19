@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "ModuleManager.h"
 #include "LogMacros.h"
-#include "EffectBlendInterface.h"
 
 
 class FHeightFogVolumeRuntimeModule 

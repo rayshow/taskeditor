@@ -296,6 +296,13 @@ public:
 	UPROPERTY()
 	FTaskSystemExpressionInput PostAccept;
 
+	UPROPERTY()
+	uint32 PreTaskID;
+
+	UPROPERTY()
+	uint32 NextTaskID;
+
+
 	UPROPERTY(EditAnywhere, Category = "通用参数", meta = (DisplayName = "能否自动接受"))
 	uint32 bCanAutoAccept : 1;
 
@@ -364,6 +371,18 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "事件", meta = (DisplayName = "接之后", InputName = "PostAccept"))
 	uint32 bAllowPostAccept : 1;
+
+	void AddInputExpression(FTaskSystemExpressionInput* ThisInput,
+		UTaskSystemExpression* FromExpr);
+
+	void AddOutputExpression(FTaskSystemExpressionOutput* ThisOutput,
+		UTaskSystemExpression* FromExpr);
+
+	virtual void NotifyLinkTo(FTaskSystemExpressionOutput* ThisOutput,
+		UTaskSystemExpression* ToExpr, FTaskSystemExpressionInput* ToInput);
+
+	virtual void NotifyLinkFrom(FTaskSystemExpressionInput* ThisInput,
+		UTaskSystemExpression* FromExpr, FTaskSystemExpressionOutput* ToOutput);
 
 	virtual void GetCaption(TArray<FString>& OutCaptions) const override {
 		if (!TaskTitle.IsEmpty()) {
@@ -485,7 +504,6 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "事件", meta = (DisplayName = "交之后", InputName = "PostHandup"))
 	uint32 bAllowPostHandUp : 1;
-
 
 	virtual void SaveToExcel(Excel& ex, int i)
 	{
