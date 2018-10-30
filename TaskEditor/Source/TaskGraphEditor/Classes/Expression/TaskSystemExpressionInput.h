@@ -25,7 +25,7 @@ struct FTaskSystemExpressionInput
 	TArray<uint32> PreTaskObjectIDs;
 
 	UPROPERTY()
-	TArray<class UTaskSystemExpression*> LinkedExpression;
+	TArray<class UTaskSystemExpression*> LinkedExprs;
 
 	UPROPERTY()
 	int32 OutputIndex;

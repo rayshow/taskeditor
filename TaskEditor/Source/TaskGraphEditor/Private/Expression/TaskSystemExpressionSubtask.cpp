@@ -47,9 +47,9 @@ void UTaskSystemExpressionSubtask_Common::NotifyLinkFrom(FTaskSystemExpressionIn
 	//
 	if (ThisInput == &Input)
 	{
-		PreTaskID = FromExp->TaskID;
-		ThisInput->PreTaskObjectIDs.Add(FromExp->TaskID);
-		ThisInput->LinkedExprs.Add(FromExpr);
+		/*PreTaskID = FromExpr->TaskID;
+		ThisInput->PreTaskObjectIDs.Add(FromExpr->TaskID);
+		ThisInput->LinkedExprs.Add(FromExpr);*/
 
 	}
 	

@@ -16,7 +16,7 @@
 	"Modules": [
 		{
 			"Name": "ExcelOps",
-			"Type": "Developer",
+			"Type": "Editor",
 			"LoadingPhase": "Default"
 		}
 	]
