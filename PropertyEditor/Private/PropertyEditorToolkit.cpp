@@ -12,6 +12,7 @@
 #include "IPropertyTableColumn.h"
 #include "IPropertyTreeRow.h"
 #include "IPropertyTableRow.h"
+#include "PropertyNode.h"
 
 #include "Widgets/Docking/SDockTab.h"
 

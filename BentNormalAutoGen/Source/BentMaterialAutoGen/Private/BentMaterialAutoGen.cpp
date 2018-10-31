@@ -22,6 +22,7 @@
 #include "MessageLog/Public/MessageLogModule.h"
 #include "MessageLog/Public/IMessageLogListing.h"
 #include "MessageLog.h"
+#include "DrawDebugHelpers.h"
 
 static const FName BentMaterialAutoGenTabName("BentMaterialAutoGen");
 
@@ -40,6 +41,7 @@ static void Test(ECheckBoxState State, int)
 void FBentMaterialAutoGenModule::StartupModule()
 {
 	
+
 	//SLATE_ARGUMENT()
 	int a = 1;
 	SNew(SCheckBox).IsChecked_Lambda([]() {
