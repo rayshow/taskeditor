@@ -11,6 +11,7 @@
 FObjectPropertyNode::FObjectPropertyNode(void)
 	: FComplexPropertyNode()
 	, BaseClass(NULL)
+	, TemplateObject(NULL)
 {
 }
 
@@ -50,6 +51,12 @@ const UPackage* FObjectPropertyNode::GetUPackage(int32 InIndex) const
 void FObjectPropertyNode::AddObject( UObject* InObject )
 {
 	Objects.Add( InObject );
+}
+
+
+void FObjectPropertyNode::AddTemplateObject(UObject* InObject)
+{
+	TemplateObject = InObject;
 }
 
 // Removes an object from the list.
@@ -119,6 +126,13 @@ bool FObjectPropertyNode::GetReadAddressUncached(FPropertyNode& InNode,
 											   bool bObjectForceCompare,
 											   bool bArrayPropertiesCanDifferInSize) const
 {
+
+	if (OutAddresses && TemplateObject.Get() )
+	{
+		OutAddresses->Add(TemplateObject.Get(), InNode.GetValueBaseAddress((uint8*)(TemplateObject.Get())));
+		return true;
+	}
+
 	// Are any objects selected for property editing?
 	if( !GetNumObjects())
 	{

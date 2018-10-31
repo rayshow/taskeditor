@@ -49,6 +49,7 @@ public:
 	 * Adds a new object to the list.
 	 */
 	void AddObject( UObject* InObject );
+	void AddTemplateObject(UObject* InObject);
 	/**
 	 * Removes an object from the list.
 	 */
@@ -135,6 +136,11 @@ private:
 private:
 	/** The list of objects we are editing properties for. */
 	TArray< TWeakObjectPtr<UObject> >		Objects;
+
+
+	/* in split mode display this object, save property to objects*/
+	TWeakObjectPtr<UObject> TemplateObject;
+
 
 	/** The lowest level base class for objects in this list. */
 	TWeakObjectPtr<UClass>					BaseClass;

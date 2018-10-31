@@ -758,10 +758,11 @@ void SPropertyTreeViewImpl::SetObjectArray( const TArray< TWeakObjectPtr< UObjec
 	PreSetObject();
 
 	bool bOwnedByLockedLevel = false;
-	for( int32 ObjectIndex = 0 ; ObjectIndex < InObjects.Num() ; ++ObjectIndex )
+	for( int32 ObjectIndex = 1 ; ObjectIndex < InObjects.Num() ; ++ObjectIndex )
 	{
 		RootPropertyNode->AddObject( InObjects[ObjectIndex].Get() );
 	}
+	RootPropertyNode->AddTemplateObject(InObjects[0].Get());
 
 	// @todo Slate Property Window
 	//SetFlags(EPropertyWindowFlags::ReadOnly, bOwnedByLockedLevel);
