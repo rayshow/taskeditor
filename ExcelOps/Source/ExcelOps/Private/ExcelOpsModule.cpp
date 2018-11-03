@@ -27,7 +27,7 @@ void FExcelOpsModule::StartupModule()
 	ExampleLibraryHandle = !LibraryPath.IsEmpty() ? FPlatformProcess::GetDllHandle(*LibraryPath) : nullptr;
 	if (ExampleLibraryHandle)
 	{
-		Excel ex;
+		/*Excel ex;
 		ex.Value("A1",5);
 		ex.Value("A2", L"大家好 data");
 		ex.Value("B2", 4.5f);
@@ -35,7 +35,7 @@ void FExcelOpsModule::StartupModule()
 
 		Excel ex2{L"测试example_.xlsx"};
 		FString A2 = ex2.Value<FString>("A2");
-		int a = 0;
+		int a = 0;*/
 	}
 }
 

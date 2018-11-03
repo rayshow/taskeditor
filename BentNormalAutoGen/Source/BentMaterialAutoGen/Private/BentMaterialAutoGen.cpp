@@ -22,6 +22,7 @@
 #include "MessageLog/Public/MessageLogModule.h"
 #include "MessageLog/Public/IMessageLogListing.h"
 #include "MessageLog.h"
+#include "DrawDebugHelpers.h"
 
 static const FName BentMaterialAutoGenTabName("BentMaterialAutoGen");
 
@@ -32,9 +33,21 @@ struct FAutoGenBentMesh {
 	TArray<uint32>  NeededGenMatIndice;
 };
 
+static void Test(ECheckBoxState State, int)
+{
+
+}
 
 void FBentMaterialAutoGenModule::StartupModule()
 {
+	
+
+	//SLATE_ARGUMENT()
+	int a = 1;
+	SNew(SCheckBox).IsChecked_Lambda([]() {
+		return ECheckBoxState::Checked;
+	}).OnCheckStateChanged_Static(Test, a);
+
 	// do register
 	FBentMaterialAutoGenStyle::Initialize();
 	FBentMaterialAutoGenStyle::ReloadTextures();

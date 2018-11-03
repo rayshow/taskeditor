@@ -13,11 +13,15 @@
 #include "MessageLog.h"
 #include "ScopedTransaction.h"
 #include "Components/PrimitiveComponent.h"
+#include "Input/SCheckBox.h"
 #define LOCTEXT_NAMESPACE "FHeightAlignTool"
 
 
 static void AlertErrorMessage(EMessageSeverity::Type LV, FString&& Msg)
 {
+	auto box = SNew(SCheckBox);
+	
+
 	auto& MessageLogModule = FModuleManager::LoadModuleChecked<FMessageLogModule>("MessageLog");
 	FMessageLog MessageLog("HeightAlign Tool");
 
