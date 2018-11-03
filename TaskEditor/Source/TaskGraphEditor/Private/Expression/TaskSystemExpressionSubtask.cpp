@@ -47,12 +47,10 @@ void UTaskSystemExpressionSubtask_Common::NotifyLinkFrom(FTaskSystemExpressionIn
 	//
 	if (ThisInput == &Input)
 	{
-		PreTaskID = FromExp->TaskID;
+	/*	PreTaskID = FromExp->TaskID;
 		ThisInput->PreTaskObjectIDs.Add(FromExp->TaskID);
-		ThisInput->LinkedExprs.Add(FromExpr);
-
+		ThisInput->LinkedExprs.Add(FromExpr);*/
 	}
-	
 }
 
 static const FName NAME_Output_HandUpNpc(TEXT("交NPC"));
