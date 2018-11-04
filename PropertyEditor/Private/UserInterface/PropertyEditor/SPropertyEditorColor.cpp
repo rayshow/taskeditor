@@ -208,9 +208,11 @@ void SPropertyEditorColor::SetColor(FLinearColor NewColor)
 
 	UProperty* Property = PropertyNode->GetProperty();
 	check(Property);
-	
+
+	//Set non-template's color
+
 	FReadAddressList ReadAddresses;
-	PropertyNode->GetReadAddress( false, ReadAddresses, false );
+	PropertyNode->GetReadAddress( false, ReadAddresses, false,false,false,true );
 
 	if( ReadAddresses.Num() ) 
 	{

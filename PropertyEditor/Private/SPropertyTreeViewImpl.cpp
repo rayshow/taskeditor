@@ -145,11 +145,22 @@ void SPropertyTreeViewImpl::Construct(const FArguments& InArgs)
 	ConstructPropertyTree();
 }
 
+
+void SPropertyTreeViewImpl::ApplyTemplate()
+{
+	int Num = Rows.Num();
+	for (int i = 0; i < Num; ++i)
+	{
+		if(Rows[i].IsValid()) Rows[i]->ApplyTemplate();
+	}
+}
+
 /** Reconstructs the entire property tree widgets */
 void SPropertyTreeViewImpl::ConstructPropertyTree()
 {
 	const FString OldFilterText = CurrentFilterText;
 	CurrentFilterText.Empty();
+	Rows.Empty();
 
 	FavoritesTree.Reset();
 	PropertyTree.Reset();
@@ -279,6 +290,7 @@ void SPropertyTreeViewImpl::ConstructPropertyTree()
 		]
 	];
 
+	
 	// If we had an old filter, restore it.
 	if(!OldFilterText.IsEmpty())
 	{
@@ -758,11 +770,19 @@ void SPropertyTreeViewImpl::SetObjectArray( const TArray< TWeakObjectPtr< UObjec
 	PreSetObject();
 
 	bool bOwnedByLockedLevel = false;
+	UObject* u1 = nullptr;
+	UObject* u2 = nullptr;
 	for( int32 ObjectIndex = 1 ; ObjectIndex < InObjects.Num() ; ++ObjectIndex )
 	{
 		RootPropertyNode->AddObject( InObjects[ObjectIndex].Get() );
+		u1 = InObjects[ObjectIndex].Get();
 	}
-	RootPropertyNode->AddTemplateObject(InObjects[0].Get());
+	if (InObjects.Num() >= 1)
+	{
+		u2 = InObjects[0].Get();
+		RootPropertyNode->AddTemplateObject(InObjects[0].Get());
+	}
+	
 
 	// @todo Slate Property Window
 	//SetFlags(EPropertyWindowFlags::ReadOnly, bOwnedByLockedLevel);
@@ -1080,9 +1100,11 @@ TSharedRef<ITableRow> SPropertyTreeViewImpl::CreatePropertyEditor( TSharedPtr<FP
 	{
 		TSharedRef< IPropertyUtilities > PropertyUtilities = PropertySettings.ToSharedRef();
 		TSharedRef< FPropertyEditor > PropertyEditor = FPropertyEditor::Create( InPropertyNode.ToSharedRef(), PropertyUtilities );
-		return SNew( SPropertyEditorTableRow, PropertyEditor, PropertyUtilities, OwnerTable.ToSharedRef() )
+		auto Row = SNew( SPropertyEditorTableRow, PropertyEditor, PropertyUtilities, OwnerTable.ToSharedRef() )
 			.OnMiddleClicked( OnPropertyMiddleClicked )
 			.ConstructExternalColumnCell( ConstructExternalColumnCell );
+		Rows.Add(Row);
+		return Row;
 	}
 }
 

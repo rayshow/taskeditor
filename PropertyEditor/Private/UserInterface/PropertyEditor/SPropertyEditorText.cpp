@@ -117,6 +117,11 @@ void SPropertyEditorText::OnTextCommitted( const FText& NewText, ETextCommit::Ty
 	}
 }
 
+ void SPropertyEditorText::Apply()
+{
+	 OnTextCommitted(PropertyEditor->GetValueAsText(), ETextCommit::Default);
+}
+
 static FText ValidateNameLength( const FText& Text )
 {
 	if( Text.ToString().Len() > NAME_SIZE )

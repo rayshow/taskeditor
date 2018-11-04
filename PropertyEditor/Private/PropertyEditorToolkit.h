@@ -70,6 +70,7 @@ private:
 	TSharedRef<SDockTab> SpawnTab_PropertyTree( const FSpawnTabArgs& Args );
 
 	TSharedRef<SDockTab> SpawnTab_PropertyTable( const FSpawnTabArgs& Args ) ;
+	FReply OnApplyClicked();
 
 	void GridSelectionChanged();
 

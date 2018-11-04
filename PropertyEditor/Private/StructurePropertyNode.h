@@ -67,7 +67,7 @@ public:
 		FReadAddressListData* OutAddresses,
 		bool bComparePropertyContents,
 		bool bObjectForceCompare,
-		bool bArrayPropertiesCanDifferInSize) const override
+		bool bArrayPropertiesCanDifferInSize, bool) const override
 	{
 		if(OutAddresses)
 		{

@@ -820,11 +820,12 @@ bool FPropertyNode::GetReadAddressUncached( FPropertyNode& InPropertyNode,
 									FReadAddressListData* OutAddresses,
 									bool bComparePropertyContents,
 									bool bObjectForceCompare,
-									bool bArrayPropertiesCanDifferInSize ) const
+									bool bArrayPropertiesCanDifferInSize,
+									bool bSkipTemplate) const
 {
 	if (ParentNodeWeakPtr.IsValid())
 	{
-		return ParentNode->GetReadAddressUncached( InPropertyNode, InRequiresSingleSelection, OutAddresses, bComparePropertyContents, bObjectForceCompare, bArrayPropertiesCanDifferInSize );
+		return ParentNode->GetReadAddressUncached( InPropertyNode, InRequiresSingleSelection, OutAddresses, bComparePropertyContents, bObjectForceCompare, bArrayPropertiesCanDifferInSize, bSkipTemplate);
 	}
 
 	return false;
@@ -843,23 +844,26 @@ bool FPropertyNode::GetReadAddress(bool InRequiresSingleSelection,
 								   FReadAddressList& OutAddresses,
 								   bool bComparePropertyContents,
 								   bool bObjectForceCompare,
-								   bool bArrayPropertiesCanDifferInSize)
+								   bool bArrayPropertiesCanDifferInSize,
+								   bool bSkipTemplate)
 
 {
+	static bool lastSkipTemplate = false;
 
 	// @todo PropertyEditor Nodes which require validation cannot be cached
-	if( CachedReadAddresses.Num() && !CachedReadAddresses.bRequiresCache && !HasNodeFlags(EPropertyNodeFlags::RequiresValidation) )
+	if(lastSkipTemplate == bSkipTemplate && CachedReadAddresses.Num() && !CachedReadAddresses.bRequiresCache && !HasNodeFlags(EPropertyNodeFlags::RequiresValidation) )
 	{
 		OutAddresses.ReadAddressListData = &CachedReadAddresses;
 		return CachedReadAddresses.bAllValuesTheSame;
 	}
 
+	lastSkipTemplate = bSkipTemplate;
 	CachedReadAddresses.Reset();
 
 	bool bAllValuesTheSame = false;
 	if (ParentNodeWeakPtr.IsValid())
 	{
-		bAllValuesTheSame = GetReadAddressUncached( *this, InRequiresSingleSelection, &CachedReadAddresses, bComparePropertyContents, bObjectForceCompare, bArrayPropertiesCanDifferInSize );
+		bAllValuesTheSame = GetReadAddressUncached( *this, InRequiresSingleSelection, &CachedReadAddresses, bComparePropertyContents, bObjectForceCompare, bArrayPropertiesCanDifferInSize, bSkipTemplate);
 		OutAddresses.ReadAddressListData = &CachedReadAddresses;
 		CachedReadAddresses.bAllValuesTheSame = bAllValuesTheSame;
 		CachedReadAddresses.bRequiresCache = false;

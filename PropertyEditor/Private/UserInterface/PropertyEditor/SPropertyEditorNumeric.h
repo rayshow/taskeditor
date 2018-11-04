@@ -31,11 +31,12 @@
 
 #include "Math/UnitConversion.h"
 #include "Widgets/Input/NumericUnitTypeInterface.inl"
+#include "ApplyInterface.h"
 
 #define LOCTEXT_NAMESPACE "PropertyEditor"
 
 template <typename NumericType>
-class SPropertyEditorNumeric : public SCompoundWidget
+class SPropertyEditorNumeric : public SCompoundWidget, public ApplyInterface
 {
 public:
 
@@ -342,6 +343,11 @@ public:
 		}
 
 		SetEnabled(TAttribute<bool>(this, &SPropertyEditorNumeric<NumericType>::CanEdit));
+	}
+
+	virtual void Apply() override
+	{
+		OnValueCommitted(OnGetValue().GetValue(), ETextCommit::Default);
 	}
 
 	virtual bool SupportsKeyboardFocus() const override

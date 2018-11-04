@@ -9,8 +9,9 @@
 #include "Widgets/SCompoundWidget.h"
 #include "Presentation/PropertyEditor/PropertyEditor.h"
 #include "UserInterface/PropertyEditor/PropertyEditorConstants.h"
+#include "ApplyInterface.h"
 
-class SPropertyEditorDateTime : public SCompoundWidget
+class SPropertyEditorDateTime : public SCompoundWidget, public ApplyInterface
 {
 public:
 
@@ -25,6 +26,8 @@ public:
 	void Construct( const FArguments& InArgs, const TSharedRef< class FPropertyEditor >& InPropertyEditor );
 
 	void GetDesiredWidth( float& OutMinDesiredWidth, float& OutMaxDesiredWidth );
+
+	virtual void Apply() override;
 
 private:
 

@@ -11,6 +11,7 @@
 #include "IPropertyUtilities.h"
 #include "Presentation/PropertyEditor/PropertyEditor.h"
 #include "IPropertyTreeRow.h"
+#include "UserInterface/PropertyEditor/ApplyInterface.h"
 
 typedef SMultiColumnTableRow< TSharedPtr<class FPropertyNode*> > SPropertyRowBase;
 
@@ -44,6 +45,13 @@ public:
 
 	virtual bool IsCursorHovering() const override;
 
+	void ApplyTemplate()
+	{
+		if (Interface)
+		{
+			Interface->Apply();
+		}
+	}
 
 private:
 
@@ -78,6 +86,8 @@ private:
 	TSharedPtr< FPropertyPath > PropertyPath;
 
 	FOnPropertyClicked OnMiddleClicked;
+
+	ApplyInterface* Interface;
 
 	/** Called to construct any the cell contents for columns created by external code*/
 	FConstructExternalColumnCell ConstructExternalColumnCell;

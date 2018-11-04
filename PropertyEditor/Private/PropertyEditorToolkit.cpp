@@ -9,6 +9,7 @@
 #include "Widgets/Images/SImage.h"
 #include "Widgets/Input/SButton.h"
 #include "Widgets/Input/SCheckBox.h"
+#include "Widgets/Layout/SScrollBox.h"
 #include "IPropertyTableColumn.h"
 #include "IPropertyTreeRow.h"
 #include "IPropertyTableRow.h"
@@ -170,7 +171,7 @@ void FPropertyEditorToolkit::Initialize( const EToolkitMode::Type Mode, const TS
 		{
 			AdjustedObjectsToEditWeak.Add(*ObjectIter);
 		}
-		PropertyTree->SetObjectArray(AdjustedObjectsToEditWeak);
+		//PropertyTree->SetObjectArray(AdjustedObjectsToEditWeak);
 
 		PinColor = FSlateColor(FLinearColor(1, 1, 1, 0));
 		GEditor->GetTimerManager()->SetTimer(TimerHandle_TickPinColor, FTimerDelegate::CreateSP(this, &FPropertyEditorToolkit::TickPinColorAndOpacity), 0.1f, true);
@@ -178,10 +179,17 @@ void FPropertyEditorToolkit::Initialize( const EToolkitMode::Type Mode, const TS
 }
 
 
+FReply FPropertyEditorToolkit::OnApplyClicked()
+{
+	if(PropertyTree.IsValid()) PropertyTree->ApplyTemplate();
+	return FReply::Handled();
+}
+
+
 TSharedRef<SDockTab> FPropertyEditorToolkit::SpawnTab_PropertyTree( const FSpawnTabArgs& Args ) 
 {
 	check( Args.GetTabId() == TreeTabId );
-
+	
 	TSharedRef<SDockTab> TreeToolkitTab = SNew(SDockTab)
 		.Icon( FEditorStyle::GetBrush("PropertyEditor.Properties.TabIcon") )
 		.Label( LOCTEXT("GenericDetailsTitle", "Details") )
@@ -193,7 +201,22 @@ TSharedRef<SDockTab> FPropertyEditorToolkit::SpawnTab_PropertyTree( const FSpawn
 			.BorderImage( FEditorStyle::GetBrush( "ToolPanel.GroupBorder" ) )
 			.Content()
 			[
-				PropertyTree.ToSharedRef()
+				SNew(SScrollBox) + SScrollBox::Slot()
+				[
+					SNew(SVerticalBox)
+					+ SVerticalBox::Slot().AutoHeight()
+					[
+						PropertyTree.ToSharedRef()
+					]
+					+ SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Center)
+					[
+						SNew(SHorizontalBox) + SHorizontalBox::Slot().AutoWidth().VAlign(VAlign_Center)
+						[
+							SNew(SButton).Text(FText::FromString(TEXT("Apply Template"))).OnClicked_Raw(this, &FPropertyEditorToolkit::OnApplyClicked)
+						]
+
+					]
+				]
 			]
 		];	
 	
@@ -284,7 +307,8 @@ void FPropertyEditorToolkit::CreatePropertyTable()
 {
 	FPropertyEditorModule& PropertyEditorModule = FModuleManager::GetModuleChecked<FPropertyEditorModule>( "PropertyEditor" );
 	PropertyTable = PropertyEditorModule.CreatePropertyTable();
-
+	//PropertyTable->SetSelectionMode(ESelectionMode::Single);
+	
 	PropertyTable->OnSelectionChanged()->AddSP( this, &FPropertyEditorToolkit::GridSelectionChanged );
 	PropertyTable->OnColumnsChanged()->AddSP( this, &FPropertyEditorToolkit::TableColumnsChanged );
 	PropertyTable->OnRootPathChanged()->AddSP( this, &FPropertyEditorToolkit::GridRootPathChanged );
@@ -487,7 +511,28 @@ void FPropertyEditorToolkit::GridSelectionChanged()
 {
 	TArray< TWeakObjectPtr< UObject > > SelectedObjects;
 	PropertyTable->GetSelectedTableObjects( SelectedObjects );
-	PropertyTree->SetObjectArray( SelectedObjects );
+
+	TArray< TWeakObjectPtr<UObject> > PropObjects;
+
+	if (SelectedObjects.Num() == 1)
+	{
+		 auto EditObjects = GetEditingObjects();
+		 PropObjects.Add(SelectedObjects[0]);
+
+		 for (int i = 0; i < EditObjects.Num(); ++i)
+		 {
+			 if (EditObjects[i] != SelectedObjects[0].Get())
+			 {
+				 PropObjects.Add(EditObjects[i]);
+			 }
+		 }
+	}
+
+	if (PropObjects.Num() <= 1) return;
+
+	PropertyTree->SetObjectArray(PropObjects);
+
+	
 
 	const TSet< TSharedRef< IPropertyTableRow > > SelectedRows = PropertyTable->GetSelectedRows();
 

@@ -26,6 +26,7 @@
 
 void SPropertyEditorTableRow::Construct( const FArguments& InArgs, const TSharedRef<FPropertyEditor>& InPropertyEditor, const TSharedRef< class IPropertyUtilities >& InPropertyUtilities, const TSharedRef<STableViewBase>& InOwnerTable )
 {
+	Interface = nullptr;
 	PropertyEditor = InPropertyEditor;
 	PropertyUtilities = InPropertyUtilities;
 	OnMiddleClicked = InArgs._OnMiddleClicked;
@@ -234,76 +235,111 @@ TSharedRef<SWidget> SPropertyEditorTableRow::ConstructPropertyEditorWidget()
 	const TSharedRef< FPropertyEditor > PropertyEditorRef = PropertyEditor.ToSharedRef();
 	const TSharedRef< IPropertyUtilities > PropertyUtilitiesRef = PropertyUtilities.ToSharedRef();
 
+	Interface = nullptr;
 	if( Property )
 	{
 		// ORDER MATTERS: first widget type to support the property node wins!
 		if ( SPropertyEditorNumeric<float>::Supports(PropertyEditorRef) )
 		{
-			PropertyWidget = SNew( SPropertyEditorNumeric<float>, PropertyEditorRef );
+			auto Sp = SNew( SPropertyEditorNumeric<float>, PropertyEditorRef );
+			Interface = &Sp.Get();
+			PropertyWidget = Sp;
 		}
 		else if (SPropertyEditorNumeric<int8>::Supports(PropertyEditorRef))
 		{
-			PropertyWidget = SNew(SPropertyEditorNumeric<int8>, PropertyEditorRef);
+			auto Sp = SNew(SPropertyEditorNumeric<int8>, PropertyEditorRef);
+			Interface = &Sp.Get();
+			PropertyWidget = Sp;
 		}
 		else if (SPropertyEditorNumeric<int16>::Supports(PropertyEditorRef))
 		{
-			PropertyWidget = SNew(SPropertyEditorNumeric<int16>, PropertyEditorRef);
+			auto Sp = SNew(SPropertyEditorNumeric<int16>, PropertyEditorRef);
+			Interface = &Sp.Get();
+			PropertyWidget = Sp;
 		}
 		else if (SPropertyEditorNumeric<int32>::Supports(PropertyEditorRef))
 		{
-			PropertyWidget = SNew(SPropertyEditorNumeric<int32>, PropertyEditorRef);
+			auto Sp = SNew(SPropertyEditorNumeric<int32>, PropertyEditorRef);
+			Interface = &Sp.Get();
+			PropertyWidget = Sp;
 		}
 		else if ( SPropertyEditorNumeric<int64>::Supports(PropertyEditorRef) )
 		{
-			PropertyWidget = SNew( SPropertyEditorNumeric<int64>, PropertyEditorRef );
+			auto Sp = SNew( SPropertyEditorNumeric<int64>, PropertyEditorRef );
+			Interface = &Sp.Get();
+			PropertyWidget = Sp;
 		}
 		else if ( SPropertyEditorNumeric<uint8>::Supports(PropertyEditorRef) )
 		{
-			PropertyWidget = SNew( SPropertyEditorNumeric<uint8>, PropertyEditorRef );
+			auto Sp = SNew( SPropertyEditorNumeric<uint8>, PropertyEditorRef );
+			Interface = &Sp.Get();
+			PropertyWidget = Sp;
 		}
 		else if (SPropertyEditorNumeric<uint16>::Supports(PropertyEditorRef))
 		{
-			PropertyWidget = SNew(SPropertyEditorNumeric<uint16>, PropertyEditorRef);
+			auto Sp = SNew(SPropertyEditorNumeric<uint16>, PropertyEditorRef);
+			Interface = &Sp.Get();
+			PropertyWidget = Sp;
 		}
 		else if (SPropertyEditorNumeric<uint32>::Supports(PropertyEditorRef))
 		{
-			PropertyWidget = SNew(SPropertyEditorNumeric<uint32>, PropertyEditorRef);
+			auto Sp = SNew(SPropertyEditorNumeric<uint32>, PropertyEditorRef);
+			Interface = &Sp.Get();
+			PropertyWidget = Sp;
 		}
 		else if (SPropertyEditorNumeric<uint64>::Supports(PropertyEditorRef))
 		{
-			PropertyWidget = SNew(SPropertyEditorNumeric<uint64>, PropertyEditorRef);
+			auto Sp = SNew(SPropertyEditorNumeric<uint64>, PropertyEditorRef);
+			Interface = &Sp.Get();
+			PropertyWidget = Sp;
 		}
 		else if ( SPropertyEditorArray::Supports(PropertyEditorRef) )
 		{
-			PropertyWidget = SNew( SPropertyEditorArray, PropertyEditorRef );
+			auto Sp = SNew( SPropertyEditorArray, PropertyEditorRef );
+			//Interface = &Sp.Get();
+			PropertyWidget = Sp;
 		}
 		else if ( SPropertyEditorCombo::Supports(PropertyEditorRef) )
 		{
-			PropertyWidget = SNew( SPropertyEditorCombo, PropertyEditorRef );
+			auto Sp = SNew( SPropertyEditorCombo, PropertyEditorRef );
+			Interface = &Sp.Get();
+			PropertyWidget = Sp;
 		}
 		else if ( SPropertyEditorEditInline::Supports(PropertyEditorRef) )
 		{
-			PropertyWidget = SNew( SPropertyEditorEditInline, PropertyEditorRef );
+			auto Sp = SNew( SPropertyEditorEditInline, PropertyEditorRef );
+			Interface = &Sp.Get();
+			PropertyWidget = Sp;
 		}
 		else if ( SPropertyEditorText::Supports(PropertyEditorRef) )
 		{
-			PropertyWidget = SNew( SPropertyEditorText, PropertyEditorRef );
+			auto Sp = SNew( SPropertyEditorText, PropertyEditorRef );
+			Interface = &Sp.Get();
+			PropertyWidget = Sp;
 		}
 		else if ( SPropertyEditorBool::Supports(PropertyEditorRef) )
 		{
-			PropertyWidget = SNew( SPropertyEditorBool, PropertyEditorRef );
+			auto Sp = SNew( SPropertyEditorBool, PropertyEditorRef );
+			Interface = &Sp.Get();
+			PropertyWidget = Sp;
 		}
 		else if ( SPropertyEditorColor::Supports(PropertyEditorRef) )
 		{
-			PropertyWidget = SNew( SPropertyEditorColor, PropertyEditorRef, PropertyUtilitiesRef );
+			auto Sp = SNew( SPropertyEditorColor, PropertyEditorRef, PropertyUtilitiesRef );
+			Interface = &Sp.Get();
+			PropertyWidget = Sp;
 		}
 		else if ( SPropertyEditorArrayItem::Supports(PropertyEditorRef) )
 		{
-			PropertyWidget = SNew( SPropertyEditorArrayItem, PropertyEditorRef );
+			auto Sp = SNew( SPropertyEditorArrayItem, PropertyEditorRef );
+			//Interface = &Sp.Get();
+			PropertyWidget = Sp;
 		}
 		else if ( SPropertyEditorDateTime::Supports(PropertyEditorRef) )
 		{
-			PropertyWidget = SNew( SPropertyEditorDateTime, PropertyEditorRef );
+			auto Sp = SNew( SPropertyEditorDateTime, PropertyEditorRef );
+			Interface = &Sp.Get();
+			PropertyWidget = Sp;
 		}
 	}
 

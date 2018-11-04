@@ -300,6 +300,7 @@ public:
 	 */
 	virtual class FObjectPropertyNode* AsObjectNode() { return nullptr; }
 	virtual const FObjectPropertyNode* AsObjectNode() const { return nullptr; }
+	
 
 	virtual FComplexPropertyNode* AsComplexNode() { return nullptr; }
 	virtual const FComplexPropertyNode* AsComplexNode() const { return nullptr; }
@@ -421,7 +422,8 @@ public:
 		FReadAddressList& OutAddresses,
 		bool bComparePropertyContents = true,
 		bool bObjectForceCompare = false,
-		bool bArrayPropertiesCanDifferInSize = false);
+		bool bArrayPropertiesCanDifferInSize = false,
+		bool bSkipTemplate = false);
 
 	/**
 	 * fills in the OutAddresses array with the addresses of all of the available objects.
@@ -432,7 +434,7 @@ public:
 	/**
 	 * Gets read addresses without accessing cached data.  Is less efficient but gets the must up to date data
 	 */
-	virtual bool GetReadAddressUncached(FPropertyNode& InNode, bool InRequiresSingleSelection, FReadAddressListData* OutAddresses, bool bComparePropertyContents = true, bool bObjectForceCompare = false, bool bArrayPropertiesCanDifferInSize = false) const;
+	virtual bool GetReadAddressUncached(FPropertyNode& InNode, bool InRequiresSingleSelection, FReadAddressListData* OutAddresses, bool bComparePropertyContents = true, bool bObjectForceCompare = false, bool bArrayPropertiesCanDifferInSize = false, bool bSkipTemplate = false) const;
 	virtual bool GetReadAddressUncached(FPropertyNode& InNode, FReadAddressListData& OutAddresses) const;
 
 	/**

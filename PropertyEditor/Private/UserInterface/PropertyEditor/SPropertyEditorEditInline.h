@@ -10,8 +10,10 @@
 #include "Presentation/PropertyEditor/PropertyEditor.h"
 #include "UserInterface/PropertyEditor/PropertyEditorConstants.h"
 #include "Widgets/Input/SComboButton.h"
+#include "ApplyInterface.h"
+#include "PropertyCustomizationHelpers.h"
 
-class SPropertyEditorEditInline : public SCompoundWidget
+class SPropertyEditorEditInline : public SCompoundWidget, public ApplyInterface
 {
 public:
 
@@ -27,7 +29,7 @@ public:
 	void Construct( const FArguments& InArgs, const TSharedRef< class FPropertyEditor >& InPropertyEditor );
 
 	void GetDesiredWidth( float& OutMinDesiredWidth, float& OutMaxDesiredWidth );
-
+	virtual void Apply() override;
 
 private:
 	/**

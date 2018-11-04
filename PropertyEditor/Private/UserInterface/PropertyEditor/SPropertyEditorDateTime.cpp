@@ -28,6 +28,12 @@ void SPropertyEditorDateTime::Construct( const FArguments& InArgs, const TShared
 }
 
 
+void SPropertyEditorDateTime::Apply()
+{
+	HandleTextCommitted(PropertyEditor->GetValueAsText(), ETextCommit::Default);
+}
+
+
 bool SPropertyEditorDateTime::Supports( const TSharedRef< FPropertyEditor >& InPropertyEditor )
 {
 	const TSharedRef< FPropertyNode > PropertyNode = InPropertyEditor->GetPropertyNode();

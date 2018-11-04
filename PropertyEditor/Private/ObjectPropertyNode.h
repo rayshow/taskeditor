@@ -23,7 +23,7 @@ public:
 	/** FPropertyNode Interface */
 	virtual FObjectPropertyNode* AsObjectNode() override { return this;}
 	virtual const FObjectPropertyNode* AsObjectNode() const override { return this; }
-	virtual bool GetReadAddressUncached(FPropertyNode& InNode, bool InRequiresSingleSelection, FReadAddressListData* OutAddresses, bool bComparePropertyContents = true, bool bObjectForceCompare = false, bool bArrayPropertiesCanDifferInSize = false) const override;
+	virtual bool GetReadAddressUncached(FPropertyNode& InNode, bool InRequiresSingleSelection, FReadAddressListData* OutAddresses, bool bComparePropertyContents = true, bool bObjectForceCompare = false, bool bArrayPropertiesCanDifferInSize = false, bool bSkipTemplate = false) const override;
 	virtual bool GetReadAddressUncached(FPropertyNode& InNode, FReadAddressListData& OutAddresses) const override;
 
 	virtual uint8* GetValueBaseAddress( uint8* Base ) override;
@@ -50,6 +50,7 @@ public:
 	 */
 	void AddObject( UObject* InObject );
 	void AddTemplateObject(UObject* InObject);
+
 	/**
 	 * Removes an object from the list.
 	 */

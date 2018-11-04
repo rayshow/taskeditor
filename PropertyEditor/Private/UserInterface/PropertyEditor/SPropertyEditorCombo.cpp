@@ -193,6 +193,12 @@ void SPropertyEditorCombo::OnComboSelectionChanged( TSharedPtr<FString> NewValue
 	}
 }
 
+ void SPropertyEditorCombo::Apply()
+{
+	 FString CurrentDisplayValue = GetDisplayValueAsString();
+	 ComboBox->SetSelectedItem(CurrentDisplayValue);
+}
+
 void SPropertyEditorCombo::OnComboOpening()
 {
 	TArray<TSharedPtr<FString>> ComboItems;

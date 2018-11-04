@@ -7,8 +7,9 @@
 #include "Widgets/SCompoundWidget.h"
 #include "Presentation/PropertyEditor/PropertyEditor.h"
 #include "Widgets/Input/SCheckBox.h"
+#include "ApplyInterface.h"
 
-class SPropertyEditorBool : public SCompoundWidget
+class SPropertyEditorBool : public SCompoundWidget, public ApplyInterface
 {
 public:
 
@@ -25,7 +26,7 @@ public:
 	virtual bool SupportsKeyboardFocus() const override;
 	virtual bool HasKeyboardFocus() const override;
 	virtual FReply OnFocusReceived( const FGeometry& MyGeometry, const FFocusEvent& InFocusEvent ) override;
-
+	virtual void Apply() override;
 private:
 
 	virtual FReply OnMouseButtonDoubleClick( const FGeometry& InMyGeometry, const FPointerEvent& InMouseEvent ) override;

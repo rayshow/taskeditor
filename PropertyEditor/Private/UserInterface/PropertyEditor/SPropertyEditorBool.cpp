@@ -29,6 +29,12 @@ void SPropertyEditorBool::GetDesiredWidth( float& OutMinDesiredWidth, float& Out
 	OutMaxDesiredWidth = 0;
 }
 
+
+ void SPropertyEditorBool::Apply()
+{
+	 OnCheckStateChanged(OnGetCheckState());
+}
+
 bool SPropertyEditorBool::Supports( const TSharedRef< class FPropertyEditor >& PropertyEditor )
 {
 	return PropertyEditor->PropertyIsA( UBoolProperty::StaticClass() );

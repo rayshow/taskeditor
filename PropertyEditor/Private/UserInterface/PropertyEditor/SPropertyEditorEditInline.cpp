@@ -268,3 +268,36 @@ void SPropertyEditorEditInline::OnClassPicked(UClass* InClass)
 		ComboButton->SetIsOpen(false);
 	}
 }
+
+ void SPropertyEditorEditInline::Apply() 
+{
+	 TArray<FString> Values;
+	 const TSharedRef< IPropertyHandle > PropertyHandle = PropertyEditor->GetPropertyHandle();
+
+	 UObjectProperty* ObjectProperty = CastChecked<UObjectProperty>(PropertyHandle->GetProperty());
+	 if (ObjectProperty && ObjectProperty->HasAnyPropertyFlags(CPF_InstancedReference) && ObjectProperty->PropertyClass->IsChildOf(UActorComponent::StaticClass()))
+	 {
+		 PropertyHandle->GetPerObjectValues(Values);
+	 }
+
+	 auto ParentHandle = PropertyHandle->GetParentHandle();
+	 auto ArrayProp = ParentHandle->AsArray();
+	 auto MapProp = ParentHandle->AsMap();
+	 auto SetProp = ParentHandle->AsSet();
+	 uint32  Num = 0;
+	 if (ArrayProp.IsValid())
+	 {
+		 ArrayProp->GetNumElements(Num);
+	 }
+	 else if (MapProp.IsValid())
+	 {
+		 MapProp->GetNumElements(Num);
+	 }
+	 else if (SetProp.IsValid())
+	 {
+		 SetProp->GetNumElements(Num);
+	 }
+	 int Num2 = PropertyHandle->GetNumOuterObjects();
+
+	 PropertyHandle->SetPerObjectValues(Values);
+}

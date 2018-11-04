@@ -8,10 +8,11 @@
 #include "Widgets/SCompoundWidget.h"
 #include "IPropertyUtilities.h"
 #include "Presentation/PropertyEditor/PropertyEditor.h"
+#include "ApplyInterface.h"
 
 class SColorBlock;
 
-class SPropertyEditorColor : public SCompoundWidget
+class SPropertyEditorColor : public SCompoundWidget, public ApplyInterface
 {
 public:
 
@@ -41,6 +42,7 @@ protected:
 
 	/** @return Gets the color for the color block to use for its TAttribute */
 	FLinearColor OnGetColor() const;
+	
 
 	/**
 	* The system calls this method to notify the widget that a mouse button was pressed within it. This event is bubbled.
@@ -66,6 +68,11 @@ protected:
 	void CreateColorPickerWindow(const TSharedRef< class FPropertyEditor >& PropertyEditor, bool bUseAlpha, bool bOnlyRefreshOnOk=false);
 
 	void SetColor(FLinearColor NewColor);
+
+	virtual void Apply() override
+	{
+		SetColor(OnGetColor());
+	}
 
 	/**
 	 * Called when the color picker is cancelled

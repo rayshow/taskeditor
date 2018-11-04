@@ -10,11 +10,12 @@
 #include "Widgets/SCompoundWidget.h"
 #include "Presentation/PropertyEditor/PropertyEditor.h"
 #include "UserInterface/PropertyEditor/PropertyEditorConstants.h"
+#include "ApplyInterface.h"
 
 class SEditableTextBox;
 class SMultiLineEditableTextBox;
 
-class SPropertyEditorText : public SCompoundWidget
+class SPropertyEditorText : public SCompoundWidget, public ApplyInterface
 {
 public:
 
@@ -37,6 +38,7 @@ public:
 private:
 
 	void OnTextCommitted( const FText& NewText, ETextCommit::Type CommitInfo );
+	virtual void Apply() override;
 
 	/** Called if the single line widget text changes */
 	void OnSingleLineTextChanged( const FText& NewText );

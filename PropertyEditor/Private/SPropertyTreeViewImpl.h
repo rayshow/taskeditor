@@ -180,6 +180,7 @@ public:
 	 */
 	virtual bool IsPropertyOrChildrenSelected( const FString& InName, const int32 InArrayIndex = INDEX_NONE, const bool CheckChildren = true );
 
+	void ApplyTemplate();
 private:
 
 	/** Restores the expansion state in the tree for a specific object set */
@@ -244,6 +245,7 @@ private:
 
 	/** Reconstructs the entire property tree widgets */
 	void ConstructPropertyTree();
+	
 
 	/** 
 	 * Recursively marks nodes which should be favorite starting from the root
@@ -361,4 +363,6 @@ private:
 	FConstructExternalColumnHeaders ConstructExternalColumnHeaders;
 	/** Called to construct any the cell contents for columns created by external code*/
 	FConstructExternalColumnCell ConstructExternalColumnCell;
+
+	TArray<TSharedPtr<class SPropertyEditorTableRow>> Rows;
 };

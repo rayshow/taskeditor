@@ -124,10 +124,12 @@ bool FObjectPropertyNode::GetReadAddressUncached(FPropertyNode& InNode,
 											   FReadAddressListData* OutAddresses,
 											   bool bComparePropertyContents,
 											   bool bObjectForceCompare,
-											   bool bArrayPropertiesCanDifferInSize) const
+											   bool bArrayPropertiesCanDifferInSize,
+											   bool bSkipStemplate) const
 {
+	if (!OutAddresses) return false;
 
-	if (OutAddresses && TemplateObject.Get() )
+	if ( OutAddresses && TemplateObject.Get() && !bSkipStemplate)
 	{
 		OutAddresses->Add(TemplateObject.Get(), InNode.GetValueBaseAddress((uint8*)(TemplateObject.Get())));
 		return true;
@@ -651,10 +653,15 @@ bool FObjectPropertyNode::GetQualifiedName(FString& PathPlusIndex, bool bWithArr
 void FObjectPropertyNode::SetBestBaseClass()
 {
 	BaseClass = NULL;
-
-	for( int32 x = 0 ; x < Objects.Num() ; ++x )
+	auto NewObjects = Objects;
+	if (TemplateObject.Get())
 	{
-		UObject* Obj = Objects[x].Get();
+		NewObjects.Add(TemplateObject);
+	}
+
+	for( int32 x = 0 ; x < NewObjects.Num() ; ++x )
+	{
+		UObject* Obj = NewObjects[x].Get();
 		
 		if( Obj )
 		{

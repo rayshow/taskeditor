@@ -10,9 +10,11 @@
 #include "UserInterface/PropertyEditor/PropertyEditorConstants.h"
 #include "PropertyCustomizationHelpers.h"
 
+#include "ApplyInterface.h"
+
 class SPropertyComboBox;
 
-class SPropertyEditorCombo : public SCompoundWidget
+class SPropertyEditorCombo : public SCompoundWidget, public ApplyInterface
 {
 public:
 
@@ -36,6 +38,7 @@ private:
 	void GenerateComboBoxStrings( TArray< TSharedPtr<FString> >& OutComboBoxStrings, TArray<TSharedPtr<class SToolTip>>& OutToolTips, TArray<bool>& OutRestrictedItems );
 	void OnComboSelectionChanged( TSharedPtr<FString> NewValue, ESelectInfo::Type SelectInfo );
 	void OnComboOpening();
+	virtual void Apply() override;
 
 	virtual void SendToObjects( const FString& NewValue );
 
