@@ -11,11 +11,11 @@
 #include "PropertyEditorHelpers.h"
 #include "UserInterface/PropertyEditor/PropertyEditorConstants.h"
 #include "Widgets/Text/STextBlock.h"
-
+#include "ApplyInterface.h"
 
 #define LOCTEXT_NAMESPACE "PropertyEditor"
 
-class SPropertyEditorArray : public SCompoundWidget
+class SPropertyEditorArray : public SCompoundWidget, public ApplyInterface
 {
 public:
 
@@ -64,6 +64,73 @@ public:
 		OutMinDesiredWidth = 170.0f;
 		OutMaxDesiredWidth = 170.0f;
 	}
+
+	virtual void Apply() override
+	{
+		const TSharedRef< IPropertyHandle > PropertyHandle = PropertyEditor->GetPropertyHandle();
+		auto ArrayProp = PropertyHandle->AsArray();
+		auto MapProp = PropertyHandle->AsMap();
+		auto SetProp = PropertyHandle->AsSet();
+		int  FromNum = PropertyEditor->GetPropertyNode()->GetNumChildNodes();
+
+		FReadAddressList ReadAddresses;
+		PropertyEditor->GetPropertyNode()->GetReadAddress(false, ReadAddresses, false, false, false, true);
+
+		auto NodeProperty = PropertyEditor->GetPropertyNode()->GetProperty();
+		UArrayProperty* Array = Cast<UArrayProperty>(NodeProperty);
+		USetProperty* Set = Cast<USetProperty>(NodeProperty);
+		UMapProperty* Map = Cast<UMapProperty>(NodeProperty);
+		int Index = -1;
+		bool bAddedMapEntry = false;
+
+		for (int32 i = 0; i < ReadAddresses.Num(); ++i)
+		{
+			void* Addr = ReadAddresses.GetAddress(i);
+
+			if (Array)
+			{
+				FScriptArrayHelper	ArrayHelper(Array, Addr);
+				int ToNum = ArrayHelper.Num();
+				if (FromNum > ToNum)
+				{
+					ArrayHelper.AddValues(FromNum - ToNum);
+				}
+				else if(FromNum < ToNum) {
+					ArrayHelper.RemoveValues(0, ToNum - FromNum);
+				}
+			}
+			//else if (Set)
+			//{
+			//	FScriptSetHelper	SetHelper(Set, Addr);
+			//	
+			//	int ToNum = SetHelper.Num();
+			//	if (FromNum > ToNum)
+			//	{
+			//		for (int i = 0; i < FromNum-ToNum; ++i)
+			//		{
+			//			Index = SetHelper.AddDefaultValue_Invalid_NeedsRehash();
+			//		}
+			//	}
+			//	else {
+			//		SetHelper.RemoveAt(0, FromNum - ToNum);
+			//	}
+
+			//	SetHelper.Rehash();
+			//}
+			//else if (Map)
+			//{
+			//	FScriptMapHelper	MapHelper(Map, Addr);
+			//	Index = MapHelper.AddDefaultValue_Invalid_NeedsRehash();
+			//	MapHelper.Rehash();
+
+			//	uint8* PairPtr = MapHelper.GetPairPtr(Index);
+			//	bAddedMapEntry = true;
+			//}
+
+		}
+		
+	}
+
 private:
 	FText GetArrayTextValue() const
 	{

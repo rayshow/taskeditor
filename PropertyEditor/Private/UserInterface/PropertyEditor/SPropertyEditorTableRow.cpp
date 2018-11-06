@@ -296,7 +296,7 @@ TSharedRef<SWidget> SPropertyEditorTableRow::ConstructPropertyEditorWidget()
 		else if ( SPropertyEditorArray::Supports(PropertyEditorRef) )
 		{
 			auto Sp = SNew( SPropertyEditorArray, PropertyEditorRef );
-			//Interface = &Sp.Get();
+			Interface = &Sp.Get();
 			PropertyWidget = Sp;
 		}
 		else if ( SPropertyEditorCombo::Supports(PropertyEditorRef) )

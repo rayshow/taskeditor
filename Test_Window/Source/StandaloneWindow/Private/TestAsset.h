@@ -16,5 +16,11 @@ public:
 	FString Name;
 
 	UPROPERTY(EditAnywhere, Category = "My Object Properties")
+	TArray<int> IntArray;
+
+	UPROPERTY(EditAnywhere, Category = "My Object Properties")
+		TArray<UMaterialInterface*> MatArray;
+
+	UPROPERTY(EditAnywhere, Category = "My Object Properties")
 	TWeakObjectPtr<UMaterialInterface> Material;
 };
