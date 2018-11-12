@@ -127,8 +127,6 @@ bool FObjectPropertyNode::GetReadAddressUncached(FPropertyNode& InNode,
 											   bool bArrayPropertiesCanDifferInSize,
 											   bool bSkipStemplate) const
 {
-	if (!OutAddresses) return false;
-
 	if ( OutAddresses && TemplateObject.Get() && !bSkipStemplate)
 	{
 		OutAddresses->Add(TemplateObject.Get(), InNode.GetValueBaseAddress((uint8*)(TemplateObject.Get())));
